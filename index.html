@@ -347,6 +347,9 @@ document.querySelector('.ci[href*="book"]').addEventListener('click',function(e)
   document.querySelector('.pg').classList.add('crt-exit');
   setTimeout(function(){window.location.href=dest},660);
 });
+window.addEventListener('pageshow',function(e){
+  if(e.persisted)document.querySelector('.pg').classList.remove('crt-exit');
+});
 })();
 </script>
 </body>
