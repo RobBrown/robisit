@@ -177,6 +177,17 @@ h1::after{
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 .cursor{display:inline-block;width:.55em;height:.9em;background:var(--p);vertical-align:text-bottom;margin-left:1px;animation:blink .7s step-end infinite;transition:background .4s}
 @media(max-width:640px){.bot{padding:16px 18px}.hero{padding:28px 18px;align-items:flex-start;padding-top:36px}.card{padding:26px 20px}.sc+.sc{padding-left:9px}}
+@keyframes crt-off{
+  0%  {transform:scaleY(1);   filter:brightness(1);  opacity:1}
+  8%  {transform:scaleY(1);   filter:brightness(1);  opacity:.25}
+  16% {transform:scaleY(1);   filter:brightness(1.2);opacity:.9}
+  25% {transform:scaleY(1);   filter:brightness(.8); opacity:.4}
+  38% {transform:scaleY(.06); filter:brightness(2);  opacity:1}
+  58% {transform:scaleY(.01); filter:brightness(4);  opacity:1}
+  78% {transform:scaleY(.01); filter:brightness(7);  opacity:1}
+  100%{transform:scaleY(0);   filter:brightness(0);  opacity:0}
+}
+.crt-exit{animation:crt-off .65s ease-in forwards;transform-origin:center}
 </style>
 </head>
 <body>
@@ -329,6 +340,13 @@ function typeNext(){
   }
 }
 setTimeout(typeNext,900);
+
+document.querySelector('.ci[href*="book"]').addEventListener('click',function(e){
+  e.preventDefault();
+  var dest=this.href;
+  document.querySelector('.pg').classList.add('crt-exit');
+  setTimeout(function(){window.location.href=dest},660);
+});
 })();
 </script>
 </body>
