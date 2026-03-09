@@ -1,0 +1,32 @@
+title: Rob Brown
+url: "https://robisit.com"
+baseurl: ""
+
+# Jekyll settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+# Exclude files that should not be copied to _site
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - "*.gemspec"
+  - "*.gem"
+  - vendor/
+  - README.md
+  - TEMPLATE.md
+
+# Collections for articles
+collections:
+  thoughts:
+    output: true
+    permalink: /thoughts/:name/
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: null

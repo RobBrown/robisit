@@ -1,0 +1,342 @@
+---
+layout: null
+permalink: /content/
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content — Rob Brown</title>
+<meta name="description" content="All articles by Rob Brown.">
+<meta property="og:title" content="Content — Rob Brown">
+<meta property="og:description" content="All articles by Rob Brown.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:#0a0600;
+  color:#d4cfc6;
+  font-family:'Lora',Georgia,'Times New Roman',serif;
+  font-size:19px;
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Navigation ── */
+nav{
+  max-width:660px;margin:0 auto;
+  padding:20px 24px 0;
+  display:flex;justify-content:space-between;align-items:center;
+}
+nav a{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;letter-spacing:.02em;
+  color:#ffa000;text-decoration:none;
+  transition:color .2s;
+}
+nav a:hover{color:#ffe4a0}
+nav .brand{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:.04em;
+  color:#c06800;text-decoration:none;
+  position:relative;
+  text-shadow:
+    0 0 2px rgba(255,160,60,.9),
+    0 0 6px rgba(210,100,0,.8),
+    0 0 14px rgba(180,80,0,.6),
+    0 0 30px rgba(150,60,0,.35),
+    0 0 55px rgba(120,50,0,.2);
+  animation:brand-flicker 6s step-end infinite;
+  -webkit-font-smoothing:antialiased;
+}
+nav .brand:hover{color:#ffe4a0}
+@keyframes brand-flicker{
+  0%,100%{opacity:1}
+  4%{opacity:.85}
+  4.2%{opacity:1}
+  62%{opacity:1}
+  62.5%{opacity:.75}
+  63%{opacity:1}
+  83%{opacity:1}
+  83.4%{opacity:.9}
+  83.8%{opacity:1}
+}
+
+/* ── Hamburger menu ── */
+.menu{position:relative}
+.menu-toggle{
+  background:none;border:none;cursor:pointer;
+  padding:8px;display:flex;flex-direction:column;gap:4px;
+}
+.menu-toggle span{
+  display:block;width:18px;height:2px;
+  background:#706a5e;transition:background .2s;
+}
+.menu-toggle:hover span{background:#ffa000}
+.menu-toggle.open span{background:#ffa000}
+.menu-dropdown{
+  display:none;position:absolute;right:0;top:100%;
+  margin-top:8px;
+  background:#14100a;border:1px solid #1e1a14;border-radius:4px;
+  padding:4px 0;min-width:140px;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+.menu-dropdown.open{display:block}
+.menu-dropdown a{
+  display:block;padding:10px 16px;
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;color:#d4cfc6;text-decoration:none;
+  text-align:right;
+}
+.menu-dropdown a:hover{background:#1e1a14;color:#ffa000}
+
+/* ── Content area ── */
+.content{
+  max-width:660px;
+  margin:0 auto;
+  padding:36px 24px 60px;
+}
+
+/* ── Page quote ── */
+.hero-quote{
+  margin-bottom:65px;
+}
+.hero-quote blockquote{
+  font-family:'Lora',Georgia,serif;
+  font-size:24px;
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:#eae6df;
+  letter-spacing:-0.01em;
+  margin:0 0 12px;
+}
+@media(max-width:600px){.hero-quote blockquote{font-size:20px}}
+.hero-quote cite{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;
+  font-style:italic;
+  color:#706a5e;
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+
+/* ── Sort controls ── */
+.sort-bar{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:24px;
+  color:#585249;
+}
+.sort-bar span{margin-right:4px}
+.sort-btn{
+  background:none;border:1px solid #2e2820;border-radius:4px;
+  font-family:'Inter',system-ui,sans-serif;font-size:12px;
+  color:#706a5e;padding:5px 12px;cursor:pointer;
+  transition:color .2s,border-color .2s,background .2s;
+}
+.sort-btn:hover{color:#b8a47e;border-color:#b8a47e}
+.sort-btn.active{color:#ffa000;border-color:#ffa000;background:rgba(255,160,0,.06)}
+
+/* ── Article list ── */
+.articles{list-style:none;padding:0;margin:0}
+
+.article-row{
+  padding:28px 0;
+  border-bottom:1px solid #1e1a14;
+}
+.article-row:first-child{
+  padding-top:0;
+}
+
+.article-row h2{
+  font-family:'Lora',Georgia,serif;
+  font-size:22px;font-weight:700;line-height:1.3;
+  margin:0 0 6px;
+}
+.article-row h2 a{
+  color:#eae6df;text-decoration:none;
+  transition:color .2s;
+}
+.article-row h2 a:hover{color:#b8a47e}
+
+.article-row .meta{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;color:#585249;
+  letter-spacing:.01em;
+  margin-bottom:8px;
+}
+
+.article-row .excerpt{
+  font-family:'Lora',Georgia,serif;
+  font-size:16px;line-height:1.7;
+  color:#9e9789;
+}
+
+/* ── Empty state ── */
+.empty{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;color:#585249;
+  padding:32px 0;
+}
+
+/* ── Subscribe ── */
+.subscribe{
+  border-top:1px solid #1e1a14;
+  padding:28px 0;
+  margin-bottom:8px;
+}
+.subscribe p{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;color:#ffa000;
+  margin-bottom:12px;
+}
+.subscribe .thanks{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;color:#ffa000;
+}
+.subscribe form{
+  display:flex;gap:8px;
+}
+.subscribe input[type="email"]{
+  flex:1;min-width:0;
+  font-family:'Inter',system-ui,sans-serif;font-size:14px;
+  background:#14100a;color:#d4cfc6;
+  border:1px solid #2e2820;border-radius:4px;
+  padding:10px 12px;
+  outline:none;transition:border-color .2s;
+}
+.subscribe input[type="email"]::placeholder{color:#585249}
+.subscribe input[type="email"]:focus{border-color:#706a5e}
+.subscribe button{
+  font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:600;
+  background:#1e1a14;color:#b8a47e;
+  border:1px solid #2e2820;border-radius:4px;
+  padding:10px 20px;cursor:pointer;
+  transition:background .2s,color .2s;
+  white-space:nowrap;
+}
+.subscribe button:hover{background:#2e2820;color:#d4cfc6}
+
+/* ── Footer ── */
+footer{
+  max-width:660px;margin:0 auto;
+  padding:0 24px 48px;
+}
+footer .copy{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:12px;color:#3d3529;
+}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  body{font-size:17px;line-height:1.8}
+  .content{padding:36px 20px 48px}
+  nav{padding:16px 20px 0}
+  footer{padding:0 20px 36px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="brand">ROB BROWN</a>
+  <div class="menu">
+    <button class="menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="menu-dropdown">
+      <a href="/">Home</a>
+      <a href="#subscribe" onclick="this.closest('.menu-dropdown').classList.remove('open');document.querySelector('#subscribe-form input[type=email]').focus()">Subscribe</a>
+    </div>
+  </div>
+</nav>
+
+<main class="content">
+  <div class="hero-quote">
+    <blockquote>"The most dangerous phrase in the language is, 'We've always done it this way.'" &nbsp; &nbsp;<cite>-- Grace Hopper</cite></blockquote>
+  </div>
+
+  {% assign sorted_thoughts = site.thoughts | sort: "date" | reverse %}
+  {% if sorted_thoughts.size == 0 %}
+    <div class="empty">No articles yet. Check back soon.</div>
+  {% else %}
+    <div class="sort-bar">
+      <span>⇅</span>
+      <button class="sort-btn active" data-sort="featured">Featured</button>
+      <button class="sort-btn" data-sort="date">Date</button>
+      <button class="sort-btn" data-sort="views">Views</button>
+    </div>
+    <ul class="articles" id="article-list">
+      {% for post in sorted_thoughts %}
+      <li class="article-row" data-featured="{{ post.featured }}" data-date="{{ post.date | date: '%Y%m%d' }}" data-views="{{ post.views | default: 0 }}">
+        <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+        {% if post.description %}<p class="excerpt">{{ post.description }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <script>
+    (function(){
+      var btns=document.querySelectorAll('.sort-btn');
+      var list=document.getElementById('article-list');
+      function sortList(mode){
+        var rows=Array.from(list.children);
+        rows.sort(function(a,b){
+          if(mode==='featured'){
+            var af=a.dataset.featured==='true'?1:0;
+            var bf=b.dataset.featured==='true'?1:0;
+            if(bf!==af) return bf-af;
+            return parseInt(b.dataset.date)-parseInt(a.dataset.date);
+          }
+          if(mode==='date') return parseInt(b.dataset.date)-parseInt(a.dataset.date);
+          if(mode==='views') return parseInt(b.dataset.views)-parseInt(a.dataset.views);
+        });
+        rows.forEach(function(r){list.appendChild(r)});
+      }
+      btns.forEach(function(btn){
+        btn.addEventListener('click',function(){
+          btns.forEach(function(b){b.classList.remove('active')});
+          btn.classList.add('active');
+          sortList(btn.dataset.sort);
+        });
+      });
+      sortList('featured');
+    })();
+    </script>
+  {% endif %}
+</main>
+
+<footer>
+  <div class="subscribe" id="subscribe">
+    <p id="subscribe-label">Get notified when Rob publishes something new.</p>
+    <form id="subscribe-form">
+      <input type="email" name="entry.99560001" placeholder="you@email.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+  <script>
+  document.getElementById('subscribe-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var email=this.querySelector('input[type="email"]').value;
+    var data=new FormData();
+    data.append('entry.99560001',email);
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse',{
+      method:'POST',body:data,mode:'no-cors'
+    });
+    this.style.display='none';
+    var label=document.getElementById('subscribe-label');
+    label.textContent="Thanks! You'll receive future articles via email.";
+    label.className='thanks';
+  });
+  </script>
+  <div class="copy">© {{ site.time | date: "%Y" }} Rob Brown</div>
+</footer>
+
+</body>
+</html>
