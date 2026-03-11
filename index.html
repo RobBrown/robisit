@@ -344,6 +344,12 @@ function typeNext(){
 }
 setTimeout(typeNext,900);
 
+document.querySelectorAll('.ci').forEach(function(el){
+  el.addEventListener('click',function(){
+    var label=this.href.includes('book')?'book_meeting':this.href.includes('linkedin')?'linkedin':'signal';
+    gtag('event','button_click',{button:label});
+  });
+});
 document.querySelector('.ci[href*="book"]').addEventListener('click',function(e){
   e.preventDefault();
   var dest=this.href;
