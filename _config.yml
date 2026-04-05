@@ -19,7 +19,7 @@ exclude:
 
 # Collections for articles
 collections:
-  thoughts:
+  articles:
     output: true
     permalink: /thoughts/:name/
 

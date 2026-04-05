@@ -5,12 +5,12 @@ Personal business card site for Rob Brown. Static HTML and Jekyll on GitHub Page
 ## How It Works
 
 - **Homepage** (`index.html`) — Single-page business card with contact links
-- **Articles** (`_thoughts/*.md`) — Write in markdown, commit to publish. Jekyll renders them automatically.
+- **Articles** (`_articles/*.md`) — Write in markdown, commit to publish. Jekyll renders them automatically.
 - **Listing** (`/content`) — All articles in one place with sort options
 
 ## Publishing
 
-Copy `TEMPLATE.md` to `_thoughts/your-slug.md`, fill in the front matter, write your content, commit and push.
+Copy `TEMPLATE.md` to `_articles/your-slug.md`, fill in the front matter, write your content, commit and push.
 
 ## Email Collection
 

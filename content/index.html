@@ -263,7 +263,7 @@ footer .copy{
     <blockquote>"The most dangerous phrase in the language is, 'We've always done it this way.'" &nbsp; &nbsp;<cite>-- Grace Hopper</cite></blockquote>
   </div>
 
-  {% assign sorted_thoughts = site.thoughts | sort: "date" | reverse %}
+  {% assign sorted_thoughts = site.articles | sort: "date" | reverse %}
   {% if sorted_thoughts.size == 0 %}
     <div class="empty">No articles yet. Check back soon.</div>
   {% else %}
