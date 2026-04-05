@@ -116,14 +116,13 @@ h1{
 @media(max-width:600px){h1{font-size:28px}}
 
 .date{
-  display:flex;align-items:center;gap:16px;
+  display:block;
   font-family:'Inter',system-ui,sans-serif;
   font-size:13px;
   color:#706a5e;
   letter-spacing:.01em;
   margin-bottom:12px;
 }
-.date .dot{color:#3d3529}
 .byline{
   font-family:'Inter',system-ui,sans-serif;
   font-size:13px;
@@ -294,7 +293,7 @@ footer .copy{
 <article>
   <header>
     <h1>{{ page.title }}</h1>
-    <div class="date"><span>{{ page.date | date: "%B %-d, %Y" }}</span>{% if page.read_time %}<span class="dot">·</span><span>Read in {{ page.read_time }}</span>{% endif %}</div>
+    <div class="date">{{ page.date | date: "%B %-d, %Y" }}</div>
     <div class="byline">
       <span class="stat"><span class="stat-num">2,841</span> reads</span>
       <span class="dot">·</span>
