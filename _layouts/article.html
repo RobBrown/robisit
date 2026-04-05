@@ -293,7 +293,7 @@ footer .copy{
 <article>
   <header>
     <h1>{{ page.title }}</h1>
-    <time class="date">{{ page.date | date: "%B %-d, %Y" }}</time>
+    <div class="date">{{ page.date | date: "%B %-d, %Y" }}{% if page.read_time %} · Read in {{ page.read_time }}{% endif %}</div>
     <div class="byline">
       <span class="stat"><span class="stat-num">2,841</span> reads</span>
       <span class="dot">·</span>

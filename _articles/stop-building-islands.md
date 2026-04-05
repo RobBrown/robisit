@@ -6,6 +6,7 @@ description: "The real opportunity of AI isn't shipping faster. It's the rare ch
 og_image: ""
 featured: true
 views: 2841
+read_time: "4 min"
 ---
 
 Software is changing. But the real story isn't the code; it’s the shift in the soul of the organizations building it. 
