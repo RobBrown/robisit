@@ -1,6 +1,6 @@
 # robisit.com
 
-Personal business card site for Rob Brown. Static HTML and Jekyll on GitHub Pages — no backend, no database, no server.
+Personal business card site for Rob Brown. Static HTML and Jekyll on GitHub Pages. No backend, no database, no server.
 
 ## How It Works
 
