@@ -27,6 +27,25 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 
+/* ── Scanline sweep ── */
+.scanline{
+  position:fixed;left:0;width:100%;height:58px;
+  pointer-events:none;z-index:999;
+  background:linear-gradient(
+    to bottom,
+    rgba(180,90,0,0) 0%,
+    rgba(200,110,0,.07) 40%,
+    rgba(220,130,0,.13) 70%,
+    rgba(240,150,0,.18) 85%,
+    rgba(255,160,0,.22) 100%
+  );
+  animation:sweep 10s linear infinite;
+}
+@keyframes sweep{
+  0%{top:-60px}
+  100%{top:100vh}
+}
+
 /* ── Navigation ── */
 nav{
   max-width:660px;margin:0 auto;
@@ -244,6 +263,7 @@ footer .copy{
 </style>
 </head>
 <body>
+<div class="scanline"></div>
 
 <nav>
   <a href="/" class="brand">ROB BROWN</a>
