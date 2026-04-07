@@ -13,6 +13,29 @@ Software is changing. But the real story isn't the code; it’s the shift in the
 
 Lately, the conversation around AI in development has been aimed at the wrong target. We are obsessed with velocity: lines committed, tickets closed, sprints compressed. We’ve taken our existing mess and simply asked how to make it pile up faster. 
 
+<div class="subscribe subscribe--inline" style="border-top:none;padding:20px 0;margin:28px 0;">
+<p id="subscribe-label-inline">Get new articles in your inbox.</p>
+<form id="subscribe-form-inline">
+<input type="email" name="entry.99560001" placeholder="you@email.com" required>
+<button type="submit">Subscribe</button>
+</form>
+</div>
+<script>
+document.getElementById(‘subscribe-form-inline’).addEventListener(‘submit’,function(e){
+  e.preventDefault();
+  var email=this.querySelector(‘input[type="email"]’).value;
+  var data=new FormData();
+  data.append(‘entry.99560001’,email);
+  fetch(‘https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse’,{
+    method:’POST’,body:data,mode:’no-cors’
+  });
+  this.style.display=’none’;
+  var label=document.getElementById(‘subscribe-label-inline’);
+  label.textContent="Thanks! You’ll receive future articles via email.";
+  label.className=’thanks’;
+});
+</script>
+
 Shopify CEO Tobi Lütke described the current tension well: 
 
 > *“Before asking for more headcount and resources, teams must demonstrate why they cannot get what they want done using AI.”*
