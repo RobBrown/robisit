@@ -13,12 +13,12 @@ Software is changing. But the real story isn't the code; it’s the shift in the
 
 Lately, the conversation around AI in development has been aimed at the wrong target. We are obsessed with velocity: lines committed, tickets closed, sprints compressed. We’ve taken our existing mess and simply asked how to make it pile up faster. 
 
-<div class="subscribe subscribe--inline" style="border-top:none;padding:20px 0;margin:28px 0;text-align:center;">
-<p id="subscribe-label-inline">Get new articles in your inbox.</p>
-<form id="subscribe-form-inline" style="flex-direction:column;align-items:center;" onsubmit="event.preventDefault();var e=this.querySelector(‘input[type=email]’).value,d=new FormData();d.append(‘entry.99560001’,e);fetch(‘https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse’,{method:’POST’,body:d,mode:’no-cors’});this.style.display=’none’;var l=document.getElementById(‘subscribe-label-inline’);l.textContent=’Thanks! You will receive future articles via email.’;l.className=’thanks’;">
-<input type="email" name="entry.99560001" placeholder="you@email.com" required style="width:50%;min-width:200px;text-align:center;">
-<button type="submit">Subscribe</button>
-</form>
+<div class="subscribe subscribe--inline" markdown="0" style="border-top:none;padding:20px 0;margin:28px 0;text-align:center;">
+  <p id="subscribe-label-inline">Get new articles in your inbox.</p>
+  <form id="subscribe-form-inline" style="flex-direction:column;align-items:center;" onsubmit="event.preventDefault();var e=this.querySelector(‘input[type=email]’).value,d=new FormData();d.append(‘entry.99560001’,e);fetch(‘https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse’,{method:’POST’,body:d,mode:’no-cors’});this.style.display=’none’;var l=document.getElementById(‘subscribe-label-inline’);l.textContent=’Thanks! You will receive future articles via email.’;l.className=’thanks’;">
+    <input type="email" name="entry.99560001" placeholder="you@email.com" required style="width:50%;min-width:200px;text-align:center;">
+    <button type="submit">Subscribe</button>
+  </form>
 </div>
 
 Shopify CEO Tobi Lütke described the current tension well: 
