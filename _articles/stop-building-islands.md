@@ -13,10 +13,10 @@ Software is changing. But the real story isn't the code; it’s the shift in the
 
 Lately, the conversation around AI in development has been aimed at the wrong target. We are obsessed with velocity: lines committed, tickets closed, sprints compressed. We’ve taken our existing mess and simply asked how to make it pile up faster. 
 
-<div class="subscribe subscribe--inline" style="border-top:none;padding:20px 0;margin:28px 0;">
+<div class="subscribe subscribe--inline" style="border-top:none;padding:20px 0;margin:28px 0;text-align:center;">
 <p id="subscribe-label-inline">Get new articles in your inbox.</p>
-<form id="subscribe-form-inline">
-<input type="email" name="entry.99560001" placeholder="you@email.com" required>
+<form id="subscribe-form-inline" style="flex-direction:column;align-items:center;">
+<input type="email" name="entry.99560001" placeholder="you@email.com" required style="width:50%;min-width:200px;">
 <button type="submit">Subscribe</button>
 </form>
 </div>
