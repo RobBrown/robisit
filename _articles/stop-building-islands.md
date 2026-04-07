@@ -19,7 +19,6 @@ Lately, the conversation around AI in development has been aimed at the wrong ta
 <input type="email" name="entry.99560001" placeholder="you@email.com" required style="width:50%;min-width:200px;text-align:center;">
 <button type="submit">Subscribe</button>
 </form>
-</div>
 <script>
 document.getElementById(‘subscribe-form-inline’).addEventListener(‘submit’,function(e){
   e.preventDefault();
@@ -35,6 +34,7 @@ document.getElementById(‘subscribe-form-inline’).addEventListener(‘submit�
   label.className=’thanks’;
 });
 </script>
+</div>
 
 Shopify CEO Tobi Lütke described the current tension well: 
 
