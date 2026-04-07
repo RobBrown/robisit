@@ -16,7 +16,7 @@ Lately, the conversation around AI in development has been aimed at the wrong ta
 <div class="subscribe subscribe--inline" style="border-top:none;padding:20px 0;margin:28px 0;text-align:center;">
 <p id="subscribe-label-inline">Get new articles in your inbox.</p>
 <form id="subscribe-form-inline" style="flex-direction:column;align-items:center;">
-<input type="email" name="entry.99560001" placeholder="you@email.com" required style="width:50%;min-width:200px;">
+<input type="email" name="entry.99560001" placeholder="you@email.com" required style="width:50%;min-width:200px;text-align:center;">
 <button type="submit">Subscribe</button>
 </form>
 </div>
