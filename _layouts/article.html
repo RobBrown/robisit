@@ -337,6 +337,52 @@ footer .copy{
     label.className='thanks';
   });
   </script>
+  {% if page.inline_subscribe %}
+  <script>
+  (function(){
+    var n = {{ page.inline_subscribe }};
+    var paragraphs = document.querySelectorAll('.body > p');
+    if (paragraphs.length >= n) {
+      var target = paragraphs[n - 1];
+      var div = document.createElement('div');
+      div.className = 'subscribe subscribe--inline';
+      div.style.cssText = 'border-top:none;padding:20px 0;margin:28px 0;text-align:center;';
+      var label = document.createElement('p');
+      label.id = 'subscribe-label-inline';
+      label.textContent = 'Get new articles in your inbox.';
+      var form = document.createElement('form');
+      form.id = 'subscribe-form-inline';
+      form.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:8px;';
+      var input = document.createElement('input');
+      input.type = 'email';
+      input.name = 'entry.99560001';
+      input.placeholder = 'you@email.com';
+      input.required = true;
+      input.style.cssText = 'width:50%;min-width:200px;text-align:center;';
+      var btn = document.createElement('button');
+      btn.type = 'submit';
+      btn.textContent = 'Subscribe';
+      form.appendChild(input);
+      form.appendChild(btn);
+      div.appendChild(label);
+      div.appendChild(form);
+      target.parentNode.insertBefore(div, target.nextSibling);
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var email = input.value;
+        var data = new FormData();
+        data.append('entry.99560001', email);
+        fetch('https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse', {
+          method: 'POST', body: data, mode: 'no-cors'
+        });
+        form.style.display = 'none';
+        label.textContent = "Thanks! You'll receive future articles via email.";
+        label.className = 'thanks';
+      });
+    }
+  })();
+  </script>
+  {% endif %}
   <div class="copy">© {{ site.time | date: "%Y" }} Rob Brown</div>
 </footer>
 
