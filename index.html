@@ -371,11 +371,13 @@ document.querySelectorAll('.ci').forEach(function(el){
     gtag('event','button_click',{button:label});
   });
 });
-document.querySelector('.ci[href*="book"]').addEventListener('click',function(e){
-  e.preventDefault();
-  var dest=this.href;
-  document.querySelector('.pg').classList.add('crt-exit');
-  setTimeout(function(){window.location.href=dest},660);
+document.querySelectorAll('.ci[href*="book"], .ci[href="/content"]').forEach(function(link){
+  link.addEventListener('click',function(e){
+    e.preventDefault();
+    var dest=this.href;
+    document.querySelector('.pg').classList.add('crt-exit');
+    setTimeout(function(){window.location.href=dest},660);
+  });
 });
 window.addEventListener('pageshow',function(e){
   if(e.persisted)document.querySelector('.pg').classList.remove('crt-exit');
