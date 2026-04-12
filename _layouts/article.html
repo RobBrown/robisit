@@ -199,6 +199,34 @@ header .rule{
 
 .body strong{font-weight:700;color:#eae6df}
 
+.body table{
+  width:100%;
+  border-collapse:collapse;
+  margin:32px 0;
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;
+  line-height:1.55;
+}
+.body thead th{
+  text-align:left;
+  font-weight:600;
+  color:#eae6df;
+  padding:10px 12px;
+  border-bottom:1px solid #3a3228;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  font-size:12px;
+}
+.body tbody td{
+  padding:10px 12px;
+  border-bottom:1px solid #1e1a14;
+  vertical-align:top;
+  color:#c0b9ae;
+}
+.body tbody tr:last-child td{border-bottom:none}
+.body tbody tr:hover td{background:rgba(255,160,0,0.03)}
+.body table code{font-size:13px}
+
 /* ── Footer stats + copyright ── */
 footer{
   max-width:660px;margin:0 auto;

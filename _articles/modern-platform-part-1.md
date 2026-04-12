@@ -40,9 +40,9 @@ I’m running this stack today. Every choice was made because it works as well f
 
 *Estimated monthly spend at ~1,000 active users. If you’re paying for "idle" time in 2026, you're overpaying.*
 
-| Service | The Job | Why it beats the "Big Three" | Cost (1k Users) |
+| Service | The Job | Why it beats the "Big Three" | Cost |
 | :--- | :--- | :--- | :--- |
-| **Render** | Compute/Previews | No Terraform plans. It spins up a preview per branch, period. | ~$25 |
+| **Render** | Compute | No Terraform plans. It spins up a preview per branch, period. | ~$25 |
 | **Cloudflare** | The Edge | Replaces half a dozen AWS products with one navigable control plane. | $0 - $5 |
 | **Supabase** | Postgres | Database branching. Every workstream gets an isolated sandbox. | $25 |
 | **Clerk** | Auth | Full identity management so agents never touch credential logic. | Free (to 10k) |
