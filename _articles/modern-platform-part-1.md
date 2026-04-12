@@ -38,7 +38,7 @@ The platform shouldn’t be a static monolith you maintain; it should be a compo
 
 I’m running this stack today. Every choice was made because it works as well for a headless agent as it does for a Senior Dev. 
 
-*Estimated monthly spend at ~1,000 active users. If you’re paying for "idle" time in 2026, you're overpaying.*
+Estimated monthly spend at ~1,000 active users. For the stack I've chosen there is *$0 cost during development and testing phases*. If you’re paying for "idle" time in 2026, you're overpaying.
 
 | Service | The Job | Why it beats Legacy CSP's | Cost/1k |
 | :--- | :--- | :--- | :--- |
