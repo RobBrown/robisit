@@ -73,6 +73,6 @@ Picking the stack is the easy part. The harder question is one most CTOs are avo
 
 When an agent inevitably breaks production, and it will, who is actually responsible? I don’t mean "philosophically." I mean operationally. How do you enforce boundaries structurally so an LLM doesn’t hallucinate a `DROP TABLE` command?
 
-Most of you don’t have a structural answer. You have "trust." In an AI-native world, trust is a liability.
+Most of us don’t have a structural answer. We have "trust." In an AI-native world, trust is a liability.
 
 **That’s Part 2. Next week.**
