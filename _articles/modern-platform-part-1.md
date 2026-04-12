@@ -14,7 +14,9 @@ inline_subscribe: 2
 
 AWS has 200+ services. Your AI agents don’t care about any of them.
 
-The complexity we’ve normalized over the last decade that "enterprise-grade" overhead we wear like a badge of honor, has become a tax. You pay it every time an agent stalls on a Jenkins pipeline or chokes on a permissions error from a service built for a human operator.
+The complexity we’ve normalized over the last decade, that "enterprise-grade" overhead we wear like a badge of honor... Theyve become a tax.
+
+You pay it every time an agent stalls on a Jenkins pipeline or chokes on a permissions error from a service built for a human operator.
 
 The teams outrunning you right now aren’t "optimizing" on GCP or Azure. They’ve realized that interfacing directly with the Big Three is a waste of senior engineering time. Sure, Render and Supabase run on AWS, but that’s irrelevant. The point is they aren't the ones navigating it. 
 
