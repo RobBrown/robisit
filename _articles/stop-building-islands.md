@@ -5,7 +5,9 @@ date: 2026-04-04
 description: "The real opportunity of AI isn't shipping faster. It's the rare chance to revisit foundational decisions before the complexity that AI generates makes them permanent."
 og_image: ""
 featured: true
-views: 2841
+views: 2473
+linkedin: 408
+bluesky: 79
 read_time: "4 min"
 inline_subscribe: 2
 ---

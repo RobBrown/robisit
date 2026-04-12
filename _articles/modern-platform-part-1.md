@@ -5,7 +5,9 @@ date: 2026-04-12
 description: "The complexity we've normalized over the last decade has become an AI tax. The abstraction layer is the strategy."
 og_image: ""
 featured: true
-views: 0
+views: 1847
+linkedin: 284
+bluesky: 63
 read_time: "4 min"
 inline_subscribe: 2
 ---
