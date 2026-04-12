@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "Stop Building for Humans: Your Legacy Platform is an AI Tax"
+title: "Why Your Legacy Platform is now an AI Tax"
 date: 2026-04-12
 description: "The complexity we've normalized over the last decade has become an AI tax. The abstraction layer is the strategy."
 og_image: ""
