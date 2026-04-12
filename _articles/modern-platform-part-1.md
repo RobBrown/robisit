@@ -40,18 +40,18 @@ I’m running this stack today. Every choice was made because it works as well f
 
 *Estimated monthly spend at ~1,000 active users. If you’re paying for "idle" time in 2026, you're overpaying.*
 
-| Service | The Job | Why it beats the "Big Three" | Cost |
+| Service | The Job | Why it beats Legacy CSP's | Cost/1k |
 | :--- | :--- | :--- | :--- |
 | **Render** | Compute | No Terraform plans. It spins up a preview per branch, period. | ~$25 |
-| **Cloudflare** | The Edge | Replaces half a dozen AWS products with one navigable control plane. | $0 - $5 |
+| **Cloudflare** | The Edge | Replaces half a dozen AWS products with one navigable control plane. | ~$5 |
 | **Supabase** | Postgres | Database branching. Every workstream gets an isolated sandbox. | $25 |
-| **Clerk** | Auth | Full identity management so agents never touch credential logic. | Free (to 10k) |
-| **Resend** | Email | One API. No SMTP hell. No SES policy debugging. | $0 - $20 |
-| **Stripe** | Payments | The CSPs haven't even tried to compete here. | 2.9% + 30¢ |
-| **PostHog** | Analytics | Product-led growth in a box. No data engineering required. | Free (to 1M) |
-| **Sentry** | Observability | It tells you *what* broke, not just that a log was fired. | $0 - $26 |
-| **Upstash** | Serverless Redis | Pay per request. Zero cost for idle dev environments. | $0 - $10 |
-| **Doppler** | Secrets | Scoped tokens. The only safe way to let agents work. | Free |
+| **Clerk** | Auth | Full identity management so agents never touch credential logic. | $0 |
+| **Resend** | Email | One API. No SMTP hell. No SES policy debugging. | $20 |
+| **Stripe** | Payments | The CSPs haven't even tried to compete here. | 2.9% |
+| **PostHog** | Analytics | Product-led growth in a box. No data engineering required. | $0 |
+| **Sentry** | Observability | It tells you *what* broke, not just that a log was fired. | $26 |
+| **Upstash** | Serverless Redis | Pay per request. Zero cost for idle dev environments. | $10 |
+| **Doppler** | Secrets | Scoped tokens. The only safe way to let agents work. | $0 |
 
 ---
 
