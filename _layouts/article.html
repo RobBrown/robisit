@@ -374,7 +374,7 @@ footer .copy{
       var target = paragraphs[n - 1];
       var div = document.createElement('div');
       div.className = 'subscribe subscribe--inline';
-      div.style.cssText = 'border-top:none;padding:20px 0;margin:28px 0;text-align:center;';
+      div.style.cssText = 'border-top:none;padding:8px 0 0;margin:12px 0 0;text-align:center;';
       var label = document.createElement('p');
       label.id = 'subscribe-label-inline';
       label.textContent = 'Get new articles in your inbox.';
@@ -395,6 +395,9 @@ footer .copy{
       div.appendChild(label);
       div.appendChild(form);
       target.parentNode.insertBefore(div, target.nextSibling);
+      if (div.nextElementSibling && div.nextElementSibling.tagName === 'HR') {
+        div.nextElementSibling.style.marginTop = '16px';
+      }
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         var email = input.value;
