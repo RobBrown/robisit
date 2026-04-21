@@ -16,7 +16,7 @@ inline_subscribe: 2
 
 4 min read, what you'll receive: An OAuth token brought down Vercel's internal systems this week. If your team is running AI agents in production, what's written below gives you the structural answer most CTOs don't have yet: a concrete access matrix, a shared responsibility model by layer, and the enforcement mechanism that makes it real.
 
----
+## The Setup
 
 Vercel got breached this week. It wasn't a sophisticated exploit that is worthy of recasting Oceans 11. An employee approved an OAuth token from a third-party AI tool and forgot about it.
 
