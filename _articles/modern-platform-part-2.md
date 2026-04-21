@@ -5,16 +5,14 @@ date: 2026-04-21
 description: "The Vercel breach shows trust is a liability. The access matrix, shared responsibility model, and enforcement that makes agentic platforms safe."
 og_image: ""
 featured: true
-views: 0
-linkedin: 0
-bluesky: 0
+views: 1192
+linkedin: 183
+bluesky: 71
 read_time: "4 min"
 inline_subscribe: 2
 ---
 
 *Part 2 of 3 — [Start with Part 1](https://robisit.com/thoughts/modern-platform-part-1/)*
-
----
 
 4 min read, what you'll receive: An OAuth token brought down Vercel's internal systems this week. If your team is running AI agents in production, what's written below gives you the structural answer most CTOs don't have yet: a concrete access matrix, a shared responsibility model by layer, and the enforcement mechanism that makes it real.
 
