@@ -6,8 +6,8 @@ description: "A framework for engineering leaders navigating AI transformation: 
 og_image: ""
 featured: true
 views: 28
-linkedin: 129
-bluesky: 71
+linkedin: 0
+bluesky: 0
 read_time: "12 min"
 inline_subscribe: 2
 ---
