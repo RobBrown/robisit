@@ -14,9 +14,7 @@ inline_subscribe: 2
 
 Most engineering organizations are treating AI adoption the way they treated cloud migration a decade ago, as a project. Pick the tools, run the pilot, train the teams, declare victory at some percentage of adoption, move on.
 
-I get it. The instinct is understandable.
-
-Migrations are a shape of work engineering leaders know how to plan, budget, and report on.
+I get it. The instinct is understandable. Migrations are a shape of work engineering leaders know how to plan, budget, and report on.
 
 It is also the wrong shape for AI, and the strongest research we have today says so directly.
 
