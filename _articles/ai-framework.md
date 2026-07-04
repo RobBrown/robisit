@@ -12,15 +12,35 @@ read_time: "12 min"
 inline_subscribe: 2
 ---
 
-Most engineering organizations are treating AI adoption the way they treated cloud migration a decade ago, as a project. Pick the tools, run the pilot, train the teams, declare victory at some percentage of adoption, move on. The instinct is understandable. Migrations are a shape of work engineering leaders know how to plan, budget, and report on.
+Most engineering organizations are treating AI adoption the way they treated cloud migration a decade ago, as a project. Pick the tools, run the pilot, train the teams, declare victory at some percentage of adoption, move on.
 
-It is also the wrong shape for this problem, and the strongest research we have says so directly.
+I get it. The instinct is understandable.
 
-Google Cloud's DORA team, in its 2025 State of AI-Assisted Software Development report, landed on a finding that should reframe every AI adoption conversation in a boardroom right now. AI acts as an amplifier. It does not fix an engineering organization. It magnifies whatever that organization already is. Teams with strong platforms, clear ownership, and disciplined delivery practices get meaningfully faster and better. Teams with fragmented systems, ambiguous domain boundaries, and weak feedback loops also get faster, at producing fragmentation and ambiguity. The bottleneck was never typing speed, and a tool that increases typing speed does not remove it.
+Migrations are a shape of work engineering leaders know how to plan, budget, and report on.
 
-This is why "buy the licenses and wait for productivity" fails so consistently, and why the gap between organizations reporting transformative gains and organizations reporting nothing is so wide. The tools are largely the same. The organizations are not.
+It is also the wrong shape for AI, and the strongest research we have today says so directly.
 
-So this whitepaper argues a simple thesis. **AI transformation is an organizational systems problem, not a tooling rollout.** What follows is a framework for working that problem, aimed at leaders of established software companies with real customers, real revenue, and real legacy.
+---
+
+Google Cloud's DORA team (2025 State of AI-Assisted Software Development report formed a conclusion that should reframe every AI adoption conversation in a boardroom right now.
+
+AI acts as an amplifier. It does not fix an engineering organization.
+
+It magnifies whatever that organization already is.
+
+Teams with strong platforms, clear ownership, and disciplined delivery practices get meaningfully faster and better. Teams with fragmented systems, ambiguous domain boundaries, and weak feedback loops also get faster, at producing fragmentation and ambiguity. 
+
+The bottleneck was never the number of code commits and a tool that increases typing speed does not remove it.
+
+This is why "buy the latest tool and wait for productivity" fails so consistently, and why the gap between organizations reporting transformative gains and organizations reporting nothing is so wide. The tools are largely the same. The organizations are not.
+
+So, I have a simple thesis. **AI transformation is an organizational systems problem, not a tooling rollout.**
+
+What follows is a framework for working that problem, aimed at leaders of established software companies with real customers, real revenue, and real legacy.
+
+The framework I describe isn't a polished giide. Instead, it's an overview based on my expeience leading large scale transformations at AWS, and transforming engineering organizations outside of AWS.
+
+---
 
 ## A running example, on purpose
 
@@ -28,17 +48,21 @@ To keep this honest, I will carry one company through the entire framework. Call
 
 Meridian has been in business for over twenty years selling software to service businesses. Scheduling, client management, billing, the operational backbone of appointment-driven companies. Its customer base is split. A newer SaaS product serves a growing share of customers, and a Windows desktop application, first shipped when .NET was young, still runs the daily operations of a large and loyal segment who have no intention of leaving it.
 
-That shape is deliberate. Almost every piece of AI transformation content assumes a greenfield, or quietly ignores twenty years of working software. Meridian does not get that luxury, and neither do you. Any framework that only works for a company founded eighteen months ago is not a framework, it is a demo.
+That shape is deliberate. Almost every piece of AI transformation content assumes a greenfield app, or ignores twenty years of working software. Meridian does not get that luxury, and neither do you.
 
-One more piece of framing. What follows is Phase 1, the foundation an organization needs before AI leverage compounds instead of dissipating. It is not a finished checklist you complete and file away; I will come back to why at the end.
+Any framework that only works for a company founded eighteen months ago is not a framework, it is a demo.
+
+One more piece of framing. What follows is Phase 1, the foundation an organization needs before AI leverage compounds instead of dissipating. It is not a finished checklist you complete and file away. I will come back to why at the end.
 
 ## The shape of the framework
 
-Structurally, I am borrowing from something that worked. AWS's Cloud Adoption Framework and its Migration Readiness Assessment organized cloud transformation not as a linear task list but as a small number of named perspectives, lenses through which a leader could assess their own organization's readiness. That structure succeeded because it met organizations where they were, and because it made honest self-assessment the first deliverable instead of the thing everyone skipped.
+Structurally, I am borrowing from something that worked. AWS's Cloud Adoption Framework (CAF) and its Migration Readiness Assessment (MRA) organized cloud transformation not as a linear task list but as a small number of named perspectives, lenses through which a leader could assess their own organization's readiness.
 
-This framework, which I call **the AI-Native Engineering Framework**, adapts that shape for a different transformation. The content here is not AWS's, and this is not a repackaging of the CAF. It is an adaptation of a structural idea that earned its keep. Perspectives, not phases; diagnosis, not prescription.
+That structure succeeded because it met organizations where they were, and because it made honest self-assessment the first deliverable instead of the thing everyone skipped.
 
-Phase 1 consists of **Seven Perspectives**. For each, I will cover what it is, why it matters based on what the research shows, what acting on it looks like, and the questions to ask your own organization. This is a diagnostic and planning lens, meant to be adapted, not followed like a runbook.
+This framework, which I call **the AI-Native Engineering Framework**, adapts that shape for a different transformation. The content here is not AWS's, and this is not a repackaging of the CAF. It is an adaptation of a structural idea that earned its keep.  Diagnosis, not prescription is what works.
+
+Phase 1 consists of **Seven Perspectives**. For each, I will cover what it is, why it matters based on what research and experience shows, what acting on it looks like, and the questions to ask your own organization. This is a diagnostic and planning lens, meant to be adapted, not followed like a runbook.
 
 ## Perspective 1: Business
 
@@ -48,47 +72,65 @@ The first concrete work in an AI transformation should contain no AI at all. It 
 
 This ordering matters because the amplifier cuts both ways. AI magnifies your organization's direction too. An engineering org pointed at technically interesting problems instead of customer problems will now build the wrong things faster, with better commit messages.
 
-In practice, this perspective produces three artifacts, and it should be timeboxed in weeks, not quarters. First, a current-state architecture map that is accurate rather than aspirational, including the parts everyone is embarrassed about. Second, a written inventory of where the same business concept lives in more than one place, which becomes the work queue for the Architecture perspective. Third, a set of transformation goals where each one traces to a customer problem someone actually voiced, with the customer's framing preserved. If a goal cannot be traced that way, it goes in a parking lot, not the plan. And if your goals were written before any of this work happened, treat them as drafts.
+In practice, this perspective produces 3 artifacts, and it should be timeboxed in **weeks**, not quarters. 
 
-At Meridian, this looks unglamorous. It means mapping what actually exists across the SaaS product and the desktop product, where the two share concepts, where they diverge, where twenty years of tactical decisions have left duplicated logic. And it means sitting with customers on both sides of that split. The desktop customers, in particular, will tell you things a roadmap workshop never will, starting with why they have not migrated.
+1. A current-state architecture map that is accurate rather than aspirational, including the parts everyone is embarrassed about. 
 
-Some questions to ask your organization. Can anyone produce an accurate current-state architecture diagram without starting a project to make one? When did an executive last hear a customer describe their needs firsthand? Are our stated AI goals traceable to a customer problem, or to a capability we found exciting?
+2. A written inventory of where the same business concept lives in more than one place, which becomes the work queue for the Architecture perspective.
+
+3. A set of transformation goals where each one traces to a customer problem someone actually voiced, with the customer's framing preserved. If a goal cannot be traced that way, it goes in a parking lot, not the plan. And if your goals were written before any of this work happened, treat them as drafts.
+
+At Meridian, thisneffort doesnt look glamorous, and it has probably been done before. It means mapping what actually exists across the SaaS product and the desktop product, where the two share concepts, where they diverge, where twenty years of tactical decisions have left duplicated logic. And it means sitting with customers on both sides of that split. The desktop customers, in particular, will tell you things a roadmap workshop never will, starting with why they have not migrated.
+
+Some real questions to ask your organization. Can anyone produce an accurate current-state architecture diagram without starting a project to make one? When did an executive last hear a customer describe their needs firsthand? Do we have clesr product use diagrams showing what our customers value and what they don't? Are our current AI goals traceable to a customer problem, or to a capability we found exciting?
 
 ## Perspective 2: Leadership
 
-The second perspective is executive alignment, and it starts with an uncomfortable admission, which is that your leadership team does not currently agree on what "AI" means for your organization, and no external standard exists to settle it for you.
+The second perspective is executive alignment, and it starts with an uncomfortable admission, which is that your leadership team does not currently agree on what "AI" means for your organization, and no external standard exists (yet) to define it for you.
 
-This is not a criticism; the ground genuinely is not settled, and any vendor telling you there is an established standard for what "AI-native" means is selling you their definition. What your organization needs is a working definition, written down, specific to your business. Make it a one-page document the leadership team actually signs, covering what you mean by an agent, what you mean by AI-assisted development, which systems and workflows are in scope, which are explicitly out, and a standing commitment to revisit the document quarterly because it will be wrong in six months. The signature matters more than the prose. It converts six private definitions into one shared, revisable one.
+This is not a criticism. The ground genuinely is not settled, and any vendor telling you there is an established standard for what "AI-native" means is selling you their definition. What your organization needs is a working definition, written down, specific to your business. Make it a one-page document the leadership team actually signs, covering what you mean by an agent, what you mean by AI-assisted development, which systems and workflows are in scope, which are explicitly out, and a standing commitment to revisit the document quarterly because it will be wrong in six months. The signature matters more than the prose. It converts six private definitions into one shared, revisable one.
 
-The deeper leadership work is harder. Roughly thirty years of software delivery assumptions are being reset. How long things take, what a team of a given size can ship, whether estimation works at all. Every experienced leader carries an internal model built from decades of pattern matching, and that model is now wrong in nonuniform ways. Some work got radically cheaper; some barely moved. The instinct to reason from precedent, normally a leadership strength, becomes a liability when the precedents quietly expired.
+The deeper leadership work is harder. Roughy 30 years of software delivery assumptions are being reset. How long things take, what a team of a given size can ship, whether estimation works at all. Every experienced leader carries an internal model built from decades of pattern matching, and that model is now wrong in nonuniform ways. Some work got radically cheaper, some barely moved. The instinct to reason from precedent, normally a leadership strength, becomes a liability when the precedents quietly expired.
 
-There is a practical exercise here, and I recommend actually running it. Take three or four recently completed projects and re-estimate them as if they were starting today with current capability, independently, then compare. The spread in the answers is a direct measurement of how uncalibrated the team's intuitions are, and the conversation it forces is the real deliverable.
+There is a practical exercise here, and I recommend actually running it. Take three or four recently completed projects and re-estimate them as if they were starting today with target capability, independently, then compare. The spread in the answers is a direct measurement of how uncalibrated the team's intuitions are, and the conversation it forces is the real deliverable.
 
-Not all of these resets favor how things used to be done, and some will be personally uncomfortable for leaders whose credibility rests on the old intuitions. This mindset shift cannot be delegated to a tools budget. A leadership team that funds AI adoption while privately planning and estimating like it is 2019 has not started a transformation. It has started a line item.
+Not all of these resets favor how things used to be done, and some prople will be personally uncomfortable for leaders whose credibility rests on the old intuitions.
 
-Questions worth asking. Does our leadership team share a written working definition of what AI means here? Which of our planning and estimation assumptions have we actually re-examined, versus carried forward on inertia? Where has a leader visibly updated a long-held position based on what AI changed?
+This mindset shift cannot be delegated to a tools budget. A leadership team that funds AI adoption while privately planning and estimating like it is 2019 has not started a transformation. 
+
+I cant tell you how many transformaotions I've seen fail because they're a single line item on the P&L.
+
+Questions worth asking: Does our leadership team share a written working definition of what AI means here? Which of our planning and estimation assumptions have we actually re-examined, versus carried forward on inertia? Where has a leader visibly updated a long-held position based on what AI changed?
 
 ## Perspective 3: Architecture
 
-The architecture perspective is one stance expressed three ways. Your system must be legible to a consumer that does not attend your meetings.
+The architecture perspective is expressed three ways.
 
-**AI-ready documentation** comes first. Documentation has always been aspirational in most organizations, and it survived because its consumers were humans who could fill gaps by asking someone. An agent cannot tap a shoulder. Documentation that is structured, current, and accurate enough for an agent to act on reliably is a different artifact from documentation that is "pretty good for onboarding." It is closer to an interface than a wiki, and it should be treated like one, versioned alongside the code it describes, updated in the same change that alters behavior, and owned by the team that owns the system. If your docs are eighteen months stale, an agent will confidently build against the system you used to have.
+**1. AI-ready documentation** comes first. Documentation has always been aspirational in most organizations, and it survived because its consumers were humans who could fill gaps by asking someone. An agent cannot tap a shoulder. Documentation that is structured, current, and accurate enough for an agent to act on reliably is a different artifact from documentation that is "pretty good for onboarding." It is closer to an interface than a wiki, and it should be treated like one, versioned alongside the code it describes, updated in the same change that alters behavior, and owned by the team that owns the system. If your docs are eighteen months stale, an agent will confidently build against the system you used to have.
 
-**A unified domain model** is the second expression, and I would argue the highest-leverage architectural investment on this list. Every business concept should exist exactly once. "Appointment" means exactly one thing everywhere in Meridian's systems, whether it is being touched by the SaaS scheduling flow, a reporting job, or the desktop client's sync layer; same for "guest," same for "therapist," same for every noun the business runs on.
+Off-topic side note: What I descrive above is the reason why people are (correctly) excited about Obsidian vs systems like Confluence. But I digress, back to the 3 expressions of the architecutr perspecive.
 
-Here is why this suddenly matters more than it did. Ambiguous and duplicated domain boundaries were always a cost, but they were a survivable cost, because humans negotiated the ambiguity through conversation. Recent Team Topologies research on AI-era organization design identifies exactly this dynamic as a new failure mode. AI agents take ambiguity at face value. An agent handed two subtly different "appointment" concepts does not schedule a meeting to reconcile them. It picks one, or blends them, and generates plausible code that violates a domain boundary nobody ever wrote down. Conway's Law did not go anywhere; it got a faster execution engine.
+**2. A unified domain model** is the second expression, and I would argue the highest-leverage architectural investment on this list. Every business concept should exist exactly once. "Appointment" means exactly one thing everywhere in Meridian's systems, whether it is being touched by the SaaS scheduling flow, a reporting job, or the desktop client's sync layer. Same for "guest", same for "therapist", same for every noun the business runs on.
 
-**API as the single source of truth** is the third expression. Every consumer of the system, without exception, goes through the contract. AI agents, the mobile app, partner integrations, internal tools, reporting. No side channels. No "just this once" direct database access, because an agent that learns the side channel will use the side channel, at scale, forever. The API is where the unified domain model becomes enforceable rather than aspirational, and it is the boundary at which you can observe, version, and govern everything that touches your system. It is also the honest answer to Meridian's desktop question. The legacy client's path forward is not a rewrite, it is progressively re-plumbing it to consume the same contract as everything else.
+Here is why unified data models suddenly matter more than they did...
 
-A few questions for your organization. Could an agent, given only our documentation, correctly modify a core workflow? How many definitions of our top five business concepts exist in code today? What consumers currently bypass our API, and why have we allowed each one?
+Ambiguous and duplicated domain boundaries were always a cost, but they were a survivable cost, because humans negotiated the ambiguity through conversation.
+
+Recent Team Topologies research on AI-era organization design identifies exactly this dynamic as a new failure mode. AI agents take ambiguity at face value. An agent handed two subtly different "appointment" concepts does not schedule a meeting to reconcile them. It picks one, or blends them, and generates plausible code that violates a domain boundary nobody ever wrote down.
+
+Conway's Law did not go anywhere. It got a faster execution engine.
+
+**3. API as the single source of truth** is the third expression. Every consumer of the system, without exception, goes through the contract. AI agents, the mobile app, partner integrations, internal tools, reporting. No side channels. No "just this once" direct database access, because an agent that learns the side channel will use the side channel, at scale, forever. The API is where the unified domain model becomes enforceable rather than aspirational, and it is the boundary at which you can observe, version, and govern everything that touches your system. It is also the honest answer to Meridian's desktop question. The legacy client's path forward is not a rewrite, it is progressively re-plumbing it to consume the same contract as everything else.
+
+A few questions for your organization: Could an agent, given only our documentation, correctly modify a core workflow? How many definitions of our top five business concepts exist in code today? What consumers currently bypass our API, and why have we allowed each one?
 
 ## Perspective 4: Governance
 
 The organizing principle for AI governance is **bounded agency**. Scope an AI agent the way you would scope a human's access. Explicitly. Narrowly. Auditably.
 
-Matthew Skelton put a name to this at QCon London in 2026, and it is the right name, because it reframes the question. The question is not "how much can we trust the model." It is "what is this actor permitted to do, and how would we know what it did." You would never grant a new contractor standing write access to production, every repository, and the billing system because narrower provisioning was inconvenient. Yet that is precisely how many organizations deploy agents today, because broad access makes the demo work faster.
+Matthew Skelton put a name to this at QCon London in 2026, and it is the right name, because it reframes the question. The question is not "how much can we trust the model". It is "what is this actor permitted to do, and how would we know what it did". You would never grant a new contractor standing write access to production, every repository, and the billing system because narrower provisioning was inconvenient. Yet that is precisely how many organizations deploy agents today, because broad access makes the demo work faster.
 
-The industry has already named the failure mode. OWASP's LLM risk taxonomy includes Excessive Agency as a category in its own right, meaning systems granted more capability, autonomy, or permissions than their function requires. You do not need its technical depth to act on the insight; you need to translate "scoped like a human" into the same access dimensions you already use for people, because they all apply.
+The industry has already named the failure mode. OWASP's LLM risk taxonomy includes Excessive Agency as a category in its own right, meaning systems granted more capability, autonomy, or permissions than their function requires. You need to translate "scoped like a human" into the same access dimensions you already use for people, because they all apply.
 
 **Environment scope** means an agent's credentials are bound to specific environments. An agent that works in development and staging holds no production credentials at all, not production credentials it promises not to use. **Task scope** means permissions match function, per agent, with no shared "AI service account" underneath everything. An agent that drafts code changes gets repository read, branch write, and pull-request creation. It does not get merge rights; the pipeline and a human owner control the merge. **Time scope** means credentials are short-lived, scoped to the task or session rather than standing. This quietly inverts your security posture, because revocation stops being an emergency procedure and becomes the resting state of the system. And then there is **identity**. Every agent operates under its own distinct identity in your logs. The moment agents share credentials with each other or with humans, your audit trail is fiction, and you will discover that during an incident, the most expensive time to discover anything.
 
@@ -96,13 +138,13 @@ Meridian's first agent deployment shows what this looks like on the ground. An a
 
 The second half of governance is accountability, and it should be boring. **Someone owns every agent-generated change**, the same way someone owns every human-authored one. In practice, every change lands with a named human owner, either the engineer who reviewed and approved it or, for changes flowing through automated approval, the named owner of the pipeline that made the call. That pipeline-owner role is not symbolic. When an agent-generated change causes an incident, the response runs exactly like any other incident. The owner is on point, the retrospective is blameless, and the questions asked are the useful ones. Was the agent's scope right? Did the pipeline gate what it should have gated? Was the approval path appropriate for this class of change? What you are trying to prevent is "the agent did it" becoming an acceptable answer to "who owns this change," because that answer means nobody owns the fix, and a system where nobody owns the fix will generate the same incident again. Lose that, and you have lost the audit trail and, shortly after, the plot.
 
-Questions to ask here. Can we enumerate every agent operating in our systems and exactly what each is permitted to do? If an agent-generated change caused an incident tonight, is the owner unambiguous? Is any agent holding access it was given for convenience rather than function?
+Questions to ask here: Can we enumerate every agent operating in our systems and exactly what each is permitted to do? If an agent-generated change caused an incident tonight, is the owner unambiguous? Is any agent holding access it was given for convenience rather than function?
 
 ## Perspective 5: Operations
 
 The operations perspective is the least novel item in this framework, and I want to be direct about that rather than dress it up. Robust, secure CI/CD, with unit tests, integration tests, and API-level tests as non-negotiable gates.
 
-You have heard this advice for fifteen years. What changed is not the advice. What changed is that it became load-bearing.
+You have heard this advice for 15+ years. What changed is not the advice. What changed is that it became load-bearing.
 
 When humans authored every change, weak test coverage was a survivable risk, because human throughput was the natural rate limiter and human judgment was an informal gate on every commit. Agentic development removes the rate limiter. The volume and velocity of change goes up, the average scrutiny per change goes down, and the pipeline becomes the only gate that reliably scales with the new throughput. A test suite that was a nice-to-have at ten deploys a week is the entire safety system at a hundred.
 
@@ -134,13 +176,13 @@ It also looks structurally different from training-as-checkbox. The output of ch
 
 The organizations that get this right will not be the ones that hired mythical AI-native engineers. They will be the ones that turned learning into a system, so the engineers they already have, who already carry the institutional knowledge, keep pace with a moving field.
 
-The questions to ask. Does our org chart reflect where coordination work actually lives today, or where it lived in 2020? What learning happens here on company time, structurally, not heroically? If an engineer wanted to spend four hours exploring a new capability this week, what would they have to apologize for?
+The questions to ask: Does our org chart reflect where coordination work actually lives today, or where it lived in 2020? What learning happens here on company time, structurally, not heroically? If an engineer wanted to spend four hours exploring a new capability this week, what would they have to apologize for?
 
 ## Perspective 7: Platform
 
 The seventh perspective is where the previous four stop being separate initiatives and become one thing, an internal AI engineering platform. This is the payoff, and I mean that word. Not a someday-maybe. The payoff.
 
-Let me make it concrete with Meridian. A product request comes in. Resources need recurring blackout dates. A therapist wants every second Friday off, indefinitely, and the scheduling system needs to respect it.
+Let me make it concrete with Meridian. A product request comes in. Resources need recurring blackout dates. A doctor wants every second Friday off, indefinitely, and the scheduling system needs to respect it.
 
 In most organizations, the first week of that request is archaeology. Someone figures out which tables hold availability, which services enforce booking rules, which of the three appointment-adjacent concepts this touches, which APIs and clients are affected, and who to ask about the parts nobody remembers. The work has not started; the finding-out has.
 
