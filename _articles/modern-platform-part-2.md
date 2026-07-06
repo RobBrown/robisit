@@ -4,7 +4,7 @@ title: "The Operating Model: Who's Actually Running Your Platform?"
 date: 2026-04-21
 description: "The Vercel breach shows trust is a liability. The access matrix, shared responsibility model, and enforcement that makes agentic platforms safe."
 og_image: ""
-featured: true
+featured: false
 views: 1192
 linkedin: 183
 bluesky: 71
