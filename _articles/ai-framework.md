@@ -5,19 +5,25 @@ date: 2026-07-03
 description: "A framework for engineering leaders navigating AI transformation: seven perspectives adapted from AWS's Cloud Adoption Framework, grounded in DORA, Team Topologies, and Stanford research on AI-assisted development."
 og_image: ""
 featured: true
-views: 119
+views: 131
 linkedin: 0
 bluesky: 0
 read_time: "12 min"
 ---
 
-Most engineering organizations are treating AI adoption the way they treated cloud migration a decade ago, as a project. Pick the tools, run the pilot, train the teams, declare victory at some percentage of adoption, move on.
+TL;DR =Two companies buy the same AI tools. One reports transformative gains; the other reports nothing. The difference was never the tools. Drawing on years of leading cloud migrations at every scale, I've built a framework for the thing that actually determines the outcome: the organization itself. Seven perspectives, real numbers, and no pretending your twenty-year-old codebase doesn't exist.
 
-I get it. The instinct is understandable. Migrations are a shape of work engineering leaders know how to plan, budget, and report on.
+---
 
-It is also the wrong shape for AI, and the strongest research we have today says so directly.
+It feels like it was yesterday that every board room conversation was talking about how to take advantage of the cloud. But it wasn't. It was a lifetime ago.
 
-[subscribe]
+Today, I'm seeing engineering organizations treating AI adoption the same way they treated cloud adoption, as a project. Pick the tools, run the pilot, train the teams, declare victory at some percentage of adoption, move on.
+
+I get it. The instinct is understandable. Migrations are something engineering leaders know how to plan, budget, and report on. The process that worked for cloud adoption do not work for AI adoption, and the strongest research we have today says so directly.
+
+Read on to find out why, and for a tangible path to start thinking about why AI adoption is succeeding or struggling at your company.
+
+[contents]
 
 Google Cloud's DORA team (2025 State of AI-Assisted Software Development report formed a conclusion that should reframe every AI adoption conversation in a boardroom right now.
 
@@ -36,6 +42,8 @@ So, I have a simple thesis. **AI transformation is an organizational systems pro
 What follows is a framework for working that problem, aimed at leaders of established software companies with real customers, real revenue, and real legacy.
 
 The framework I describe isn't a polished guide. Instead, it's an overview based on my experience leading large scale transformations at AWS, and transforming engineering organizations outside of AWS.
+
+[subscribe]
 
 ---
 
