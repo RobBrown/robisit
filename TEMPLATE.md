@@ -32,3 +32,8 @@ an article, put `[subscribe]` on its own line wherever you want it:
 
 Use it as many times as you like, or leave it out. The "Thanks for reading…"
 subscribe block always appears at the very bottom automatically.
+
+To drop in a table of contents, put `[contents]` on its own line. It renders a
+styled list of links to every section heading (`#` and `##`) in the article:
+
+[contents]

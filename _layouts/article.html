@@ -227,6 +227,36 @@ header .rule{
 .body tbody tr:hover td{background:rgba(255,160,0,0.03)}
 .body table code{font-size:13px}
 
+/* ── Table of contents ── */
+.toc{
+  font-family:'Inter',system-ui,sans-serif;
+  background:#0e0b06;
+  border:1px solid #1e1a14;
+  border-radius:6px;
+  padding:18px 24px;
+  margin:36px 0;
+}
+.toc .toc-title{
+  font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:#706a5e;
+  margin-bottom:6px;
+}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc li{margin:0}
+.toc a{
+  display:block;
+  padding:7px 0;
+  font-size:15px;line-height:1.4;
+  color:#b8a47e;text-decoration:none;
+  border-bottom:1px solid #16120b;
+  transition:color .2s;
+}
+.toc li:last-child a{border-bottom:none}
+.toc a:hover{color:#ffa000}
+.toc .toc-h2 a{padding-left:18px;font-size:14px;color:#9e9789}
+.toc .toc-h2 a:hover{color:#ffa000}
+
 /* ── Footer stats + copyright ── */
 footer{
   max-width:660px;margin:0 auto;
@@ -411,6 +441,49 @@ footer .copy{
       if (block.nextElementSibling && block.nextElementSibling.tagName === 'HR') {
         block.nextElementSibling.style.marginTop = '16px';
       }
+    });
+  })();
+  </script>
+  <script>
+  // Table of contents: replace each [contents] marker with a list of links to
+  // the article's H1/H2 section headings. Type [contents] on its own line.
+  (function(){
+    function slugify(text){
+      return text.toLowerCase().trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+    var markers = [];
+    document.querySelectorAll('.body p').forEach(function(p){
+      if (p.textContent.trim() === '[contents]') markers.push(p);
+    });
+    if (!markers.length) return;
+    var headings = document.querySelectorAll('.body h1, .body h2');
+    if (!headings.length) { markers.forEach(function(p){ p.remove(); }); return; }
+    function buildToc(){
+      var nav = document.createElement('nav');
+      nav.className = 'toc';
+      var title = document.createElement('div');
+      title.className = 'toc-title';
+      title.textContent = 'Contents';
+      var ul = document.createElement('ul');
+      headings.forEach(function(h){
+        if (!h.id) h.id = slugify(h.textContent);
+        var li = document.createElement('li');
+        li.className = 'toc-' + h.tagName.toLowerCase();
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      nav.appendChild(title);
+      nav.appendChild(ul);
+      return nav;
+    }
+    markers.forEach(function(p){
+      p.parentNode.replaceChild(buildToc(), p);
     });
   })();
   </script>
