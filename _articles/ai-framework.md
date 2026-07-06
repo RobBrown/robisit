@@ -35,7 +35,7 @@ So, I have a simple thesis. **AI transformation is an organizational systems pro
 
 What follows is a framework for working that problem, aimed at leaders of established software companies with real customers, real revenue, and real legacy.
 
-The framework I describe isn't a polished giide. Instead, it's an overview based on my expeience leading large scale transformations at AWS, and transforming engineering organizations outside of AWS.
+The framework I describe isn't a polished guide. Instead, it's an overview based on my experience leading large scale transformations at AWS, and transforming engineering organizations outside of AWS.
 
 ---
 
@@ -83,9 +83,9 @@ In practice, this perspective produces 3 artifacts, and it should be timeboxed i
 
 3. A set of transformation goals where each one traces to a customer problem someone actually voiced, with the customer's framing preserved. If a goal cannot be traced that way, it goes in a parking lot, not the plan. And if your goals were written before any of this work happened, treat them as drafts.
 
-At Meridian, thisneffort doesnt look glamorous, and it has probably been done before. It means mapping what actually exists across the SaaS product and the desktop product, where the two share concepts, where they diverge, where twenty years of tactical decisions have left duplicated logic. And it means sitting with customers on both sides of that split. The desktop customers, in particular, will tell you things a roadmap workshop never will, starting with why they have not migrated.
+At Meridian, this effort doesn't look glamorous, and it has probably been done before. It means mapping what actually exists across the SaaS product and the desktop product, where the two share concepts, where they diverge, where twenty years of tactical decisions have left duplicated logic. And it means sitting with customers on both sides of that split. The desktop customers, in particular, will tell you things a roadmap workshop never will, starting with why they have not migrated.
 
-Some real questions to ask your organization. Can anyone produce an accurate current-state architecture diagram without starting a project to make one? When did an executive last hear a customer describe their needs firsthand? Do we have clesr product use diagrams showing what our customers value and what they don't? Are our current AI goals traceable to a customer problem, or to a capability we found exciting?
+Some real questions to ask your organization. Can anyone produce an accurate current-state architecture diagram without starting a project to make one? When did an executive last hear a customer describe their needs firsthand? Do we have clear product use diagrams showing what our customers value and what they don't? Are our current AI goals traceable to a customer problem, or to a capability we found exciting?
 
 ## Perspective 2: Leadership
 
