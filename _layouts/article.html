@@ -240,7 +240,12 @@ header .rule{
   font-size:12px;font-weight:600;
   letter-spacing:.08em;text-transform:uppercase;
   color:#706a5e;
-  margin-bottom:6px;
+  margin-bottom:2px;
+}
+.toc .toc-sub{
+  font-size:13px;
+  color:#585249;
+  margin-bottom:12px;
 }
 .toc ul{list-style:none;margin:0;padding:0}
 .toc li{margin:0}
@@ -466,7 +471,10 @@ footer .copy{
       nav.className = 'toc';
       var title = document.createElement('div');
       title.className = 'toc-title';
-      title.textContent = 'Contents';
+      title.textContent = 'Table of Contents';
+      var sub = document.createElement('div');
+      sub.className = 'toc-sub';
+      sub.textContent = 'Jump to a section in the article below';
       var ul = document.createElement('ul');
       headings.forEach(function(h){
         if (!h.id) h.id = slugify(h.textContent);
@@ -479,6 +487,7 @@ footer .copy{
         ul.appendChild(li);
       });
       nav.appendChild(title);
+      nav.appendChild(sub);
       nav.appendChild(ul);
       return nav;
     }
