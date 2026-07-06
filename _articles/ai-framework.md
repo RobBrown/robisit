@@ -19,13 +19,13 @@ It feels like it was yesterday that every board room conversation was talking ab
 
 Today, I'm seeing engineering organizations treating AI adoption the same way they treated cloud adoption, as a project. Pick the tools, run the pilot, train the teams, declare victory at some percentage of adoption, move on.
 
-I get it. The instinct is understandable. Migrations are something engineering leaders know how to plan, budget, and report on. The process that worked for cloud adoption do not work for AI adoption, and the strongest research we have today says so directly.
+I get it. The instinct is understandable. Migrations are something engineering leaders know how to plan, budget, and report on. The process that worked for cloud adoption does not work for AI adoption, and the strongest research we have today says so directly.
 
 Read on to find out why, and for a tangible path to start thinking about why AI adoption is succeeding or struggling at your company.
 
 [contents]
 
-Google Cloud's DORA team (2025 State of AI-Assisted Software Development report formed a conclusion that should reframe every AI adoption conversation in a boardroom right now.
+Google Cloud's DORA team ([State of AI-Assisted Software Development report](https://dora.dev/dora-report-2025/)) formed a conclusion that should reframe every AI adoption conversation in a boardroom right now.
 
 AI acts as an amplifier. It does not fix an engineering organization.
 
