@@ -11,7 +11,7 @@ bluesky: 31
 read_time: "27 min"
 ---
 
-TL;DR = Two companies buy the same AI tools. One reports transformative gains; the other reports nothing. The difference was never the tools. Drawing on years of leading cloud migrations at every scale, I've built a framework for the thing that actually determines the outcome, the organization itself. 1 AI Transformation framework for you to make your own, 7 perspectives, real numbers, and no pretending your legacy doesn't exist.
+TL;DR = Two companies buy the same AI tools. One reports transformative gains, the other reports nothing. The difference was never the tools. Drawing on years of leading cloud migrations at every scale, I've built a framework for the thing that actually determines the outcome, the organization itself. 1 AI Transformation framework for you to make your own, 7 perspectives, real numbers, and no pretending your legacy doesn't exist.
 
 ---
 
