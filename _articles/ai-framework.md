@@ -15,9 +15,9 @@ Most engineering organizations are treating AI adoption the way they treated clo
 
 I get it. The instinct is understandable. Migrations are a shape of work engineering leaders know how to plan, budget, and report on.
 
-[subscribe]
-
 It is also the wrong shape for AI, and the strongest research we have today says so directly.
+
+[subscribe]
 
 Google Cloud's DORA team (2025 State of AI-Assisted Software Development report formed a conclusion that should reframe every AI adoption conversation in a boardroom right now.
 
