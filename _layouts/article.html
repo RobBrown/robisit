@@ -240,9 +240,9 @@ header .rule{
   margin:36px 0;
 }
 .toc-head{
-  order:2;
+  order:1;
   flex:0 0 auto;
-  text-align:right;
+  text-align:left;
 }
 .toc .toc-title{
   font-size:12px;font-weight:600;
@@ -255,7 +255,7 @@ header .rule{
   color:#585249;
   margin-bottom:0;
 }
-.toc ul{order:1;flex:1;list-style:none;margin:0;padding:0}
+.toc ul{order:2;flex:1;list-style:none;margin:0;padding:0}
 .toc li{margin:0}
 .toc a{
   display:block;
@@ -271,7 +271,6 @@ header .rule{
 .toc .toc-h2 a:hover{color:#ffa000}
 @media(max-width:600px){
   .toc{flex-direction:column;gap:14px}
-  .toc-head{order:0;text-align:left}
 }
 
 /* ── Footer stats + copyright ── */
@@ -488,7 +487,7 @@ footer .copy{
       title.textContent = 'Table of Contents';
       var sub = document.createElement('div');
       sub.className = 'toc-sub';
-      sub.textContent = 'Jump to a section in the article below';
+      sub.textContent = 'Jump to a section in the article';
       head.appendChild(title);
       head.appendChild(sub);
       var ul = document.createElement('ul');
