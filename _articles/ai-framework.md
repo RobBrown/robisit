@@ -11,7 +11,7 @@ bluesky: 0
 read_time: "12 min"
 ---
 
-TL;DR =Two companies buy the same AI tools. One reports transformative gains; the other reports nothing. The difference was never the tools. Drawing on years of leading cloud migrations at every scale, I've built a framework for the thing that actually determines the outcome: the organization itself. Seven perspectives, real numbers, and no pretending your twenty-year-old codebase doesn't exist.
+TL;DR = Two companies buy the same AI tools. One reports transformative gains; the other reports nothing. The difference was never the tools. Drawing on years of leading cloud migrations at every scale, I've built a framework for the thing that actually determines the outcome: the organization itself. Seven perspectives, real numbers, and no pretending your twenty-year-old codebase doesn't exist.
 
 ---
 
@@ -47,9 +47,9 @@ The framework I describe isn't a polished guide. Instead, it's an overview based
 
 ---
 
-# Get In To The Right Mindset
+## Get In To The Right Mindset
 
-## A running example, on purpose
+### A running example, on purpose
 
 To keep this honest, I will carry one company through the entire framework. Call it Meridian, fictional but deliberately shaped like the companies this framework is for.
 
@@ -61,7 +61,7 @@ Any framework that only works for a company founded eighteen months ago is not a
 
 One more piece of framing. What follows is Phase 1, the foundation an organization needs before AI leverage compounds instead of dissipating. It is not a finished checklist you complete and file away. I will come back to why at the end.
 
-## The shape of the framework
+### The shape of the framework
 
 Structurally, I am borrowing from something that worked. AWS's Cloud Adoption Framework (CAF) and its Migration Readiness Assessment (MRA) organized cloud transformation not as a linear task list but as a small number of named perspectives, lenses through which a leader could assess their own organization's readiness.
 
@@ -73,9 +73,9 @@ Phase 1 consists of **Seven Perspectives**. For each, I will cover what it is, w
 
 ---
 
-# 7 Perspectives to Adopt AI
+## 7 Perspectives to Adopt AI
 
-## Perspective 1: Business
+### Perspective 1: Business
 
 Start where the business is, not where the technology is.
 
@@ -95,7 +95,7 @@ At Meridian, this effort doesn't look glamorous, and it has probably been done b
 
 Some real questions to ask your organization. Can anyone produce an accurate current-state architecture diagram without starting a project to make one? When did an executive last hear a customer describe their needs firsthand? Do we have clear product use diagrams showing what our customers value and what they don't? Are our current AI goals traceable to a customer problem, or to a capability we found exciting?
 
-## Perspective 2: Leadership
+### Perspective 2: Leadership
 
 The second perspective is executive alignment, and it starts with an uncomfortable admission, which is that your leadership team does not currently agree on what "AI" means for your organization, and no external standard exists (yet) to define it for you.
 
@@ -113,7 +113,7 @@ I cant tell you how many transformaotions I've seen fail because they're a singl
 
 Questions worth asking: Does our leadership team share a written working definition of what AI means here? Which of our planning and estimation assumptions have we actually re-examined, versus carried forward on inertia? Where has a leader visibly updated a long-held position based on what AI changed?
 
-## Perspective 3: Architecture
+### Perspective 3: Architecture
 
 The architecture perspective is expressed three ways.
 
@@ -135,7 +135,7 @@ Conway's Law did not go anywhere. It got a faster execution engine.
 
 A few questions for your organization: Could an agent, given only our documentation, correctly modify a core workflow? How many definitions of our top five business concepts exist in code today? What consumers currently bypass our API, and why have we allowed each one?
 
-## Perspective 4: Governance
+### Perspective 4: Governance
 
 The organizing principle for AI governance is **bounded agency**. Scope an AI agent the way you would scope a human's access. Explicitly. Narrowly. Auditably.
 
@@ -151,7 +151,7 @@ The second half of governance is accountability, and it should be boring. **Some
 
 Questions to ask here: Can we enumerate every agent operating in our systems and exactly what each is permitted to do? If an agent-generated change caused an incident tonight, is the owner unambiguous? Is any agent holding access it was given for convenience rather than function?
 
-## Perspective 5: Operations
+### Perspective 5: Operations
 
 The operations perspective is the least novel item in this framework, and I want to be direct about that rather than dress it up. Robust, secure CI/CD, with unit tests, integration tests, and API-level tests as non-negotiable gates.
 
@@ -171,7 +171,7 @@ This is also where Meridian meets its first genuinely hard conversation. The des
 
 Three questions to sit with. Would we be comfortable tripling deploy volume tomorrow with our current gates? Which of our test suites would we actually trust to catch a plausible-looking, subtly wrong change? Where does human review currently substitute for automation that should exist?
 
-## Perspective 6: People
+### Perspective 6: People
 
 Two things are true about the people side of this transformation, and they pull in different directions, which is why leaders keep mishandling it.
 
@@ -189,7 +189,7 @@ The organizations that get this right will not be the ones that hired mythical A
 
 The questions to ask: Does our org chart reflect where coordination work actually lives today, or where it lived in 2020? What learning happens here on company time, structurally, not heroically? If an engineer wanted to spend four hours exploring a new capability this week, what would they have to apologize for?
 
-## Perspective 7: Platform
+### Perspective 7: Platform
 
 The seventh perspective is where the previous four stop being separate initiatives and become one thing, an internal AI engineering platform. This is the payoff, and I mean that word. Not a someday-maybe. The payoff.
 
@@ -207,9 +207,9 @@ And the questions. If a routine product request arrived today, how much of the f
 
 ---
 
-# A Practical Example of the Framework
+## A Practical Example of the Framework
 
-## Applying the framework at Meridian
+### Applying the framework at Meridian
 
 Frameworks earn their keep in contact with a real portfolio, so let us put this one in contact with Meridian's, starting with the fact everyone would rather skip, which is that the gains will not be evenly distributed.
 
@@ -223,9 +223,9 @@ And this framework should never be pitched as a headcount reduction initiative. 
 
 ---
 
-# What's Next
+## What's Next
 
-## Beyond Phase 1: the perspectives still emerging
+### Beyond Phase 1: the perspectives still emerging
 
 I said at the start that this is Phase 1. Here is what that means, briefly.
 
@@ -233,7 +233,7 @@ The Seven Perspectives are the foundation, the organizational conditions under w
 
 I am deliberately not specifying these, because I would be guessing, and the guesses would age badly. The point of naming them at all is the meta-point, that this list will keep growing. A framework for a transformation that is still being defined has to be a living document, and treating this one as finished would repeat the exact mistake it was written to correct.
 
-## If you take one thing from this...
+### If you take one thing from this...
 
 If you take one thing from this neccisarily long text, take the amplifier. AI will make your organization more of what it already is, which means the highest-return AI investment available to you is the patient, unfashionable work of becoming an organization worth amplifying.
 
