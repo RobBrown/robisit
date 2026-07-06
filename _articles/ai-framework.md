@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "AI Transformation Isn't a Migration: A Framework for Engineering Leaders"
-date: 2026-07-07
+date: 2026-07-06
 description: "A framework for engineering leaders navigating AI transformation: seven perspectives adapted from AWS's Cloud Adoption Framework, grounded in DORA, Team Topologies, and Stanford research on AI-assisted development."
 og_image: "/images/ai-framework.png"
 featured: true
