@@ -229,13 +229,20 @@ header .rule{
 
 /* ── Table of contents ── */
 .toc{
-  display:block;
+  display:flex;
+  gap:28px;
+  align-items:flex-start;
   font-family:'Inter',system-ui,sans-serif;
-  background:#0e0b06;
-  border:1px solid #1e1a14;
+  background:#14100a;
+  border:1px solid #241f18;
   border-radius:6px;
   padding:18px 24px;
   margin:36px 0;
+}
+.toc-head{
+  order:2;
+  flex:0 0 auto;
+  text-align:right;
 }
 .toc .toc-title{
   font-size:12px;font-weight:600;
@@ -246,9 +253,9 @@ header .rule{
 .toc .toc-sub{
   font-size:13px;font-style:italic;
   color:#585249;
-  margin-bottom:12px;
+  margin-bottom:0;
 }
-.toc ul{list-style:none;margin:0;padding:0}
+.toc ul{order:1;flex:1;list-style:none;margin:0;padding:0}
 .toc li{margin:0}
 .toc a{
   display:block;
@@ -262,6 +269,10 @@ header .rule{
 .toc a:hover{color:#ffa000}
 .toc .toc-h2 a{padding-left:18px;font-size:14px;color:#9e9789}
 .toc .toc-h2 a:hover{color:#ffa000}
+@media(max-width:600px){
+  .toc{flex-direction:column;gap:14px}
+  .toc-head{order:0;text-align:left}
+}
 
 /* ── Footer stats + copyright ── */
 footer{
@@ -470,12 +481,16 @@ footer .copy{
     function buildToc(){
       var nav = document.createElement('nav');
       nav.className = 'toc';
+      var head = document.createElement('div');
+      head.className = 'toc-head';
       var title = document.createElement('div');
       title.className = 'toc-title';
       title.textContent = 'Table of Contents';
       var sub = document.createElement('div');
       sub.className = 'toc-sub';
       sub.textContent = 'Jump to a section in the article below';
+      head.appendChild(title);
+      head.appendChild(sub);
       var ul = document.createElement('ul');
       headings.forEach(function(h){
         if (!h.id) h.id = slugify(h.textContent);
@@ -487,8 +502,7 @@ footer .copy{
         li.appendChild(a);
         ul.appendChild(li);
       });
-      nav.appendChild(title);
-      nav.appendChild(sub);
+      nav.appendChild(head);
       nav.appendChild(ul);
       return nav;
     }
