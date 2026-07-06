@@ -5,7 +5,7 @@ date: 2026-07-03
 description: "A framework for engineering leaders navigating AI transformation: seven perspectives adapted from AWS's Cloud Adoption Framework, grounded in DORA, Team Topologies, and Stanford research on AI-assisted development."
 og_image: ""
 featured: true
-views: 142
+views: 1142
 linkedin: 0
 bluesky: 0
 read_time: "12 min"
@@ -76,6 +76,8 @@ Phase 1 consists of **Seven Perspectives**. For each, I will cover what it is, w
 ---
 
 ## 7 Perspectives to Adopt AI
+
+![](/images/ai-framework.png)
 
 ### Perspective 1: Business
 
