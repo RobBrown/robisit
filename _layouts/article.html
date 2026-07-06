@@ -365,25 +365,24 @@ footer .copy{
     label.className='thanks';
   });
   </script>
-  {% if page.inline_subscribe %}
   <script>
+  // Inline subscribe blocks: replace each [subscribe] marker in the body
+  // with an inbox form. Type [subscribe] on its own line in the Markdown,
+  // anywhere you want a block. Use it as many times as you like, or not at all.
   (function(){
-    var n = {{ page.inline_subscribe }};
-    var paragraphs = document.querySelectorAll('.body > p');
-    if (paragraphs.length >= n) {
-      var target = paragraphs[n - 1];
+    var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse';
+    var FIELD = 'entry.99560001';
+    function buildInlineSubscribe(){
       var div = document.createElement('div');
       div.className = 'subscribe subscribe--inline';
       div.style.cssText = 'border-top:none;padding:8px 0 0;margin:12px 0 0;text-align:center;';
       var label = document.createElement('p');
-      label.id = 'subscribe-label-inline';
       label.textContent = 'Get new articles in your inbox.';
       var form = document.createElement('form');
-      form.id = 'subscribe-form-inline';
       form.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:8px;';
       var input = document.createElement('input');
       input.type = 'email';
-      input.name = 'entry.99560001';
+      input.name = FIELD;
       input.placeholder = 'you@email.com';
       input.required = true;
       input.style.cssText = 'width:50%;min-width:200px;text-align:center;';
@@ -394,26 +393,27 @@ footer .copy{
       form.appendChild(btn);
       div.appendChild(label);
       div.appendChild(form);
-      target.parentNode.insertBefore(div, target.nextSibling);
-      if (div.nextElementSibling && div.nextElementSibling.tagName === 'HR') {
-        div.nextElementSibling.style.marginTop = '16px';
-      }
-      form.addEventListener('submit', function(e) {
+      form.addEventListener('submit', function(e){
         e.preventDefault();
-        var email = input.value;
         var data = new FormData();
-        data.append('entry.99560001', email);
-        fetch('https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse', {
-          method: 'POST', body: data, mode: 'no-cors'
-        });
+        data.append(FIELD, input.value);
+        fetch(FORM_URL, { method:'POST', body:data, mode:'no-cors' });
         form.style.display = 'none';
         label.textContent = "Thanks! You'll receive future articles via email.";
         label.className = 'thanks';
       });
+      return div;
     }
+    document.querySelectorAll('.body p').forEach(function(p){
+      if (p.textContent.trim() !== '[subscribe]') return;
+      var block = buildInlineSubscribe();
+      p.parentNode.replaceChild(block, p);
+      if (block.nextElementSibling && block.nextElementSibling.tagName === 'HR') {
+        block.nextElementSibling.style.marginTop = '16px';
+      }
+    });
   })();
   </script>
-  {% endif %}
   <div class="copy">© {{ site.time | date: "%Y" }} Rob Brown</div>
 </footer>
 

@@ -24,3 +24,11 @@ Code blocks look like this.
 ```
 
 Inline `code` looks like this.
+
+To drop a "Get new articles in your inbox." subscribe form into the middle of
+an article, put `[subscribe]` on its own line wherever you want it:
+
+[subscribe]
+
+Use it as many times as you like, or leave it out. The "Thanks for reading…"
+subscribe block always appears at the very bottom automatically.

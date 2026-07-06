@@ -9,12 +9,13 @@ views: 1847
 linkedin: 284
 bluesky: 63
 read_time: "4 min"
-inline_subscribe: 2
 ---
 
 AWS has 200+ services. Your AI agents don’t care about any of them.
 
 The complexity we’ve normalized over the last decade, that "enterprise-grade" overhead we wear like a badge of honor... Theyve become a tax.
+
+[subscribe]
 
 You pay it every time an agent stalls on a Jenkins pipeline or chokes on a permissions error from a service built for a human operator.
 

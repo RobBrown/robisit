@@ -9,12 +9,13 @@ views: 2473
 linkedin: 408
 bluesky: 79
 read_time: "4 min"
-inline_subscribe: 2
 ---
 
 Software is changing. But the real story isn't the code; it’s the shift in the soul of the organizations building it. 
 
 Lately, the conversation around AI in development has been aimed at the wrong target. We are obsessed with velocity: lines committed, tickets closed, sprints compressed. We’ve taken our existing mess and simply asked how to make it pile up faster. 
+
+[subscribe]
 
 Shopify CEO Tobi Lütke described the current tension well: 
 
