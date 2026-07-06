@@ -1,14 +1,14 @@
 ---
 layout: article
 title: "AI Transformation Isn't a Migration: A Framework for Engineering Leaders"
-date: 2026-07-03
+date: 2026-07-07
 description: "A framework for engineering leaders navigating AI transformation: seven perspectives adapted from AWS's Cloud Adoption Framework, grounded in DORA, Team Topologies, and Stanford research on AI-assisted development."
-og_image: ""
+og_image: "/images/ai-framework.png"
 featured: true
-views: 1142
-linkedin: 0
-bluesky: 0
-read_time: "12 min"
+views: 1145
+linkedin: 142
+bluesky: 31
+read_time: "27 min"
 ---
 
 TL;DR = Two companies buy the same AI tools. One reports transformative gains; the other reports nothing. The difference was never the tools. Drawing on years of leading cloud migrations at every scale, I've built a framework for the thing that actually determines the outcome: the organization itself. Seven perspectives, real numbers, and no pretending your twenty-year-old codebase doesn't exist.
@@ -227,7 +227,7 @@ And this framework should never be pitched as a headcount reduction initiative. 
 
 ---
 
-## What's Next
+## Measure it and Make it Real
 
 ### Beyond Phase 1: the perspectives still emerging
 
