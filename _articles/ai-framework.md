@@ -5,7 +5,7 @@ date: 2026-07-03
 description: "A framework for engineering leaders navigating AI transformation: seven perspectives adapted from AWS's Cloud Adoption Framework, grounded in DORA, Team Topologies, and Stanford research on AI-assisted development."
 og_image: ""
 featured: true
-views: 131
+views: 142
 linkedin: 0
 bluesky: 0
 read_time: "12 min"
