@@ -15,6 +15,8 @@ TL;DR = Two companies buy the same AI tools. One reports transformative gains; t
 
 ---
 
+## AI Adoption ≠ New Tool
+
 It feels like it was yesterday that every board room conversation was talking about how to take advantage of the cloud. But it wasn't. It was a lifetime ago.
 
 Today, I'm seeing engineering organizations treating AI adoption the same way they treated cloud adoption, as a project. Pick the tools, run the pilot, train the teams, declare victory at some percentage of adoption, move on.
