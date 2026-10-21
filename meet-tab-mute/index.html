@@ -8,24 +8,90 @@ permalink: /meet-tab-mute/
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>Meet Tab Mute</title>
+<title>Meet Tab Mute: one tab, one meeting, one voice in your ears</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:#0a0600;color:#d4cfc6;font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.85;-webkit-font-smoothing:antialiased}
 main{max-width:660px;margin:0 auto;padding:64px 24px 80px}
 h1{color:#ffa000;font-weight:normal;font-size:32px;line-height:1.25;margin-bottom:32px}
+h2{color:#ffa000;font-weight:normal;font-size:22px;line-height:1.3;margin-top:40px;margin-bottom:16px}
 p{margin-bottom:24px}
+ul,ol{padding-left:1.2em;margin-bottom:24px}
+li{margin-bottom:12px}
 a{color:#ffa000;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
 a:hover{color:#ffe4a0}
-@media (max-width:600px){body{font-size:17px}main{padding:40px 20px 56px}h1{font-size:26px}}
+.head{display:flex;gap:20px;align-items:center;margin-bottom:16px}
+.head img{width:64px;height:64px;flex:none;border-radius:12px}
+.head h1{margin:0}
+.tagline{color:#8a8278;font-style:italic}
+figure{margin:32px 0}
+figure img{display:block;width:100%;height:auto;border:1px solid #2a2118;border-radius:6px}
+figcaption{color:#8a8278;font-size:15px;line-height:1.5;margin-top:10px}
+.notice{border:2px solid #ffa000;background:#1a1206;padding:24px;border-radius:6px;margin:40px 0}
+.notice h2{margin-top:0}
+.notice strong{color:#ffe4a0}
+.notice ul{margin-bottom:0}
+.notice li:last-child{margin-bottom:0}
+.notice p:last-of-type{margin-bottom:16px}
+footer{color:#8a8278;font-size:15px;line-height:1.6;margin-top:48px}
+footer p{margin-bottom:12px}
+@media (max-width:600px){body{font-size:17px}main{padding:40px 20px 56px}h1{font-size:26px}h2{font-size:20px}.notice{padding:18px}.head{gap:14px}.head img{width:52px;height:52px}}
 </style>
 </head>
 <body>
 <main>
+<div class="head">
+<img src="/meet-tab-mute/store-assets/icon-128.png" alt="Meet Tab Mute icon" width="64" height="64">
 <h1>Meet Tab Mute</h1>
-<!-- Placeholder: replace with a description of the extension. -->
-<p>A description of Meet Tab Mute is coming soon.</p>
-<p><a href="/meet-tab-mute/privacy/">Privacy Policy</a></p>
+</div>
+<p class="tagline">A Chrome extension for people who are, regrettably, in more than one meeting at once.</p>
+
+<h2>The problem</h2>
+<p>You joined a second Google Meet call. Or you forgot to close the first tab. Either way, two rooms are now talking into your ears in stereo, and your brain, a remarkable organ, is not a multi-channel mixing desk.</p>
+<p>Hunting through tabs for the right speaker icon is a poor use of a finite life. Meet Tab Mute puts every Meet call in one list so you can silence the ones you are not currently pretending to attend.</p>
+
+<figure>
+<img src="/meet-tab-mute/store-assets/screenshot-1280x800.png" alt="Meet Tab Mute popup listing open Google Meet calls by title, each with a Muted checkbox" width="1280" height="800" loading="lazy">
+<figcaption>The entire interface. A list and some checkboxes. Ambition was kept to a minimum.</figcaption>
+</figure>
+
+<h2>How it works</h2>
+<ol>
+<li>Click the toolbar icon.</li>
+<li>The popup lists every open Google Meet tab that is an actual meeting (URLs like meet.google.com/abc-defg-hij), by meeting title.</li>
+<li>Tick <em>Muted</em> to silence that tab's audio. Untick it to bring the sound back.</li>
+</ol>
+<p>It uses Chrome's own built-in tab muting: the same mute you get by right-clicking a tab, just with less archaeology.</p>
+
+<h2>What it does NOT do</h2>
+<ul>
+<li><strong>It does not mute your microphone.</strong> It mutes what <em>you hear</em>, not what you say. The popup itself warns: "Muting stops what you hear. Your mic is still live in every room." People in the other meeting can still hear you, so use Meet's own mic button. This is a hearing aid in reverse, not an invisibility cloak.</li>
+<li>It does not inject scripts or read page content. Its only permission is host access to https://meet.google.com/*.</li>
+<li>It collects no data, stores nothing, runs no analytics, and has no network access at all.</li>
+<li>It does not touch video, chat, or participants.</li>
+<li>It does not make the meetings shorter. Sadly.</li>
+</ul>
+
+<section class="notice" role="note" aria-labelledby="notice-title">
+<h2 id="notice-title">Important: read this before you get attached</h2>
+<p>A small tool with a small, unglamorous list of caveats. Please read all three.</p>
+<ul>
+<li><strong>Keep Google Chrome updated.</strong> Always install Chrome updates promptly; they contain security fixes. Do not skip or delay a Chrome update to keep this extension working. Your browser's security matters more than a mute button.</li>
+<li><strong>Chrome updates may break this extension.</strong> When Google updates Chrome, it may change or remove the browser functionality this extension relies on. If that happens, Meet Tab Mute may stop working, partly or entirely, without warning.</li>
+<li><strong>No support, no fixes, no promises.</strong> Meet Tab Mute is free. No support, bug fixes, or remediation time is available or promised. If it breaks, it may stay broken. Keep the update anyway.</li>
+</ul>
+</section>
+
+<h2>Privacy</h2>
+<p>It stores nothing and sends nothing. <a href="/meet-tab-mute/privacy/">Read the privacy policy</a>.</p>
+
+<h2>Get it</h2>
+<p>Coming to the Chrome Web Store. Price: free.</p>
+
+<footer>
+<p>For the curious: <a href="mailto:hal866245@gmail.com">hal866245@gmail.com</a>. Email is read eventually; replies, fixes, and support are not offered.</p>
+<p><a href="/">robisit.com</a></p>
+</footer>
 </main>
 </body>
 </html>
