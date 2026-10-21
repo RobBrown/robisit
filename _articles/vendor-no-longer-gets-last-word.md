@@ -2,7 +2,7 @@
 layout: article
 title: "The Vendor No Longer Gets the Last Word"
 date: 2026-10-20
-description: "For forty years, software decided what users got. AI is changing the arithmetic, and users are starting to decide for themselves."
+description: "For forty years, software decided what users got. AI is changing that, and users are starting to decide what features are implikented themselves."
 og_image: ""
 featured: false
 views: 294
@@ -11,9 +11,11 @@ bluesky: 54
 read_time: "3 min"
 ---
 
-Here is the shift in one sentence: "For forty years, software decided what users got. Users are starting to decide for themselves."
+Here is the shift in one sentence: "For forty years, software dictated what users got. Today, users are starting to decide for themselves."
 
-That sounds obvious until you remember how the business actually worked. A vendor built a product, customers bought it, learned it, and bent their work around it. When it fell short they filed a request, and most requests died in a backlog, because a feature had to pay for itself across thousands of customers or it did not get built. I ran organizations that operated this way. It was not malice. It was arithmetic, and AI is quietly changing the arithmetic. Two things this month made that concrete for me.
+That sounds obvious until you remember how the business of consumer software develolmet actually worked. A vendor built a product, customers bought it, learned it, used what was avaliable. When the features fell short, they filed a feature request. Most requests died in a backlog, because a feature had to pay for itself across thousands of customers or it did not get built.
+
+I ran organizations that operated this way. This cycle was not malice. It was the best we coild do. But, AI is quietly changing this game. Two things this month made that concrete for me.
 
 [subscribe]
 
