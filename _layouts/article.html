@@ -456,6 +456,8 @@ footer .copy{
       p.parentNode.replaceChild(block, p);
       if (block.nextElementSibling && block.nextElementSibling.tagName === 'HR') {
         block.nextElementSibling.style.marginTop = '16px';
+      } else {
+        block.style.marginBottom = '36px';
       }
     });
   })();
