@@ -15,6 +15,8 @@ That sounds obvious until you remember how the business actually worked. A vendo
 
 In early October a developer named Brandon Thomas released open-source recreations of seven Adobe apps, including a Photoshop clone called PhotoCraft, built in Rust with Claude Opus 5.5 ([PetaPixel](https://petapixel.com/2026/10/07/someone-rebuilt-free-open-source-versions-of-photoshop-premiere-and-lightroom-using-ai/)). It is a clean-room rebuild from public specs and observed behaviour. The coverage has been breathless, so some care is warranted: these are alpha. The project's own tracker had PhotoCraft under half ready for real work as of last week, and Thomas has walked back his parity claims. I would not hand it to a working designer. What stuck with me is that reproducing the shape of Photoshop, once a multi-year corporate effort, is now something a small team attempts in weeks and gets a reviewable result.
 
+![Meet Tab Mute: mute every Meet tab from one place](/meet-tab-mute/store-assets/marquee-1400x560.png)
+
 The smaller example changed my thinking more. My wife teaches, and she often has more than one Google Meet room open. She needed to silence individual tabs without hunting for the right speaker icon, and nothing we found did it cleanly. So I built [Meet Tab Mute](https://robisit.com/meet-tab-mute/), a Chrome extension that lists every open Meet call with a mute checkbox beside it. I have no idea how to write a Chrome extension. I still don't. Here is what I actually did:
 
 - Spent about 30 minutes planning and writing a PRD.
