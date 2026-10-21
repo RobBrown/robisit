@@ -6,8 +6,8 @@ description: "For forty years, software decided what users got. AI is changing t
 og_image: ""
 featured: false
 views: 294
-linkedin: 54
-bluesky: 1259
+linkedin: 1259
+bluesky: 54
 read_time: "3 min"
 ---
 
