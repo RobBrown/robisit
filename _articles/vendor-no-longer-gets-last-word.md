@@ -15,6 +15,8 @@ Here is the shift in one sentence: "For forty years, software decided what users
 
 That sounds obvious until you remember how the business actually worked. A vendor built a product, customers bought it, learned it, and bent their work around it. When it fell short they filed a request, and most requests died in a backlog, because a feature had to pay for itself across thousands of customers or it did not get built. I ran organizations that operated this way. It was not malice. It was arithmetic, and AI is quietly changing the arithmetic. Two things this month made that concrete for me.
 
+[subscribe]
+
 In early October a developer named Brandon Thomas released open-source recreations of seven Adobe apps, including a Photoshop clone called PhotoCraft, built in Rust with Claude Opus 5.5 ([PetaPixel](https://petapixel.com/2026/10/07/someone-rebuilt-free-open-source-versions-of-photoshop-premiere-and-lightroom-using-ai/)). It is a clean-room rebuild from public specs and observed behaviour. The coverage has been breathless, so some care is warranted: these are alpha. The project's own tracker had PhotoCraft under half ready for real work as of last week, and Thomas has walked back his parity claims. I would not hand it to a working designer. What stuck with me is that reproducing the shape of Photoshop, once a multi-year corporate effort, is now something a small team attempts in weeks and gets a reviewable result.
 
 ![Meet Tab Mute: mute every Meet tab from one place](/meet-tab-mute/store-assets/marquee-1400x560.png)
