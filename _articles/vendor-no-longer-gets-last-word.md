@@ -5,7 +5,9 @@ date: 2026-10-20
 description: "For forty years, software decided what users got. AI is changing the arithmetic, and users are starting to decide for themselves."
 og_image: ""
 featured: false
-views: 0
+views: 294
+linkedin: 54
+bluesky: 1259
 read_time: "3 min"
 ---
 
