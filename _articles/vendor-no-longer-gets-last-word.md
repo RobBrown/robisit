@@ -11,7 +11,7 @@ bluesky: 54
 read_time: "3 min"
 ---
 
-Here is the shift in one sentence: "For forty years, software dictated what users got. Today, users are starting to decide for themselves."
+AI modernization is as much about organizational maturiry as it is software development and the AI tooling transforming it.
 
 That sounds obvious until you remember how the business of consumer software develolmet actually worked. A vendor built a product, customers bought it, learned it, used what was avaliable. When the features fell short, they filed a feature request. Most requests died in a backlog, because a feature had to pay for itself across thousands of customers or it did not get built.
 
