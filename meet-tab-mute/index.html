@@ -33,9 +33,17 @@ figcaption{color:#8a8278;font-size:15px;line-height:1.5;margin-top:10px}
 .notice ul{margin-bottom:0}
 .notice li:last-child{margin-bottom:0}
 .notice p:last-of-type{margin-bottom:16px}
+.store{display:flex;align-items:center;gap:20px;margin:40px 0 8px;padding:20px 24px;background:linear-gradient(135deg,#1f1507,#140d04);border:1px solid #4a3410;border-radius:10px;text-decoration:none;color:#d4cfc6;transition:border-color .2s,transform .2s}
+.store:hover{color:#d4cfc6;border-color:#ffa000;transform:translateY(-1px)}
+.store-text{flex:1;line-height:1.4}
+.store-kicker{display:block;color:#8a8278;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.store-title{display:block;color:#ffe4a0;font-size:20px;margin-top:2px}
+.store-btn{flex:none;background:#ffa000;color:#0a0600;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;font-weight:600;padding:10px 18px;border-radius:999px;white-space:nowrap;transition:background .2s}
+.store:hover .store-btn{background:#ffe4a0}
+.store:focus-visible{outline:2px solid #ffe4a0;outline-offset:3px}
 footer{color:#8a8278;font-size:15px;line-height:1.6;margin-top:48px}
 footer p{margin-bottom:12px}
-@media (max-width:600px){body{font-size:17px}main{padding:40px 20px 56px}h1{font-size:26px}h2{font-size:20px}.notice{padding:18px}.head{gap:14px}.head img{width:52px;height:52px}}
+@media (max-width:600px){body{font-size:17px}main{padding:40px 20px 56px}h1{font-size:26px}h2{font-size:20px}.notice{padding:18px}.head{gap:14px}.head img{width:52px;height:52px}.store{flex-direction:column;align-items:flex-start;gap:14px;padding:18px}.store-title{font-size:18px}}
 </style>
 </head>
 <body>
@@ -45,6 +53,11 @@ footer p{margin-bottom:12px}
 <h1>Meet Tab Mute</h1>
 </div>
 <p class="tagline">A Chrome extension for people who are, regrettably, in more than one meeting at once.</p>
+
+<a class="store" href="https://chromewebstore.google.com/detail/kbfpaoffonoffmkfidkhbplmoaebnikl?utm_source=item-share-cb" target="_blank" rel="noopener">
+<span class="store-text"><span class="store-kicker">Chrome Web Store &middot; Free</span><span class="store-title">Install Meet Tab Mute</span></span>
+<span class="store-btn">Add to Chrome &rarr;</span>
+</a>
 
 <h2>The problem</h2>
 <p>You joined a second Google Meet call. Or you forgot to close the first tab. Either way, two rooms are now talking into your ears in stereo, and your brain, a remarkable organ, is not a multi-channel mixing desk.</p>
@@ -86,7 +99,7 @@ footer p{margin-bottom:12px}
 <p>It stores nothing and sends nothing. <a href="/meet-tab-mute/privacy/">Read the privacy policy</a>.</p>
 
 <h2>Get it</h2>
-<p>Coming to the Chrome Web Store. Price: free.</p>
+<p><a href="https://chromewebstore.google.com/detail/kbfpaoffonoffmkfidkhbplmoaebnikl?utm_source=item-share-cb" target="_blank" rel="noopener">Install it from the Chrome Web Store</a>. Price: free.</p>
 
 <footer>
 <p>For the curious: <a href="mailto:hal866245@gmail.com">hal866245@gmail.com</a>. Email is read eventually; replies, fixes, and support are not offered.</p>
