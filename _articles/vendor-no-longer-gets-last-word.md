@@ -11,9 +11,9 @@ bluesky: 54
 read_time: "3 min"
 ---
 
-AI modernization is as much about organizational maturiry as it is software development and the AI tooling transforming it.
+TL;DR = Lovable was just the start. We're heading in to a world where commercial software applications will be reverse engineered, rebuilt, and extended by regular every day users. Feature requests will become coding prompts.
 
-That sounds obvious until you remember how the business of consumer software develolmet actually worked. A vendor built a product, customers bought it, learned it, used what was avaliable. When the features fell short, they filed a feature request. Most requests died in a backlog, because a feature had to pay for itself across thousands of customers or it did not get built.
+The statement above sounds obvious until you remember how the business of consumer software develolmet works today. A vendor builds a product, customers buy it, they learn to use it. When the product falls short, the user files a feature request. Most requests died in a backlog, because a feature has to pay for itself across thousands of customers or it does not get built.
 
 I ran organizations that operated this way. This cycle was not malice. It was the best we coild do. But, AI is quietly changing this game. Two things this month made that concrete for me.
 
