@@ -176,6 +176,34 @@ header .rule{
   color:#9e9789;font-style:italic;
 }
 
+.body blockquote.tldr{
+  position:relative;
+  border-left:3px solid #ffa000;
+  background:linear-gradient(90deg,#1a1206,rgba(26,18,6,0));
+  padding:22px 24px 22px 56px;margin:8px 0 40px;
+  border-radius:0 6px 6px 0;
+  color:#eae6df;font-style:italic;
+  font-size:21px;line-height:1.65;
+}
+.body blockquote.tldr::before{
+  content:"\201C";
+  position:absolute;left:14px;top:6px;
+  font-family:'Lora',Georgia,serif;font-style:normal;
+  font-size:64px;line-height:1;color:#ffa000;opacity:.85;
+}
+.body blockquote.tldr p{margin-bottom:0}
+.body blockquote.tldr p::before{
+  content:"TL;DR";
+  display:block;margin-bottom:6px;
+  font-family:'Inter',system-ui,sans-serif;font-style:normal;
+  font-size:12px;font-weight:600;letter-spacing:.14em;
+  color:#ffa000;
+}
+@media(max-width:600px){
+  .body blockquote.tldr{font-size:19px;padding:18px 18px 18px 46px}
+  .body blockquote.tldr::before{font-size:52px;left:10px}
+}
+
 .body code{
   font-family:ui-monospace,'SF Mono',monospace;font-size:15px;
   background:#14100a;color:#c4b998;
