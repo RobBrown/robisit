@@ -11,12 +11,12 @@ bluesky: 54
 read_time: "3 min"
 ---
 
-> Lovable was just the start. We're heading in to a world where commercial software applications will be reverse engineered, rebuilt, and extended by regular every day users. Feature requests will become coding prompts.
+> Lovable was just the start. We're heading into a world where commercial software applications will be reverse engineered, rebuilt, and extended by regular everyday users. Feature requests will become coding prompts.
 {: .tldr}
 
-The statement above sounds obvious until you remember how the business of consumer software develolmet works today. A vendor builds a product, customers buy it, they learn to use it. When the product falls short, the user files a feature request. Most requests died in a backlog, because a feature has to pay for itself across thousands of customers or it does not get built.
+The statement above sounds obvious until you remember how the business of consumer software development works today. A vendor builds a product, customers buy it, they learn to use it. When the product falls short, the user files a feature request. Most requests died in a backlog, because a feature has to pay for itself across thousands of customers or it does not get built.
 
-I ran organizations that operated this way. This cycle was not malice. It was the best we coild do. But, AI is quietly changing this game. Two things this month made that concrete for me.
+I ran organizations that operated this way. This cycle was not malice. It was the best we could do. But, AI is quietly changing this game. Two things this month made that concrete for me.
 
 [subscribe]
 
