@@ -2,22 +2,23 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
-const { ROOT, CARDED_URL, cards, defaultOrder, N } = require('./helpers');
+const { ROOT, CARDED_URL, CARDED_FILE, cards } = require('./helpers');
 
 const SITE = path.join(ROOT, '_site');
 
-test('carded post renders masthead, deck and reveal link; article collapsed after script runs', async ({ page }) => {
+test('carded post renders the site header, deck and reveal link; article collapsed after script runs', async ({ page }) => {
   await page.goto(CARDED_URL);
-  const masthead = page.locator('.ic-masthead');
-  await expect(masthead.locator('h1')).toHaveText(/AI Transformation Isn't a Migration/);
-  await expect(masthead.locator('.date')).toHaveCount(1); // one line of metadata
+  const masthead = page.locator('article > header');
+  await expect(masthead.locator('h1')).toHaveText(/Hello, World/);
+  await expect(masthead.locator('.date')).toHaveCount(1);
+  await expect(masthead.locator('.byline')).toHaveCount(1);
   await expect(page.getByRole('region', { name: 'Insight cards' })).toBeVisible();
   await expect(page.locator('.ic-card')).toHaveCount(1 + cards.insights.length + 1);
   await expect(page.getByRole('button', { name: 'Read the full article' })).toBeVisible();
   await expect(page.locator('#ic-article')).toBeHidden();
 
   // Order on the page: masthead, deck, reveal link, article.
-  const order = await page.evaluate(() => ['.ic-masthead', '#ic-deck', '#ic-expand', '#ic-article']
+  const order = await page.evaluate(() => ['article > header', '#ic-deck', '#ic-expand', '#ic-article']
     .map((s) => document.querySelector(s)).every((el, i, a) => i === 0 || (a[i - 1].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)));
   expect(order).toBe(true);
 });
@@ -36,23 +37,16 @@ test('article body is complete in the initial HTML, visible before script runs',
   // Not collapsed in markup: collapsing is a script action.
   expect(html).not.toMatch(/id="ic-article"[^>]*hidden/);
   // Every section heading of the source post is present.
-  const src = fs.readFileSync(path.join(ROOT, '_articles/ai-framework.md'), 'utf8');
+  const src = fs.readFileSync(path.join(ROOT, CARDED_FILE), 'utf8');
   const headings = [...src.matchAll(/^#{2,3} (.+)$/gm)].length;
   expect((article.match(/<h[23] id="/g) || []).length).toBe(headings);
-  expect(article).toContain('If you take one thing from this neccisarily long text');
+  expect(article).toContain('That is the end of the test page.');
   // Deck markup ships hidden, so a script failure leaves only the article.
   expect(html).toMatch(/<section[^>]*id="ic-deck"[^>]*hidden/);
 });
 
-test('article body matches the pre-change build byte for byte', async () => {
-  const body = (html) => html.slice(html.indexOf('<div class="body">'), html.indexOf('<footer>'))
-    .replace(/(\s*<\/(div|article)>|\s*<script[^>]*><\/script>)+\s*$/, '');
-  const before = fs.readFileSync(path.join(__dirname, 'fixtures/baseline/ai-framework.html'), 'utf8');
-  const after = fs.readFileSync(path.join(SITE, 'thoughts/ai-framework/index.html'), 'utf8');
-  expect(body(after)).toBe(body(before));
-});
-
 for (const [name, file] of [
+  ['ai-framework', 'thoughts/ai-framework/index.html'],
   ['modern-platform-part-1', 'thoughts/modern-platform-part-1/index.html'],
   ['modern-platform-part-2', 'thoughts/modern-platform-part-2/index.html'],
   ['stop-building-islands', 'thoughts/stop-building-islands/index.html'],
@@ -83,7 +77,7 @@ test.describe('JavaScript disabled', () => {
     await expect(page.locator('#ic-expand')).toBeHidden();
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('#ic-article')).toBeVisible();
-    await expect(page.locator('#ai-adoption--new-tool')).toBeVisible();
+    await expect(page.locator('#hello-world')).toBeVisible();
     const deckText = await page.evaluate(() => {
       const r = document.querySelector('#ic-deck').getBoundingClientRect();
       return r.width * r.height;
@@ -106,5 +100,24 @@ test('invalid cards blocks render the plain article (fixture build)', async () =
       expect(html, p).not.toContain('insight-cards');
       expect(html, p).toContain('<div class="body">');
     }
+  }
+});
+
+test('the test page is unlisted: absent from /content and marked noindex', async ({ page, request }) => {
+  const listing = await (await request.get('/content/')).text();
+  expect(listing).not.toContain('hello-world-cards');
+  expect(listing).toContain('/thoughts/ai-framework/');
+  await page.goto(CARDED_URL);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+  await page.goto('/thoughts/ai-framework/');
+  await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+});
+
+test('no existing article has a cards block, so none shows a deck', async ({ page }) => {
+  for (const f of fs.readdirSync(path.join(ROOT, '_articles'))) {
+    if (path.join('_articles', f) === CARDED_FILE) continue;
+    const html = fs.readFileSync(path.join(SITE, 'thoughts', f.replace(/\.md$/, ''), 'index.html'), 'utf8');
+    expect(html, f).not.toContain('ic-deck');
+    expect(html, f).not.toContain('insight-cards');
   }
 });

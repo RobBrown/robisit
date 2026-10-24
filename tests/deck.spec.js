@@ -1,6 +1,6 @@
 // PRD 11 Deck; PRD 3.3-3.5, 5.2-5.7.
 const { test, expect } = require('@playwright/test');
-const { CARDED_URL, cards, insightById, defaultOrder, N, settle, currentIndex } = require('./helpers');
+const { CARDED_URL, cards, insightById, defaultOrder, N, settle, currentIndex, atTopOrEnd } = require('./helpers');
 
 const titlesInRail = (page) => page.locator('.ic-insight .ic-title').allTextContents();
 const rail = (page) => page.locator('.ic-rail');
@@ -167,7 +167,7 @@ test('terminal control reveals the article at the path anchor and hides the reve
   await expect(page.locator('#ic-article')).toBeVisible();
   await expect(page.locator('#ic-expand')).toBeHidden();
   await expect(target).toBeFocused();
-  await page.waitForFunction((sel) => Math.abs(document.querySelector(sel).getBoundingClientRect().top) < 40, cards.default_anchor);
+  await atTopOrEnd(page, cards.default_anchor);
   await expect(page.locator('#ic-deck')).toBeAttached(); // deck stays above
 });
 
@@ -177,7 +177,7 @@ test('reveal link reveals the article at its top and hides itself', async ({ pag
   await expect(page.locator('#ic-article')).toBeVisible();
   await expect(page.locator('#ic-expand')).toBeHidden();
   await expect(page.locator('#ic-article')).toBeFocused();
-  await page.waitForFunction(() => Math.abs(document.querySelector('#ic-article').getBoundingClientRect().top) < 40);
+  await atTopOrEnd(page, '#ic-article');
 });
 
 test('deep link ?path=pilot&card=3 applies the path and lands on card 3', async ({ page }) => {

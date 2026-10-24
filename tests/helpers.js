@@ -3,7 +3,8 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 const ROOT = path.resolve(__dirname, '..');
-const CARDED_URL = '/thoughts/ai-framework/';
+const CARDED_URL = '/thoughts/hello-world-cards/';
+const CARDED_FILE = '_articles/hello-world-cards.md';
 
 function frontMatter(file) {
   const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -11,7 +12,7 @@ function frontMatter(file) {
 }
 
 // The carded post's cards block, so tests follow the content rather than restating it.
-const cards = frontMatter('_articles/ai-framework.md').cards;
+const cards = frontMatter(CARDED_FILE).cards;
 const insightById = Object.fromEntries(cards.insights.map((i) => [i.id, i]));
 const defaultOrder = cards.default_order || cards.insights.map((i) => i.id);
 const paths = [{ id: null, order: defaultOrder, anchor: cards.default_anchor },
@@ -58,6 +59,15 @@ function currentIndex(page) {
   });
 }
 
+// True once the element is at the top of the viewport, or the page can scroll no further.
+function atTopOrEnd(page, selector) {
+  return page.waitForFunction((sel) => {
+    const el = sel ? document.querySelector(sel) : document.activeElement;
+    const maxed = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1;
+    return Math.abs(el.getBoundingClientRect().top) < 40 || (maxed && el.getBoundingClientRect().top > 0);
+  }, selector);
+}
+
 // Capture analytics through the documented adapter boundary.
 async function captureEvents(page) {
   await page.addInitScript(() => {
@@ -66,4 +76,4 @@ async function captureEvents(page) {
   });
 }
 
-module.exports = { ROOT, CARDED_URL, cards, insightById, defaultOrder, paths, N, siteColours, settle, currentIndex, captureEvents };
+module.exports = { ROOT, CARDED_URL, CARDED_FILE, cards, insightById, defaultOrder, paths, N, siteColours, settle, currentIndex, captureEvents, atTopOrEnd };

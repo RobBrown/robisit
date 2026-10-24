@@ -3,7 +3,7 @@
 // reveal. Written to test-results/screenshots/.
 const { test } = require('@playwright/test');
 const path = require('path');
-const { CARDED_URL, N, settle } = require('./helpers');
+const { CARDED_URL, N, settle, atTopOrEnd } = require('./helpers');
 
 const OUT = path.join(__dirname, '..', 'test-results', 'screenshots');
 
@@ -25,7 +25,7 @@ for (const width of [375, 1280]) {
       await page.goto(`${CARDED_URL}?path=pilot&card=${N}`);
       await shot('3-terminal');
       await page.locator('.ic-go').click();
-      await page.waitForFunction(() => Math.abs(document.activeElement.getBoundingClientRect().top) < 40);
+      await atTopOrEnd(page, null);
       await shot('4-revealed');
     });
   }

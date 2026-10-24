@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
-const { ROOT } = require('./helpers');
+const { ROOT, CARDED_URL } = require('./helpers');
 
 test('combined gzipped deck CSS and JS is under 10 KB', async () => {
   const files = ['assets/css/insight-cards.css', 'assets/js/insight-cards.js'];
@@ -19,7 +19,7 @@ test('the include and its Liquid add no external requests', async ({ page }) => 
   const hosts = new Set();
   page.on('request', (r) => hosts.add(new URL(r.url()).host));
   await page.route(/^(?!http:\/\/localhost)/, (r) => r.abort());
-  await page.goto('/thoughts/ai-framework/');
+  await page.goto(CARDED_URL);
   const own = [...hosts].filter((h) => !/localhost|googleapis|gstatic|posthog/.test(h));
   expect(own).toEqual([]);
 });
