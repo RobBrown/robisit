@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "The Vendor No Longer Gets the Last Word"
-date: 2026-10-20
+date: 2026-10-24
 description: "For forty years, software decided what users got. AI is changing that, and users are starting to decide what features are implemented themselves."
 og_image: ""
 featured: false
