@@ -1,0 +1,50 @@
+{%- comment -%}
+  Insight Cards deck (PRD v2.1 sections 3, 5, 6, 8). Rendered only when
+  insight-cards-valid.html has set ic_valid. The deck and reveal link ship
+  `hidden`; assets/js/insight-cards.js unhides them and collapses the
+  article, so with no script (or a failed one) the page is the plain article.
+  Insight cards render in the default order; the script reorders them per path.
+{%- endcomment -%}
+{%- assign ic = page.cards -%}
+{%- assign ic_ids = ic.insights | map: "id" -%}
+{%- assign ic_order = ic.default_order | default: ic_ids -%}
+{%- assign ic_total = ic.insights | size | plus: 1 -%}
+<header class="ic-masthead">
+    <h1>{{ page.title }}</h1>
+    <div class="date">{{ page.date | date: "%B %-d, %Y" }}{% if page.read_time %} · {{ page.read_time }} read{% endif %}</div>
+  </header>
+
+  <section class="ic-deck" id="ic-deck" role="region" aria-label="Insight cards" hidden>
+    <div class="ic-rail" tabindex="0">
+      {%- if ic.situation %}
+      <div class="ic-card ic-situation" role="group" aria-roledescription="card" aria-label="Start">
+        <div class="ic-n" aria-hidden="true">Start</div>
+        <h2 class="ic-title" id="ic-prompt">{{ ic.situation.prompt | escape }}</h2>
+        <div class="ic-options" role="radiogroup" aria-labelledby="ic-prompt">
+          {%- for o in ic.situation.options %}
+          <button type="button" class="ic-opt" role="radio" aria-checked="false" data-path="{{ o.id | escape }}">{{ o.label | escape }}</button>
+          {%- endfor %}
+        </div>
+      </div>
+      {%- endif %}
+      {%- for id in ic_order %}
+      {%- assign i = ic.insights | where: "id", id | first %}
+      <div class="ic-card ic-insight" role="group" aria-roledescription="card" aria-label="{{ forloop.index }} of {{ ic_total }}" data-id="{{ id | escape }}">
+        <div class="ic-n" aria-hidden="true">{{ forloop.index }}/{{ ic_total }}</div>
+        <h2 class="ic-title">{{ i.title | escape }}</h2>
+        <p class="ic-body">{{ i.body | strip | escape }}</p>
+      </div>
+      {%- endfor %}
+      <div class="ic-card ic-terminal" role="group" aria-roledescription="card" aria-label="{{ ic_total }} of {{ ic_total }}">
+        <div class="ic-n" aria-hidden="true">{{ ic_total }}/{{ ic_total }}</div>
+        <p class="ic-knows">{{ ic.terminal.knows | escape }}</p>
+        <p class="ic-resolves">{{ ic.terminal.resolves | escape }}</p>
+        <button type="button" class="ic-go">Read the article</button>
+      </div>
+    </div>
+    <button type="button" class="ic-chev ic-prev" aria-label="Previous card">‹</button>
+    <button type="button" class="ic-chev ic-next" aria-label="Next card">›</button>
+    <div class="ic-sr" id="ic-live" aria-live="polite"></div>
+  </section>
+  <div class="ic-expand" id="ic-expand" hidden><button type="button" class="ic-reveal">Read the full article</button></div>
+  <script type="application/json" id="ic-data">{"default_anchor":{{ ic.default_anchor | jsonify }},"options":{{ ic.situation.options | default: "" | jsonify | replace: "</", "<\/" }}}</script>

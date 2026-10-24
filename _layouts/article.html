@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">{% if page.cards %}{% include insight-cards-valid.html %}{% endif %}
 <title>{{ page.title }} — Rob Brown</title>
 <meta name="description" content="{{ page.description }}">
 <meta property="og:title" content="{{ page.title }}">
@@ -18,7 +18,8 @@ posthog.init('phc_2kfjmGaj5A7KtH79AFffVClaAxl0upvAxb7mmtXrbKr',{api_host:'https:
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">{% if ic_valid %}
+<link rel="stylesheet" href="{{ '/assets/css/insight-cards.css' | relative_url }}">{% endif %}
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -389,7 +390,20 @@ footer .copy{
   </div>
 </nav>
 
-<article>
+<article>{% if ic_valid %}
+  {% include insight-cards.html %}
+  <div class="ic-article" id="ic-article">
+  <header>
+    <div class="byline">
+      <span class="stat"><span class="stat-num">{{ page.views | default: 0 }}</span> reads</span>
+      <span class="dot">·</span>
+      <span class="stat"><span class="stat-num">{{ page.linkedin | default: 0 }}</span> LinkedIn</span>
+      <span class="dot">·</span>
+      <span class="stat"><span class="stat-num">{{ page.bluesky | default: 0 }}</span> Bluesky</span>
+    </div>
+    <span class="rule"></span>
+  </header>
+{% else %}
   <header>
     <h1>{{ page.title }}</h1>
     <div class="date">{{ page.date | date: "%B %-d, %Y" }}</div>
@@ -402,10 +416,12 @@ footer .copy{
     </div>
     <span class="rule"></span>
   </header>
-
+{% endif %}
   <div class="body">
     {{ content }}
+  </div>{% if ic_valid %}
   </div>
+  <script src="{{ '/assets/js/insight-cards.js' | relative_url }}"></script>{% endif %}
 </article>
 
 <footer>
