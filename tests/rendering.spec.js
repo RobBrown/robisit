@@ -12,13 +12,13 @@ test('carded post renders the site header, deck and reveal link; article collaps
   await expect(masthead.locator('h1')).toHaveText(/Hello, World/);
   await expect(masthead.locator('.date')).toHaveCount(1);
   await expect(masthead.locator('.byline')).toHaveCount(1);
-  await expect(page.getByRole('region', { name: 'Insight cards' })).toBeVisible();
+  await expect(page.getByRole('region', { name: /^TL;DR/ })).toBeVisible();
   await expect(page.locator('.ic-card')).toHaveCount(1 + cards.insights.length + 1);
   await expect(page.getByRole('button', { name: 'Read the full article' })).toBeVisible();
   await expect(page.locator('#ic-article')).toBeHidden();
 
-  // Order on the page: masthead, deck, reveal link, article.
-  const order = await page.evaluate(() => ['article > header', '#ic-deck', '#ic-expand', '#ic-article']
+  // Order on the page: masthead, TL;DR heading with the reveal link, deck, article.
+  const order = await page.evaluate(() => ['article > header', '#ic-head', '#ic-expand', '#ic-deck', '#ic-article']
     .map((s) => document.querySelector(s)).every((el, i, a) => i === 0 || (a[i - 1].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)));
   expect(order).toBe(true);
 });

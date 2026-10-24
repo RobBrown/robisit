@@ -10,7 +10,11 @@
 {%- assign ic_ids = ic.insights | map: "id" -%}
 {%- assign ic_order = ic.default_order | default: ic_ids -%}
 {%- assign ic_total = ic.insights | size | plus: 1 -%}
-<section class="ic-deck" id="ic-deck" role="region" aria-label="Insight cards" hidden>
+<div class="ic-head" id="ic-head" hidden>
+    <h2 class="ic-label" id="ic-label">TL;DR <span class="ic-count">in {{ ic_total }} cards</span></h2>
+    <div class="ic-expand" id="ic-expand"><button type="button" class="ic-reveal" aria-label="Read the full article">Read the full article<span aria-hidden="true"> &rarr;</span></button></div>
+  </div>
+  <section class="ic-deck" id="ic-deck" role="region" aria-labelledby="ic-label" hidden>
     <div class="ic-rail" tabindex="0">
       {%- if ic.situation %}
       <div class="ic-card ic-situation" role="group" aria-roledescription="card" aria-label="Start">
@@ -42,5 +46,4 @@
     <button type="button" class="ic-chev ic-next" aria-label="Next card">›</button>
     <div class="ic-sr" id="ic-live" aria-live="polite"></div>
   </section>
-  <div class="ic-expand" id="ic-expand" hidden><button type="button" class="ic-reveal">Read the full article</button></div>
   <script type="application/json" id="ic-data">{"default_anchor":{{ ic.default_anchor | jsonify }},"options":{{ ic.situation.options | default: "" | jsonify | replace: "</", "<\/" }}}</script>

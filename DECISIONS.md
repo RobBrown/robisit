@@ -46,7 +46,13 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 - **Radius and shadows:** 14px cards with a drop shadow, 6px controls, round chevrons with a 2px border.
 - **The selected option** takes an amber border with a 3px amber left rule (PRD 6.3), as in the prototype. The terminal control is the PRD's amber primary.
 - **The chevrons' opacity transition was removed.** PRD 5.5 says "no other animation exists".
-- **Masthead: the site's own article header, unchanged** (title, date, byline stats, rule), with the deck below it. That replaces the PRD's "title and one line of metadata". The header is shared markup in the layout, so carded and non-carded posts render it identically. Its date and byline contrast failures are pre-existing site issues.
+- **Masthead: the site's article header, compacted on carded pages (owner direction, 2026-10-24: "too much whitespace").** The layout adds `class="ic-page"` to `<article>` only when the deck renders, and `insight-cards.css` restyles that header:
+  - The date and stats share one line above the title. Below 375px the date takes its own line.
+  - The header rule is hidden.
+  - Top padding is 28px (24px on phones) instead of 48px, and the gap below the title is 28px instead of 40px.
+
+  The markup is unchanged and posts without cards are byte-identical (the baseline tests). The same treatment could go site-wide later, but that changes every post.
+- **The deck is titled "TL;DR" (owner direction).** A heading row above the deck holds an `h2` "TL;DR" in the site's TL;DR label style (amber Inter 12px, tracked), "in N cards" in muted text, and "Read the full article →" on the right. The deck region is labelled by that heading. The arrow is `aria-hidden` and the button keeps the name "Read the full article". The heading row replaces the PRD's ban on lede and hint text, by owner direction.
 
 ### Deck behaviour and markup (PRD 3, 5, 8)
 
@@ -55,7 +61,7 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 - **The script loads synchronously right after the article**, not deferred, so the collapse happens before first paint as far as possible. It's 3 KB gzipped.
 - **Geometry, as in the prototype (owner direction).** Cards snap to the start edge, so the current card always lines up with the text column and the next card shows to its right (about 40px on a phone, more on desktop, where it's dimmed). The last card sits at the column's right edge. Arrow keys, chevrons and deep links scroll to the same edge, using the rail's `scroll-padding`. Above 600px wide the rail fades its clipped edges into the page. Chevrons are round and sit over the card edges, as in the prototype. PRD 5.2's ~86%/560px width is overridden by the owner's call for smaller cards.
 - **Height.** All cards in a deck share the height of the tallest (the rail stretches them). There's no `max-height`, so at 200% zoom (ACC-09) cards grow rather than scroll internally.
-- **The reveal link is below the fold on a first load at 375×667 (832px), 390×844 (806px) and 1280×800 (835px)**, because the site header takes ~295px above the deck. It is on the first screen at 1280×900 and 1440×900, which the tests check.
+- **The reveal link is on the first screen** (owner direction, 2026-10-24). It moved into the TL;DR heading row above the deck. Its bottom edge is at 236px at 375×667 and 270px at 1280×800, and the tests check 375×667, 1280×800 and 1440×900.
 - **Each situation option is a tabbable `role="radio"` button** (the prototype's pattern), not a roving-tabindex radio group, because arrow keys belong to deck navigation (PRD 5.3, ACC-01).
 - **Arrow keys** are ignored when a modifier is held (Alt+Left is browser Back) and inside form fields. They act only while the deck is on screen, and repeated presses during a smooth scroll queue from the target card, not the current one.
 - **A disabled chevron hands focus to its sibling.** Without this, Tab looped back into the deck and never reached the reveal link. The keyboard test caught it.

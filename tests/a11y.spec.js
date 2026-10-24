@@ -21,7 +21,7 @@ for (const scheme of ['light', 'dark']) {
       const flat = (r) => r.violations.flatMap((v) => v.nodes.map((n) => `${v.id}: ${n.target.join(' ')}`));
 
       // The reading layer itself: zero violations.
-      const layer = await new AxeBuilder({ page }).withTags(WCAG).include('#ic-deck').include('#ic-expand').analyze();
+      const layer = await new AxeBuilder({ page }).withTags(WCAG).include('#ic-deck').include('#ic-head').analyze();
       expect(flat(layer)).toEqual([]);
 
       // The whole page: nothing beyond the site's pre-existing issues.
@@ -33,14 +33,15 @@ for (const scheme of ['light', 'dark']) {
 
 test('ACC-03: deck is a named region; cards are groups with roledescription and counter label', async ({ page }) => {
   await page.goto(CARDED_URL);
-  await expect(page.getByRole('region', { name: 'Insight cards' })).toHaveCount(1);
+  await expect(page.getByRole('region', { name: /^TL;DR/ })).toHaveCount(1);
   const labels = await page.locator('.ic-card').evaluateAll((els) => els.map((e) => [e.getAttribute('role'), e.getAttribute('aria-roledescription'), e.getAttribute('aria-label')]));
   expect(labels).toEqual([['group', 'card', 'Start'], ...Array.from({ length: N }, (_, i) => ['group', 'card', `${i + 1} of ${N}`])]);
 });
 
 test('ACC-04: scroll rail is focusable with a visible focus ring', async ({ page }) => {
   await page.goto(CARDED_URL);
-  await page.keyboard.press('Tab'); await page.keyboard.press('Tab'); await page.keyboard.press('Tab');
+  // Brand, menu, reveal link, then the rail.
+  for (let i = 0; i < 4; i++) await page.keyboard.press('Tab');
   await expect(page.locator('.ic-rail')).toBeFocused();
   const outline = await page.locator('.ic-rail').evaluate((el) => { const s = getComputedStyle(el); return [s.outlineStyle, parseFloat(s.outlineWidth)]; });
   expect(outline[0]).not.toBe('none');
@@ -65,7 +66,7 @@ test('ACC-01: keyboard only — Tab reaches rail, options, terminal control and 
 
   // Enter on an option selects the path and advances.
   await page.reload();
-  await page.keyboard.press('Tab'); await page.keyboard.press('Tab'); await page.keyboard.press('Tab'); // rail
+  for (let i = 0; i < 4; i++) await page.keyboard.press('Tab'); // rail
   await page.keyboard.press('Tab'); // first option
   await expect(page.getByRole('radio').first()).toBeFocused();
   await page.keyboard.press('Enter');

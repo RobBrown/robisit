@@ -19,7 +19,40 @@
 }
 @media(max-width:600px){:root{--ic-gutter:20px}}
 
-.ic-deck[hidden],.ic-expand[hidden]{display:none}
+.ic-deck[hidden],.ic-head[hidden],.ic-expand[hidden]{display:none}
+
+/* Carded pages: a compact masthead. Date and stats share one line above the
+   title, and the TL;DR heading row takes the place of the header rule. Scoped
+   to .ic-page so posts without cards are untouched. */
+.ic-page{padding-top:28px}
+.ic-page header{display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;margin-bottom:28px}
+.ic-page header .date{order:-1;margin:0}
+.ic-page header .date::after{content:"\00b7";margin-left:16px;color:var(--ic-edge)}
+.ic-page header .byline{order:-1}
+.ic-page header h1{flex:1 0 100%;margin:10px 0 0}
+.ic-page header .rule{display:none}
+@media(max-width:600px){
+  /* Keep date and stats on one line at 375px. */
+  .ic-page{padding-top:24px}
+  .ic-page header{column-gap:9px}
+  .ic-page header .date,.ic-page header .byline{font-size:12px;letter-spacing:0}
+  .ic-page header .date::after{margin-left:9px}
+  .ic-page header .byline{gap:9px}
+}
+@media(max-width:374px){
+  /* Too narrow for one line: the date gets its own line, without the dot. */
+  .ic-page header .date{flex-basis:100%;margin-bottom:4px}
+  .ic-page header .date::after{display:none}
+}
+
+/* Section heading: the TL;DR label (as on the site's TL;DR block), the card
+   count, and the way out to the full article on the right. */
+.ic-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:12px}
+.ic-label{
+  margin:0;font-family:var(--ic-sans);font-size:12px;font-weight:600;letter-spacing:.14em;line-height:1.4;
+  color:var(--ic-accent);
+}
+.ic-count{margin-left:6px;letter-spacing:.02em;font-weight:400;color:var(--ic-ink-soft)}
 /* Deck: native scroller spanning the column plus its gutters. As in the
    prototype, the current card lines up with the text column and the next
    card shows to its right. */
@@ -103,15 +136,14 @@
   .ic-deck:hover .ic-chev,.ic-chev:focus-visible{opacity:1}
 }
 
-.ic-expand{display:flex;justify-content:center;margin-top:-4px}
 .ic-reveal{
-  cursor:pointer;padding:10px 4px;background:none;border:0;
-  font-family:var(--ic-sans);font-size:14px;font-weight:600;
+  cursor:pointer;padding:6px 0;background:none;border:0;white-space:nowrap;
+  font-family:var(--ic-sans);font-size:13px;font-weight:600;
   color:var(--ic-link);
 }
-.ic-reveal:hover{color:var(--ic-ink)}
+.ic-reveal:hover{color:var(--ic-accent)}
 
-.ic-article{margin-top:48px}
+.ic-article{margin-top:24px}
 .ic-article:focus{outline:none}
 .ic-article [id]{scroll-margin-top:16px}
 .ic-article h1:focus,.ic-article h2:focus,.ic-article h3:focus{outline:none}

@@ -36,10 +36,9 @@ test('cards are uniform in height within the deck', async ({ page }) => {
   expect(new Set(hs).size).toBe(1);
 });
 
-// On phones the site header (~295px) plus a card in the site's type is more
-// than one screen, so the reveal link sits below the fold there; at 1280x800 it
-// is ~8px below. From 900px tall it is on the first screen.
-for (const vp of [{ width: 1280, height: 900 }, { width: 1440, height: 900 }]) {
+// The reveal link sits in the TL;DR heading row above the deck, so it is on
+// the first screen everywhere, including the smallest phone.
+for (const vp of [{ width: 375, height: 667 }, { width: 1280, height: 800 }, { width: 1440, height: 900 }]) {
   test(`the reveal link is on the first screen at ${vp.width}x${vp.height}`, async ({ page }, info) => {
     test.skip(info.project.name !== 'chromium');
     await page.setViewportSize(vp);
@@ -104,7 +103,7 @@ for (const scheme of ['light', 'dark']) {
     const allowed = siteColours();
     const used = await page.evaluate((props) => {
       const out = new Set();
-      const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-expand, #ic-expand *');
+      const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-head *');
       for (const el of els) {
         const cs = getComputedStyle(el);
         for (const p of props) {

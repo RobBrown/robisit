@@ -25,6 +25,7 @@
   var prev = deck.querySelector('.ic-prev');
   var next = deck.querySelector('.ic-next');
   var live = document.getElementById('ic-live');
+  var head = document.getElementById('ic-head');
   var expand = document.getElementById('ic-expand');
   var situation = rail.querySelector('.ic-situation');
   var terminal = rail.querySelector('.ic-terminal');
@@ -181,7 +182,7 @@
   var card = parseInt(q.get('card'), 10);
   var start = Math.max(0, Math.min(isNaN(card) ? 0 : card - offset, last()));
   deck.hidden = false;
-  expand.hidden = false;
+  head.hidden = false;
   article.hidden = true;
   go(start, true);
   aim = null;
