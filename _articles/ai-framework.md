@@ -9,6 +9,51 @@ views: 1145
 linkedin: 142
 bluesky: 31
 read_time: "27 min"
+
+# DRAFT: card copy pending author review
+cards:
+  situation:
+    prompt: "Which of these is closest to your situation?"
+    options:
+      - id: board
+        label: "The board wants an AI strategy by next quarter"
+        order: [board, migration, perspectives, movements, measurement, meridian, governance]
+        anchor: "#perspective-1-business"
+      - id: governance
+        label: "Teams are adopting AI tools with no governance"
+        order: [governance, movements, migration, perspectives, meridian, measurement, board]
+        anchor: "#perspective-4-governance"
+      - id: pilot
+        label: "We ran a pilot and it stalled"
+        order: [meridian, measurement, movements, perspectives, migration, governance, board]
+        anchor: "#applying-the-framework-at-meridian"
+  default_order: [migration, perspectives, movements, governance, meridian, measurement, board]
+  default_anchor: "#ai-adoption--new-tool"
+  insights:
+    - id: migration
+      title: "AI transformation is not a migration"
+      body: "A migration has a source, a target, and an end date. You move, you decommission, you close the project. AI adoption has none of these. It changes how engineering work is done, and that change compounds instead of completing. So do not fund it as a project with a finish line. Fund it as an operating change: a budget line that persists, owners who stay in role, and metrics reviewed every quarter for years."
+    - id: perspectives
+      title: "Most AI plans cover two of seven perspectives"
+      body: "Nearly every AI plan I have reviewed answers two questions: which tools engineers may use, and what data those tools may see. Tooling and security. The framework adds five more. Strategy: what the business expects to change. Operating model: how teams and workflows change. Talent: what engineers learn and stop doing. Platform: how agents become first-class actors. Measurement: how you will know. Score your plan against all seven. Two of seven predicts a stalled pilot."
+    - id: movements
+      title: "Three movements, in a fixed order"
+      body: "First, augment individuals: tools, guardrails, time to learn. The gains are real and local. Second, re-form teams: redesign workflows on the assumption that drafting, review and testing are partly delegated, then change team size, roles and the definition of done. Third, rebuild the platform so agents have identity, permissions and audit trails. The order matters because each movement creates the demand the next one serves. Platform-first efforts build for a way of working nobody has yet."
+    - id: governance
+      title: "Governance written after adoption is a ban list"
+      body: "Engineers adopt tools in weeks. Policy takes quarters. By the time a committee publishes guidance, teams have standardized on whatever worked, and the guidance reads as prohibition. Put governance where engineers already live instead: in the platform. Give agents identity, scope their access, log their actions, and draw a hard line on what data leaves the boundary. That is the control model you already use for humans, which is why nobody fights it."
+    - id: meridian
+      title: "Meridian shipped 30 percent more code and nothing changed"
+      body: "Meridian, 400 engineers, gave one team a coding assistant for a quarter. The team shipped about 30 percent more code. Review queues grew, because reviewers had no tools and no guidance on AI-drafted changes. Lead time to production was flat. The pilot was declared a success and quietly dropped. It measured the individual while the organization stood still. Most pilots fail this way, and the failure is invisible if you are counting the wrong thing."
+    - id: measurement
+      title: "Measure the path, not the engineer"
+      body: "Lines per engineer per week is the easiest AI metric to collect and the least connected to anything the business values. The metric that matters is time from an accepted idea to that idea running in production, across the whole path. If AI speeds up one stage and the rest of the path absorbs the gain, nothing changed. A second signal: count the decisions the organization now makes that it could not make before. That is how you know the second movement has started."
+    - id: board
+      title: "The board is asking about cost structure, not tools"
+      body: "When a board asks for an AI strategy it is asking how the company's cost and delivery speed change over three years. A licence count does not answer that. The seven perspectives do: which parts of the organization change first, what it costs, what it returns, and how you will know. Present that and you have a strategy a board can fund. Present a tool list and you will be asked the same question next quarter."
+  terminal:
+    knows: "You have the framework: seven perspectives, three movements in a fixed order, and the metric that exposes a stalled pilot."
+    resolves: "The article adds what cards cannot: how Meridian sequenced the movements, which perspective to fund first in your situation, and the second-movement failure that no tool fixes."
 ---
 
 TL;DR = Two companies buy the same AI tools. One reports transformative gains, the other reports nothing. The difference was never the tools. Drawing on years of leading cloud migrations at every scale, I've built a framework for the thing that actually determines the outcome, the organization itself. 1 AI Transformation framework for you to make your own, 7 perspectives, real numbers, and no pretending your legacy doesn't exist.
