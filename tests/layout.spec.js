@@ -113,7 +113,8 @@ for (const scheme of ['light', 'dark']) {
       }
       return [...out];
     }, PROPS);
-    const bad = used.filter((c) => !allowed.has(c) && !/rgba\(\d+, \d+, \d+, 0\)/.test(c));
+    // Fully transparent values and black drop shadows (as on the site's menu) are allowed.
+    const bad = used.filter((c) => !allowed.has(c) && !/rgba\(\d+, \d+, \d+, 0\)/.test(c) && !/^rgba\(0, 0, 0, 0?\.\d+\)$/.test(c));
     expect(bad).toEqual([]);
   });
 }
@@ -124,7 +125,9 @@ test('deck CSS contains no colour literals outside the site token set, and no we
   const toRgb = (h) => { if (h.length === 3) h = h.split('').map((c) => c + c).join(''); return `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4), 16)})`; };
   const hexes = [...css.matchAll(/#([0-9a-f]{3}|[0-9a-f]{6})\b/gi)].map((m) => m[1]);
   expect(hexes.filter((h) => !allowed.has(toRgb(h.toLowerCase())))).toEqual([]);
-  expect(css).not.toMatch(/rgba?\(|hsla?\(|@import|@font-face|fonts\.googleapis/);
+  const colourFns = [...css.matchAll(/(?:rgba?|hsla?)\([^)]*\)/g)].map((m) => m[0]);
+  expect(colourFns.filter((c) => !/^rgba\(0,0,0,0?\.\d+\)$/.test(c)), 'only black shadows may use rgba()').toEqual([]);
+  expect(css).not.toMatch(/@import|@font-face|fonts\.googleapis/);
   const fams = [...css.matchAll(/font-family:\s*([^;}]+)/g)].map((m) => m[1]);
   for (const f of fams) expect(f).toMatch(/var\(--ic-(serif|sans)\)/);
 });

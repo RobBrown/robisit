@@ -3,6 +3,7 @@
 :root{
   --ic-bg:#0a0600;          /* body background */
   --ic-surface:#14100a;     /* .toc, .menu-dropdown */
+  --ic-glow:#1a1206;        /* TL;DR block tint */
   --ic-ink:#d4cfc6;         /* body text */
   --ic-ink-strong:#eae6df;  /* h1, h2 */
   --ic-ink-soft:#9e9789;    /* blockquote, .toc-h2 */
@@ -11,6 +12,7 @@
   --ic-rule-mid:#2e2820;    /* blockquote rule, input border */
   --ic-rule-strong:#706a5e; /* input focus border */
   --ic-accent:#ffa000;      /* amber */
+  --ic-ink-on-accent:#0a0600; /* body background, as text on amber */
   --ic-link:#b8a47e;        /* .body a, footer .read-more */
   --ic-serif:'Lora',Georgia,'Times New Roman',serif;
   --ic-sans:'Inter',system-ui,sans-serif;
@@ -20,34 +22,37 @@
 @media(max-width:600px){:root{--ic-gutter:20px}}
 
 .ic-deck[hidden],.ic-expand[hidden]{display:none}
-/* Deck: full-bleed native scroller; padding centres the first and last card
-   so the neighbour's edge always shows. */
+/* Deck: native scroller spanning the column plus its gutters. As in the
+   prototype, the first card lines up with the text column and the next card's
+   edge shows on the right; later cards snap to the centre. */
 .ic-deck{position:relative;margin:0 calc(-1 * var(--ic-gutter))}
 .ic-rail{
   position:relative;display:flex;gap:12px;
   overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
   scroll-snap-type:x mandatory;scrollbar-width:none;
-  padding:2px calc((100% - var(--ic-card)) / 2) 6px;
+  padding:4px var(--ic-gutter) 28px;
+  scroll-padding-inline:var(--ic-gutter);
 }
 .ic-rail::-webkit-scrollbar{display:none}
 .ic-deck :focus-visible,.ic-expand :focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
 .ic-rail:focus-visible{outline-offset:-2px}
 
-/* Each element borrows an existing site component: the card is the .toc box,
-   the title is .body h2, the body is .body p, options are the subscribe input,
-   the selected option takes the TL;DR amber rule, the control is the subscribe
-   button, and the reveal link is footer .read-more. */
+/* Cards are raised panels: the TL;DR block's amber rule and warm tint along
+   the top, a lifted border and a drop shadow. Title is .body h2, body is
+   .body p, options are the subscribe input, and the counter is the TL;DR label. */
 .ic-card{
   flex:0 0 var(--ic-card);scroll-snap-align:center;scroll-snap-stop:always;
   display:flex;flex-direction:column;gap:12px;
   min-height:min(520px,var(--ic-fill,440px));
   padding:20px 20px 22px;
-  background:var(--ic-surface);border:1px solid var(--ic-rule);border-radius:6px;
+  background:linear-gradient(180deg,var(--ic-glow),var(--ic-surface) 160px);
+  border:1px solid var(--ic-rule-mid);border-top:3px solid var(--ic-accent);border-radius:12px;
+  box-shadow:0 2px 4px rgba(0,0,0,.5),0 18px 36px -14px rgba(0,0,0,.9);
   color:var(--ic-ink);font-family:var(--ic-serif);font-size:17px;line-height:1.8;
 }
 .ic-n{
-  font-family:var(--ic-sans);font-size:13px;letter-spacing:.01em;line-height:1.4;
-  color:var(--ic-ink-soft);font-variant-numeric:tabular-nums;
+  font-family:var(--ic-sans);font-size:12px;font-weight:600;letter-spacing:.14em;line-height:1.4;
+  text-transform:uppercase;color:var(--ic-accent);font-variant-numeric:tabular-nums;
 }
 .ic-title,.ic-knows{
   font-family:var(--ic-serif);font-size:24px;font-weight:700;line-height:1.3;
@@ -55,6 +60,8 @@
 }
 .ic-resolves{color:var(--ic-ink-soft)}
 @media(min-width:601px){
+  /* Fade the clipped neighbours into the page instead of cutting them off. */
+  .ic-rail{-webkit-mask-image:linear-gradient(90deg,transparent,black var(--ic-gutter),black calc(100% - var(--ic-gutter)),transparent);mask-image:linear-gradient(90deg,transparent,black var(--ic-gutter),black calc(100% - var(--ic-gutter)),transparent)}
   .ic-card{padding:24px 28px 28px;gap:16px;font-size:19px;line-height:1.85}
 }
 
@@ -65,26 +72,29 @@
   color:var(--ic-ink);background:var(--ic-surface);
   border:1px solid var(--ic-rule-mid);border-radius:4px;
 }
-.ic-opt[aria-checked="true"]{border-left:3px solid var(--ic-accent);padding-left:10px}
+.ic-opt[aria-checked="true"]{border-color:var(--ic-accent);border-left-width:3px;padding-left:10px}
 @media(hover:hover){.ic-opt:hover{border-color:var(--ic-rule-strong)}.ic-opt[aria-checked="true"]:hover{border-left-color:var(--ic-accent)}}
 
 .ic-go{
   align-self:flex-start;margin-top:4px;cursor:pointer;white-space:nowrap;
-  padding:10px 20px;border:1px solid var(--ic-rule-mid);border-radius:4px;
+  padding:10px 22px;border:1px solid var(--ic-accent);border-radius:4px;
   font-family:var(--ic-sans);font-size:14px;font-weight:600;line-height:1.85;
-  color:var(--ic-link);background:var(--ic-rule-faint);
+  color:var(--ic-ink-on-accent);background:var(--ic-accent);
 }
-.ic-go:hover{background:var(--ic-rule-mid);color:var(--ic-ink)}
+.ic-go:hover{background:transparent;color:var(--ic-accent)}
 
-/* Chevrons: pointer devices only, quiet until the deck is hovered or focused. */
+/* Chevrons, as in the prototype: pointer devices only, quiet until the deck is
+   hovered or focused, sitting over the card edges. */
 .ic-chev{
-  position:absolute;top:50%;transform:translateY(-50%);
+  position:absolute;top:calc(50% - 12px);transform:translateY(-50%);
   display:none;align-items:center;justify-content:center;
   width:40px;height:40px;padding:0 0 3px;cursor:pointer;opacity:0;
   font-family:var(--ic-sans);font-size:22px;line-height:1;
   color:var(--ic-ink);background:var(--ic-surface);
-  border:1px solid var(--ic-rule-mid);border-radius:4px;
+  border:1px solid var(--ic-rule-mid);border-radius:50%;
+  box-shadow:0 2px 8px rgba(0,0,0,.6);
 }
+.ic-chev:hover{color:var(--ic-accent);border-color:var(--ic-accent)}
 .ic-prev{left:4px}.ic-next{right:4px}
 .ic-chev:disabled{visibility:hidden}
 @media(hover:hover) and (pointer:fine){
@@ -92,7 +102,7 @@
   .ic-deck:hover .ic-chev,.ic-chev:focus-visible{opacity:1}
 }
 
-.ic-expand{display:flex;justify-content:center;margin-top:14px}
+.ic-expand{display:flex;justify-content:center;margin-top:-6px}
 .ic-reveal{
   cursor:pointer;padding:10px 4px;background:none;border:0;
   font-family:var(--ic-sans);font-size:14px;font-weight:600;
