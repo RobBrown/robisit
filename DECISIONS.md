@@ -37,15 +37,15 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 
 ### Visual design (PRD 6)
 
-- **Palette: the site's, not the prototype's.** The site is dark-only, warm near-black with amber. It has no ink navy and no light scheme. PRD "ink navy for text" maps to the site's ink (`#d4cfc6`, headings `#eae6df`). Amber is `#ffa000`. Under both `prefers-color-scheme` values the deck renders the site's single scheme, because a light deck on a dark page would read as a second product (PRD 6.1). Tests run both schemes.
+- **Palette: the site's, exactly (owner direction, 2026-10-24).** The site is dark-only, warm near-black with amber. It has no ink navy and no light scheme. Every colour in the deck is an existing value from `article.html`, used for the same kind of element it styles on the site. Under both `prefers-color-scheme` values the deck renders the site's single scheme. Tests run both schemes.
 - **Tokens.** The site has no CSS custom properties, so `insight-cards.css` defines `--ic-*` tokens whose values are hex literals copied from `article.html`. A test fails if the deck's CSS or computed styles use a colour that isn't in `article.html`.
-- **Typefaces.** Card titles, bodies and options are in Lora. The counter, primary button and reveal link are in Inter. This mirrors the site's own split (Lora for prose, Inter for UI text). The prototype's Google Fonts (Source Serif/Sans) are not loaded.
-- **Title weight is 700, not the prototype's 600**, because the site only loads Lora 400/700.
-- **Sizes.** Card body is 16px/1.55 (17px above 600px), smaller than the article's 17–19px/1.8. That's what keeps the longest 85-word body under the 520px cap at 375px wide.
-- **Radius.** Cards use 6px (the site's `.toc` box). Options and buttons use 4px (the site's subscribe form). No shadows.
-- **The selected option has an amber left rule only** (PRD 6.3). The prototype also turned the whole border amber.
+- **Style: each deck element borrows an existing site component.** The card is the `.toc` box (`#14100a` fill, `#241f18` border, 6px radius). The card title and the terminal's `knows` line are `.body h2` (Lora 24px/1.3, 700, `#eae6df`). The card body is `.body p` (Lora 17px/1.8, or 19px/1.85 above 600px). Options are the subscribe input (`#2e2820` border, 4px radius, `#706a5e` on hover). The selected option takes the TL;DR block's 3px amber left rule. "Read the article" is the subscribe button (Inter 14px 600, `#b8a47e` on `#1e1a14`). "Read the full article" is `footer .read-more` (Inter 14px 600, `#b8a47e`). The counter is Inter 13px, like `.date`, but in `#9e9789`, because `.date`'s `#706a5e` fails 4.5:1 contrast on the card surface. The prototype's Google Fonts aren't loaded.
+- **Title weight is 700**, the site's h2 weight. The site only loads Lora 400/700.
+- **Card height versus the PRD 6.3 cap of 520px.** In the site's type, a card with a ~79-word body measures 546px at 375px wide. That's over the cap but within a 667px screen, so a whole card is still readable without scrolling. Owner direction: the site's style wins. Tests now require cards to fit the screen at 375px, and to be 520px or less from 390px up. To get back under 520px at 375px, card bodies would need to stay under about 70 words.
+- **Radius and shadows** follow the components above (6px card, 4px controls, no shadows).
+- **The selected option has an amber left rule only** (PRD 6.3), drawn like the site's TL;DR rule. The PRD's amber primary control isn't used, because the site has no amber-filled button.
 - **The chevrons' opacity transition was removed.** PRD 5.5 says "no other animation exists".
-- **Masthead.** It's the site's own `<h1>` plus one `.date` line ("July 6, 2026 · 27 min read"). The byline stats (reads, LinkedIn, Bluesky) move to the top of the collapsed article, since the masthead allows one line of metadata. The masthead date uses `#9e9789` instead of the site's `#706a5e`, which fails 4.5:1 contrast.
+- **Masthead: the site's own article header, unchanged** (title, date, byline stats, rule), with the deck below it. That replaces the PRD's "title and one line of metadata". The header is shared markup in the layout, so carded and non-carded posts render it identically. Its date and byline contrast failures are pre-existing site issues.
 
 ### Deck behaviour and markup (PRD 3, 5, 8)
 
@@ -53,8 +53,8 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 - **No-JS fallback.** The deck and reveal link ship with the `hidden` attribute, and the script unhides them and collapses the article. No JS, or a failed script, leaves the plain article (PRD 10, ACC-11) without needing `<noscript>`.
 - **The script loads synchronously right after the article**, not deferred, so the collapse happens before first paint as far as possible. It's 3 KB gzipped.
 - **Geometry.** Cards are `min(86vw, 560px)` wide. The rail's padding centres the first and last card so a neighbour's edge always shows (the prototype left-aligned the first card). At 375px about 14px of the next card shows.
-- **Height.** `min-height: min(520px, first-screen space)` is measured by script. There is no `max-height`: at 200% zoom (ACC-09) cards grow rather than scroll internally. The 520px cap at default size is enforced by test.
-- **The reveal link is just below the fold on a 375×667 screen.** There, the masthead (this title runs three lines) plus a ~500px card exceed the first screen. It is on the first screen at 390×844 and 1280×800, which the tests check.
+- **Height.** `min-height: min(520px, first-screen space)`, where the first-screen space is measured by script as the room left below the header after reserving the reveal link's actual height. There is no `max-height`: at 200% zoom (ACC-09) cards grow rather than scroll internally.
+- **The reveal link is below the fold on phones**, where the site header (~295px) plus a card is more than one screen. At 1280×800 it's 8px below. From 900px tall it's on the first screen, which the tests check at 1280×900 and 1440×900.
 - **Each situation option is a tabbable `role="radio"` button** (the prototype's pattern), not a roving-tabindex radio group, because arrow keys belong to deck navigation (PRD 5.3, ACC-01).
 - **Arrow keys** are ignored when a modifier is held (Alt+Left is browser Back) and inside form fields. They act only while the deck is on screen, and repeated presses during a smooth scroll queue from the target card, not the current one.
 - **A disabled chevron hands focus to its sibling.** Without this, Tab looped back into the deck and never reached the reveal link. The keyboard test caught it.
@@ -64,16 +64,12 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 
 ### Content
 
-- **The card copy is the prototype's `DATA`, used verbatim as instructed, and marked DRAFT.** It doesn't match the published whitepaper. See "PRD/brief issues" in the PR.
-- **Anchors mapped to the post's real kramdown ids:**
-  - `#not-a-migration` → `#ai-adoption--new-tool`
-  - `#the-board-question` → `#perspective-1-business`
-  - `#governance` → `#perspective-4-governance`
-  - `#meridian` → `#applying-the-framework-at-meridian`
-  - Each is the closest real section to the prototype's intent.
+- **No existing article gets cards.** Cards aren't applied retroactively (owner direction, 2026-10-24). The whitepaper's draft block was removed, and that post is byte-identical to the pre-change build again. A test checks that no article other than the test page renders a deck.
+- **The test page is `_articles/hello-world-cards.md`** (`/thoughts/hello-world-cards/`). It's an obvious "Hello, World" page: five test cards, three paths, a terminal card and a short placeholder body with one heading per path anchor. Card bodies are 76–79 words, close to the ceiling on purpose, so the fit tests mean something. The `pilot` path id is kept so `?path=pilot&card=3` still works.
+- **The test page is unlisted.** The new `unlisted: true` front matter key hides it from `/content` (a `where_exp` filter; the listing is otherwise byte-identical) and adds `<meta name="robots" content="noindex">`. It's still reachable by URL so the deck can be tested in production.
 
 ### Testing
 
 - **"iPhone SE emulation" uses Playwright's `iPhone SE (3rd gen)`** (375×667, WebKit). Playwright's plain `iPhone SE` is the 320px first-generation model.
-- **axe scope.** The reading layer (masthead, deck, reveal link) must have zero WCAG 2.2 AA violations. The whole page may show only the site's pre-existing contrast failures in nav, byline, TOC and footer (`.brand`, `.stat`, `.toc-sub`, `.copy`). Those are on every post today and are flagged rather than restyled, since restyling them would change non-carded posts.
+- **axe scope.** The deck and reveal link must have zero WCAG 2.2 AA violations. The whole page may show only the site's pre-existing contrast failures in the nav brand, header date, byline stats, TOC subtitle and footer (`.brand`, `.date`, `.stat`, `.toc-sub`, `.copy`). Those are on every post today and are flagged rather than restyled, since restyling them would change every post.
 - **Screenshots for the review package** come from `tests/screenshots.spec.js` and are written to `test-results/screenshots/`.
