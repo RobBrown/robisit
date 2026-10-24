@@ -1,0 +1,7 @@
+# Mount points created by scripts/build-site.sh
+_layouts/
+_includes/
+assets/
+Gemfile
+Gemfile.lock
+.jekyll-cache/
