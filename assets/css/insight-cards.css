@@ -19,7 +19,7 @@
 }
 @media(max-width:600px){:root{--ic-gutter:20px}}
 
-.ic-deck[hidden],.ic-head[hidden],.ic-expand[hidden]{display:none}
+.ic-deck[hidden],.ic-head[hidden]{display:none}
 
 /* Carded pages: a compact masthead. The layout leaves out the date and stats
    (owner direction) and the TL;DR heading row takes the place of the header
@@ -28,11 +28,11 @@
 .ic-page header{margin-bottom:28px}
 .ic-page header h1{margin:0}
 .ic-page header .rule{display:none}
-@media(max-width:600px){.ic-page{padding-top:24px}}
+@media(max-width:600px){.ic-page{padding-top:16px}.ic-page header{margin-bottom:20px}.ic-head{margin-bottom:12px}}
 
-/* Section heading: the TL;DR label (as on the site's TL;DR block), the card
-   count, and the way out to the full article on the right. */
-.ic-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px}
+/* Section heading: the TL;DR label (as on the site's TL;DR block) and the
+   card count. */
+.ic-head{margin-bottom:14px}
 .ic-label{
   margin:0;font-family:var(--ic-sans);font-size:14px;font-weight:600;letter-spacing:.12em;line-height:1.4;
   color:var(--ic-accent);
@@ -54,7 +54,7 @@
   scroll-padding-inline:var(--ic-gutter);
 }
 .ic-rail::-webkit-scrollbar{display:none}
-.ic-deck :focus-visible,.ic-expand :focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
+.ic-deck :focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
 .ic-rail:focus-visible{outline-offset:-2px}
 
 /* Cards are compact raised panels on a lighter surface with a solid 2px
@@ -130,12 +130,6 @@
   .ic-deck:hover .ic-chev,.ic-chev:focus-visible{opacity:1}
 }
 
-.ic-reveal{
-  cursor:pointer;padding:6px 0;background:none;border:0;white-space:nowrap;
-  font-family:var(--ic-sans);font-size:14px;font-weight:600;
-  color:var(--ic-link);
-}
-.ic-reveal:hover{color:var(--ic-accent)}
 
 .ic-article{margin-top:24px}
 .ic-article:focus{outline:none}

@@ -1,9 +1,9 @@
 {%- comment -%}
   Insight Cards deck (PRD v2.1 sections 3, 5, 6, 8). Rendered only when
   insight-cards-valid.html has set ic_valid, between the site's own article
-  header and the body. The deck and reveal link ship
-  `hidden`; assets/js/insight-cards.js unhides them and collapses the
-  article, so with no script (or a failed one) the page is the plain article.
+  header and the body. The deck and its heading ship `hidden`;
+  assets/js/insight-cards.js unhides them above the always-open article, so
+  with no script (or a failed one) the page is the plain article.
   Insight cards render in the default order; the script reorders them per path.
 {%- endcomment -%}
 {%- assign ic = page.cards -%}
@@ -12,7 +12,6 @@
 {%- assign ic_total = ic.insights | size | plus: 1 -%}
 <div class="ic-head" id="ic-head" hidden>
     <h2 class="ic-label" id="ic-label">TL;DR <span class="ic-count">in {{ ic_total }} cards</span></h2>
-    <div class="ic-expand" id="ic-expand"><button type="button" class="ic-reveal" aria-label="Read the full article">Read the full article<span aria-hidden="true"> &rarr;</span></button></div>
   </div>
   <section class="ic-deck" id="ic-deck" role="region" aria-labelledby="ic-label" hidden>
     <div class="ic-rail" tabindex="0">

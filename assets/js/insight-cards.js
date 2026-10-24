@@ -1,7 +1,8 @@
 /* Insight Cards deck behaviour (PRD v2.1 sections 3, 5, 7, 8). No dependencies.
    The deck markup is rendered by _includes/insight-cards.html. This script
-   shows it, collapses the article, and handles paths, navigation, deep links,
-   reveal and analytics. If it never runs, the page is the plain article. */
+   shows it above the article and handles paths, navigation, deep links, the
+   jump into the article and analytics. If it never runs, the page is the
+   plain article. */
 (function () {
   var deck = document.getElementById('ic-deck');
   var article = document.getElementById('ic-article');
@@ -26,7 +27,6 @@
   var next = deck.querySelector('.ic-next');
   var live = document.getElementById('ic-live');
   var head = document.getElementById('ic-head');
-  var expand = document.getElementById('ic-expand');
   var situation = rail.querySelector('.ic-situation');
   var terminal = rail.querySelector('.ic-terminal');
   var radios = [].slice.call(rail.querySelectorAll('.ic-opt'));
@@ -108,37 +108,34 @@
     history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
   }
 
-  /* Reveal (PRD 5.6). The handoff is recorded once per page view. */
-  var depthStart = 0, depthFired = {}, depthQueued = false;
-  function reveal(r) {
-    var target = r === 'terminal' && anchor ? document.getElementById(anchor.slice(1)) || article : article;
+  /* Handoff (PRD 5.6). The article is always open (owner direction), so the
+     terminal control jumps to the path's anchor. It's recorded once per view. */
+  var depthFired = {}, depthQueued = false;
+  function handoff() {
+    var target = anchor ? document.getElementById(anchor.slice(1)) || article : article;
     if (!route) {
-      route = r;
-      trackEvent('cards_handoff', { route: r, card: counter(Math.max(idx, 0)), path: path || 'default', anchor: target === article ? '#ic-article' : anchor });
-      window.addEventListener('scroll', queueDepth, { passive: true });
+      route = 'terminal';
+      trackEvent('cards_handoff', { route: route, card: counter(Math.max(idx, 0)), path: path || 'default', anchor: target === article ? '#ic-article' : anchor });
     }
-    article.hidden = false;
-    expand.hidden = true;
     if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
     target.focus({ preventScroll: true });
     target.scrollIntoView({ behavior: reduced.matches ? 'auto' : 'smooth', block: 'start' });
-    depthStart = target.getBoundingClientRect().top + window.pageYOffset;
-    depth();
   }
 
-  /* Depth (PRD 7) is measured from where the reader entered the article to its
-     end, so a reader dropped at a late anchor isn't credited with the skipped part. */
+  /* Depth (PRD 7): how far through the article the reader has scrolled, from
+     its top. route is 'terminal' once the reader has used the terminal
+     control, and 'none' before that. */
   function queueDepth() {
     if (depthQueued) return;
     depthQueued = true;
     requestAnimationFrame(function () { depthQueued = false; depth(); });
   }
   function depth() {
-    var y = window.pageYOffset, end = article.getBoundingClientRect().bottom + y;
-    var span = end - depthStart, seen = y + window.innerHeight - depthStart;
+    var y = window.pageYOffset, top = article.getBoundingClientRect().top + y;
+    var span = article.offsetHeight, seen = y + window.innerHeight - top;
     var pct = span > 0 ? seen / span * 100 : 100;
     [25, 50, 75, 100].forEach(function (d) {
-      if (pct >= d && !depthFired[d]) { depthFired[d] = true; trackEvent('cards_depth', { depth: d, route: route }); }
+      if (pct >= d && !depthFired[d]) { depthFired[d] = true; trackEvent('cards_depth', { depth: d, route: route || 'none' }); }
     });
   }
 
@@ -148,8 +145,8 @@
       if (applyPath(id)) { trackEvent('cards_path', { path: id }); go(1); }
     });
   });
-  terminal.querySelector('.ic-go').addEventListener('click', function () { reveal('terminal'); });
-  expand.querySelector('button').addEventListener('click', function () { reveal('link'); });
+  terminal.querySelector('.ic-go').addEventListener('click', handoff);
+  window.addEventListener('scroll', queueDepth, { passive: true });
   function step(d) { go((aim !== null ? aim : idx) + d); }
   prev.addEventListener('click', function () { step(-1); });
   next.addEventListener('click', function () { step(1); });
@@ -176,14 +173,13 @@
 
   window.addEventListener('resize', function () { go(idx, true); });
 
-  /* Boot: show the deck, collapse the article, apply any deep link (PRD 5.7). */
+  /* Boot: show the deck and apply any deep link (PRD 5.7). */
   var q = new URLSearchParams(location.search);
   if (q.get('path')) applyPath(q.get('path'));
   var card = parseInt(q.get('card'), 10);
   var start = Math.max(0, Math.min(isNaN(card) ? 0 : card - offset, last()));
   deck.hidden = false;
   head.hidden = false;
-  article.hidden = true;
   go(start, true);
   aim = null;
   setIdx(start, true);

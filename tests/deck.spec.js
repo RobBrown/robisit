@@ -107,7 +107,6 @@ test('arrow keys move one card; navigation stops at both ends', async ({ page })
 
 test('arrow keys do nothing once the deck is scrolled off screen', async ({ page }) => {
   await page.goto(CARDED_URL);
-  await page.getByRole('button', { name: 'Read the full article' }).click();
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(400);
@@ -162,24 +161,14 @@ test('vertical scroll over the deck scrolls the page, not the deck', async ({ pa
   expect(await scrollLeft(page)).toBe(0);
 });
 
-test('terminal control reveals the article at the path anchor and hides the reveal link', async ({ page }) => {
+test('terminal control jumps to the path anchor in the open article', async ({ page }) => {
   await page.goto(`${CARDED_URL}?card=${N}`);
+  await expect(page.locator('#ic-article')).toBeVisible();
   await page.locator('.ic-go').click();
   const target = page.locator(cards.default_anchor);
-  await expect(page.locator('#ic-article')).toBeVisible();
-  await expect(page.locator('#ic-expand')).toBeHidden();
   await expect(target).toBeFocused();
   await atTopOrEnd(page, cards.default_anchor);
   await expect(page.locator('#ic-deck')).toBeAttached(); // deck stays above
-});
-
-test('reveal link reveals the article at its top and hides itself', async ({ page }) => {
-  await page.goto(CARDED_URL);
-  await page.getByRole('button', { name: 'Read the full article' }).click();
-  await expect(page.locator('#ic-article')).toBeVisible();
-  await expect(page.locator('#ic-expand')).toBeHidden();
-  await expect(page.locator('#ic-article')).toBeFocused();
-  await atTopOrEnd(page, '#ic-article');
 });
 
 test('deep link ?path=pilot&card=3 applies the path and lands on card 3', async ({ page }) => {

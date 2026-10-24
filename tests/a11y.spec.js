@@ -16,7 +16,7 @@ for (const scheme of ['light', 'dark']) {
       await page.emulateMedia({ colorScheme: scheme });
       const q = { situation: '', insight: '?path=pilot&card=2', terminal: `?card=${N}`, revealed: '' }[state];
       await page.goto(CARDED_URL + q);
-      if (state === 'revealed') await page.getByRole('button', { name: 'Read the full article' }).click();
+      if (state === 'revealed') await page.locator('.ic-go').click();
       await page.locator('#ic-deck').hover();
       const flat = (r) => r.violations.flatMap((v) => v.nodes.map((n) => `${v.id}: ${n.target.join(' ')}`));
 
@@ -40,15 +40,15 @@ test('ACC-03: deck is a named region; cards are groups with roledescription and 
 
 test('ACC-04: scroll rail is focusable with a visible focus ring', async ({ page }) => {
   await page.goto(CARDED_URL);
-  // Brand, menu, reveal link, then the rail.
-  for (let i = 0; i < 4; i++) await page.keyboard.press('Tab');
+  // Brand, menu, then the rail.
+  for (let i = 0; i < 3; i++) await page.keyboard.press('Tab');
   await expect(page.locator('.ic-rail')).toBeFocused();
   const outline = await page.locator('.ic-rail').evaluate((el) => { const s = getComputedStyle(el); return [s.outlineStyle, parseFloat(s.outlineWidth)]; });
   expect(outline[0]).not.toBe('none');
   expect(outline[1]).toBeGreaterThanOrEqual(2);
 });
 
-test('ACC-01: keyboard only — Tab reaches rail, options, terminal control and reveal link; Enter activates each', async ({ page }) => {
+test('ACC-01: keyboard only — Tab reaches rail, options, chevrons and terminal control; Enter activates each', async ({ page }) => {
   await page.goto(CARDED_URL);
   const focusNames = [];
   for (let i = 0; i < 12; i++) {
@@ -61,12 +61,11 @@ test('ACC-01: keyboard only — Tab reaches rail, options, terminal control and 
   expect(focusNames).toContain('rail');
   for (const o of cards.situation.options) expect(focusNames).toContain(o.label);
   expect(focusNames).toContain('Read the article');
-  expect(focusNames).toContain('Read the full article');
   expect(focusNames.some((n) => /^(Previous|Next) card$/.test(n))).toBe(true);
 
   // Enter on an option selects the path and advances.
   await page.reload();
-  for (let i = 0; i < 4; i++) await page.keyboard.press('Tab'); // rail
+  for (let i = 0; i < 3; i++) await page.keyboard.press('Tab'); // rail
   await page.keyboard.press('Tab'); // first option
   await expect(page.getByRole('radio').first()).toBeFocused();
   await page.keyboard.press('Enter');
@@ -84,13 +83,6 @@ test('ACC-01: keyboard only — Tab reaches rail, options, terminal control and 
   await page.locator('.ic-go').focus();
   await page.keyboard.press('Enter');
   await expect(page.locator(cards.situation.options[0].anchor)).toBeFocused();
-
-  // Enter on the reveal link (fresh load).
-  await page.goto(CARDED_URL);
-  await page.getByRole('button', { name: 'Read the full article' }).focus();
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#ic-article')).toBeVisible();
-  await expect(page.locator('#ic-article')).toBeFocused();
 });
 
 test('ACC-05: live region announces card changes', async ({ page }) => {
@@ -126,9 +118,10 @@ test.describe('ACC-10: reduced motion', () => {
       res(document.querySelector('.ic-rail').scrollLeft); // same task: no animation frames elapsed
     }));
     expect(Math.abs(after - target)).toBeLessThanOrEqual(1);
-    // Reveal scroll is instant too.
-    await page.getByRole('button', { name: 'Read the full article' }).click();
-    const y = await page.evaluate(() => document.querySelector('#ic-article').getBoundingClientRect().top);
+    // The jump into the article is instant too.
+    await page.goto(`${CARDED_URL}?card=${N}`);
+    await page.locator('.ic-go').click();
+    const y = await page.evaluate((a) => document.querySelector(a).getBoundingClientRect().top, cards.default_anchor);
     expect(Math.abs(y)).toBeLessThan(40);
   });
 });

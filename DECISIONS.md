@@ -52,8 +52,8 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
   - Top padding is 28px (24px on phones) instead of 48px, and the gap below the title is 28px instead of 40px.
 
   Posts without cards are byte-identical (the baseline tests). The same treatment could go site-wide later, but that changes every post.
-- **The deck is titled "TL;DR" (owner direction).** A heading row above the deck holds an `h2` "TL;DR" in the site's TL;DR label style (amber Inter 12px, tracked), "in N cards" in muted text, and "Read the full article →" on the right. The deck region is labelled by that heading. The arrow is `aria-hidden` and the button keeps the name "Read the full article". The heading row replaces the PRD's ban on lede and hint text, by owner direction.
-- **"Full Article Published on <date>" sits under the deck** in the same style as the TL;DR line (owner direction). It's an `h2` that introduces the revealed article, and it's never hidden. Without JavaScript it is the post's date line, since carded pages leave the header date out. The TL;DR line is 14px (up from 12px), and the reveal link matches it.
+- **The deck is titled "TL;DR" (owner direction).** A heading row above the deck holds an `h2` "TL;DR" in the site's TL;DR label style (amber Inter 12px, tracked), "in N cards" in muted text. The deck region is labelled by that heading. (A "Read the full article" link on the right was later removed.) The heading row replaces the PRD's ban on lede and hint text, by owner direction.
+- **"Full Article Published on <date>" sits under the deck** in the same style as the TL;DR line (owner direction). It's an `h2` that introduces the revealed article, and it's never hidden. Without JavaScript it is the post's date line, since carded pages leave the header date out. The TL;DR line is 14px (up from 12px).
 
 ### Deck behaviour and markup (PRD 3, 5, 8)
 
@@ -62,7 +62,7 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 - **The script loads synchronously right after the article**, not deferred, so the collapse happens before first paint as far as possible. It's 3 KB gzipped.
 - **Geometry, as in the prototype (owner direction).** Cards snap to the start edge, so the current card always lines up with the text column and the next card shows to its right (about 40px on a phone, more on desktop, where it's dimmed). The last card sits at the column's right edge. Arrow keys, chevrons and deep links scroll to the same edge, using the rail's `scroll-padding`. Above 600px wide the rail fades its clipped edges into the page. Chevrons are round and sit over the card edges, as in the prototype. PRD 5.2's ~86%/560px width is overridden by the owner's call for smaller cards.
 - **Height.** All cards in a deck share the height of the tallest (the rail stretches them). There's no `max-height`, so at 200% zoom (ACC-09) cards grow rather than scroll internally.
-- **The reveal link is on the first screen** (owner direction, 2026-10-24). It moved into the TL;DR heading row above the deck. Its bottom edge is at 236px at 375×667 and 270px at 1280×800, and the tests check 375×667, 1280×800 and 1440×900.
+- **The reveal link was removed** (owner direction). See "Always-open article" below.
 - **Each situation option is a tabbable `role="radio"` button** (the prototype's pattern), not a roving-tabindex radio group, because arrow keys belong to deck navigation (PRD 5.3, ACC-01).
 - **Arrow keys** are ignored when a modifier is held (Alt+Left is browser Back) and inside form fields. They act only while the deck is on screen, and repeated presses during a smooth scroll queue from the target card, not the current one.
 - **A disabled chevron hands focus to its sibling.** Without this, Tab looped back into the deck and never reached the reveal link. The keyboard test caught it.
@@ -75,6 +75,13 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 - **No existing article gets cards.** Cards aren't applied retroactively (owner direction, 2026-10-24). The whitepaper's draft block was removed, and that post is byte-identical to the pre-change build again. A test checks that no article other than the test page renders a deck.
 - **The test page is `_articles/hello-world-cards.md`** (`/thoughts/hello-world-cards/`). It's an obvious "Hello, World" page: five test cards, three paths, a terminal card and a short placeholder body with one heading per path anchor. Card bodies are 76–79 words, close to the ceiling on purpose, so the fit tests mean something. The `pilot` path id is kept so `?path=pilot&card=3` still works.
 - **The test page is unlisted.** The new `unlisted: true` front matter key hides it from `/content` (a `where_exp` filter; the listing is otherwise byte-identical) and adds `<meta name="robots" content="noindex">`. It's still reachable by URL so the deck can be tested in production.
+
+### Always-open article (owner direction, 2026-10-24)
+
+- **The article is open on load and there's no reveal link.** This overrides PRD 5.6's collapsed article. The deck sits above the article as a TL;DR, and the "Full Article Published on <date>" line introduces the body.
+- **The terminal control ("Read the article") jumps to the path's anchor.** It moves focus there and scrolls (instantly under reduced motion).
+- **Analytics.** `cards_handoff` now only has `route: "terminal"`, still once per view. The PRD's `link` route no longer exists, so the terminal-versus-link comparison in PRD 7 can't be made. Instead, `cards_depth` is tracked from page load against the whole article, with `route: "none"` until the reader uses the terminal control, then `"terminal"`. That compares readers who used the deck's way in against those who scrolled.
+- **Spacing on phones** is tightened (16px top, 20px under the title, 12px under the TL;DR line) so the first card fits wholly on a 375×667 screen. A test checks this at 375×667, 1280×800 and 1440×900.
 
 ### Testing
 

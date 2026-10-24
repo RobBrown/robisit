@@ -36,15 +36,14 @@ test('cards are uniform in height within the deck', async ({ page }) => {
   expect(new Set(hs).size).toBe(1);
 });
 
-// The reveal link sits in the TL;DR heading row above the deck, so it is on
-// the first screen everywhere, including the smallest phone.
+// The whole current card is on the first screen at common sizes.
 for (const vp of [{ width: 375, height: 667 }, { width: 1280, height: 800 }, { width: 1440, height: 900 }]) {
-  test(`the reveal link is on the first screen at ${vp.width}x${vp.height}`, async ({ page }, info) => {
+  test(`the first card is wholly on the first screen at ${vp.width}x${vp.height}`, async ({ page }, info) => {
     test.skip(info.project.name !== 'chromium');
     await page.setViewportSize(vp);
     await page.goto(CARDED_URL);
     await page.evaluate(() => document.fonts.ready);
-    const r = await page.locator('#ic-expand button').boundingBox();
+    const r = await page.locator('.ic-card').first().boundingBox();
     expect(r.y + r.height).toBeLessThanOrEqual(vp.height);
   });
 }
@@ -69,8 +68,9 @@ for (const width of [375, 414, 768, 1280]) {
       }
       const sw = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);
       expect(sw[0]).toBeLessThanOrEqual(sw[1]);
-      // Revealed article too.
-      await page.getByRole('button', { name: 'Read the full article' }).click();
+      // After jumping into the article too.
+      await page.goto(`${CARDED_URL}?card=6`);
+      await page.locator('.ic-go').click();
       const sw2 = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);
       expect(sw2[0]).toBeLessThanOrEqual(sw2[1]);
     });
