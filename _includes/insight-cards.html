@@ -1,6 +1,7 @@
 {%- comment -%}
   Insight Cards deck (PRD v2.1 sections 3, 5, 6, 8). Rendered only when
-  insight-cards-valid.html has set ic_valid. The deck and reveal link ship
+  insight-cards-valid.html has set ic_valid, between the site's own article
+  header and the body. The deck and reveal link ship
   `hidden`; assets/js/insight-cards.js unhides them and collapses the
   article, so with no script (or a failed one) the page is the plain article.
   Insight cards render in the default order; the script reorders them per path.
@@ -9,12 +10,7 @@
 {%- assign ic_ids = ic.insights | map: "id" -%}
 {%- assign ic_order = ic.default_order | default: ic_ids -%}
 {%- assign ic_total = ic.insights | size | plus: 1 -%}
-<header class="ic-masthead">
-    <h1>{{ page.title }}</h1>
-    <div class="date">{{ page.date | date: "%B %-d, %Y" }}{% if page.read_time %} · {{ page.read_time }} read{% endif %}</div>
-  </header>
-
-  <section class="ic-deck" id="ic-deck" role="region" aria-label="Insight cards" hidden>
+<section class="ic-deck" id="ic-deck" role="region" aria-label="Insight cards" hidden>
     <div class="ic-rail" tabindex="0">
       {%- if ic.situation %}
       <div class="ic-card ic-situation" role="group" aria-roledescription="card" aria-label="Start">
