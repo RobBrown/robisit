@@ -1,0 +1,108 @@
+/* Insight Cards (PRD v2.1). Loaded only on posts with a valid cards block.
+   Every colour and typeface is the site's own, taken from _layouts/article.html. */
+:root{
+  --ic-bg:#0a0600;          /* body background */
+  --ic-surface:#14100a;     /* .toc, .menu-dropdown */
+  --ic-ink:#d4cfc6;         /* body text */
+  --ic-ink-strong:#eae6df;  /* h1, h2 */
+  --ic-ink-soft:#9e9789;    /* blockquote, .toc-h2 */
+  --ic-rule:#241f18;        /* .toc border */
+  --ic-rule-mid:#2e2820;    /* blockquote rule, input border */
+  --ic-rule-strong:#706a5e; /* input focus border */
+  --ic-accent:#ffa000;      /* amber */
+  --ic-serif:'Lora',Georgia,'Times New Roman',serif;
+  --ic-sans:'Inter',system-ui,sans-serif;
+  --ic-gutter:24px;         /* article side padding */
+  --ic-card:min(86vw,560px);
+}
+@media(max-width:600px){:root{--ic-gutter:20px}}
+
+.ic-deck[hidden],.ic-expand[hidden]{display:none}
+.ic-masthead{margin-bottom:24px}
+.ic-masthead .date{margin-bottom:0;color:var(--ic-ink-soft)}
+
+/* Deck: full-bleed native scroller; padding centres the first and last card
+   so the neighbour's edge always shows. */
+.ic-deck{position:relative;margin:0 calc(-1 * var(--ic-gutter))}
+.ic-rail{
+  position:relative;display:flex;gap:12px;
+  overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scrollbar-width:none;
+  padding:2px calc((100% - var(--ic-card)) / 2) 6px;
+}
+.ic-rail::-webkit-scrollbar{display:none}
+.ic-deck :focus-visible,.ic-expand :focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
+.ic-rail:focus-visible{outline-offset:-2px}
+
+.ic-card{
+  flex:0 0 var(--ic-card);scroll-snap-align:center;scroll-snap-stop:always;
+  display:flex;flex-direction:column;gap:14px;
+  min-height:min(520px,var(--ic-fill,440px));
+  padding:22px 18px 20px;
+  background:var(--ic-surface);border:1px solid var(--ic-rule);border-radius:6px;
+  color:var(--ic-ink);font-family:var(--ic-serif);
+}
+.ic-n{
+  font-family:var(--ic-sans);font-size:12px;letter-spacing:.08em;line-height:1.4;
+  color:var(--ic-ink-soft);font-variant-numeric:tabular-nums;
+}
+.ic-title{
+  font-family:var(--ic-serif);font-size:22px;font-weight:700;line-height:1.28;
+  color:var(--ic-ink-strong);text-wrap:balance;
+}
+.ic-body,.ic-knows,.ic-resolves{font-size:16px;line-height:1.55}
+.ic-knows{font-size:22px;font-weight:700;line-height:1.28;color:var(--ic-ink-strong)}
+.ic-resolves{color:var(--ic-ink-soft)}
+@media(min-width:601px){
+  .ic-card{padding:28px 28px 24px;gap:16px}
+  .ic-title,.ic-knows{font-size:24px}
+  .ic-body,.ic-knows+.ic-resolves{font-size:17px}
+}
+
+.ic-options{display:flex;flex-direction:column;gap:8px}
+.ic-opt{
+  display:block;width:100%;text-align:left;cursor:pointer;
+  padding:12px 14px;font:inherit;font-size:16px;line-height:1.4;
+  color:var(--ic-ink);background:none;
+  border:1px solid var(--ic-rule-mid);border-radius:4px;
+}
+.ic-opt[aria-checked="true"]{border-left-color:var(--ic-accent);box-shadow:inset 2px 0 0 var(--ic-accent)}
+@media(hover:hover){.ic-opt:hover{border-color:var(--ic-rule-strong)}.ic-opt[aria-checked="true"]:hover{border-left-color:var(--ic-accent)}}
+
+.ic-go{
+  align-self:flex-start;margin-top:4px;cursor:pointer;
+  padding:12px 20px;border:0;border-radius:4px;
+  font-family:var(--ic-sans);font-size:15px;font-weight:600;
+  color:var(--ic-bg);background:var(--ic-accent);
+}
+
+/* Chevrons: pointer devices only, quiet until the deck is hovered or focused. */
+.ic-chev{
+  position:absolute;top:50%;transform:translateY(-50%);
+  display:none;align-items:center;justify-content:center;
+  width:40px;height:40px;padding:0 0 3px;cursor:pointer;opacity:0;
+  font-family:var(--ic-sans);font-size:22px;line-height:1;
+  color:var(--ic-ink);background:var(--ic-surface);
+  border:1px solid var(--ic-rule-mid);border-radius:4px;
+}
+.ic-prev{left:4px}.ic-next{right:4px}
+.ic-chev:disabled{visibility:hidden}
+@media(hover:hover) and (pointer:fine){
+  .ic-chev{display:flex}
+  .ic-deck:hover .ic-chev,.ic-chev:focus-visible{opacity:1}
+}
+
+.ic-expand{display:flex;justify-content:center;margin-top:14px}
+.ic-reveal{
+  cursor:pointer;padding:10px 4px;background:none;border:0;
+  font-family:var(--ic-sans);font-size:14px;
+  color:var(--ic-ink-soft);text-decoration:underline;text-underline-offset:4px;
+}
+.ic-reveal:hover{color:var(--ic-ink)}
+
+.ic-article{margin-top:48px}
+.ic-article:focus{outline:none}
+.ic-article [id]{scroll-margin-top:16px}
+.ic-article h1:focus,.ic-article h2:focus,.ic-article h3:focus{outline:none}
+.ic-article h1:focus-visible,.ic-article h2:focus-visible,.ic-article h3:focus-visible{outline:2px solid var(--ic-accent);outline-offset:4px}
+.ic-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
