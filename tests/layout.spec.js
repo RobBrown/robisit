@@ -66,7 +66,7 @@ for (const width of [375, 414, 768, 1280]) {
           return { visible: right - next.left, width: next.width };
         }, i);
         expect(v.visible, `card ${i}: px of next card visible`).toBeGreaterThanOrEqual(8);
-        expect(v.visible).toBeLessThan(v.width / 2);
+        expect(v.visible, 'the current card stays the widest thing on screen').toBeLessThan(v.width * 0.6);
       }
       const sw = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);
       expect(sw[0]).toBeLessThanOrEqual(sw[1]);
@@ -84,11 +84,12 @@ for (const width of [375, 414, 768, 1280]) {
       expect(h).toBeLessThanOrEqual(520);
     });
 
-    test('card is roughly 86% of the available width, capped at 560px', async ({ page }) => {
+    // PRD 5.2 says ~86%, capped at 560px; owner direction is smaller cards.
+    test('card is roughly 80% of the available width, capped at 400px', async ({ page }) => {
       await page.goto(CARDED_URL);
       const w = await page.locator('.ic-card').first().evaluate((el) => el.getBoundingClientRect().width);
-      expect(w).toBeLessThanOrEqual(560);
-      if (width < 640) expect(Math.abs(w / width - 0.86)).toBeLessThan(0.02);
+      expect(w).toBeLessThanOrEqual(400);
+      if (width < 500) expect(Math.abs(w / width - 0.80)).toBeLessThan(0.02);
     });
   });
 }

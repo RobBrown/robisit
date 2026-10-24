@@ -44,15 +44,16 @@ async function settle(page) {
   }));
 }
 
-// Index of the card whose centre is closest to the rail's centre.
+// Index of the card whose left edge is closest to the rail's snap edge (the
+// text column), or the last card when the rail is scrolled to its end.
 function currentIndex(page) {
   return page.evaluate(() => {
     const rail = document.querySelector('.ic-rail');
-    const mid = rail.getBoundingClientRect().left + rail.clientWidth / 2;
+    if (rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 2) return rail.children.length - 1;
+    const edge = rail.getBoundingClientRect().left + parseFloat(getComputedStyle(rail).paddingLeft);
     let best = 0, bd = Infinity;
     [...rail.children].forEach((c, i) => {
-      const r = c.getBoundingClientRect();
-      const d = Math.abs(r.left + r.width / 2 - mid);
+      const d = Math.abs(c.getBoundingClientRect().left - edge);
       if (d < bd) { bd = d; best = i; }
     });
     return best;

@@ -119,7 +119,7 @@ test.describe('ACC-10: reduced motion', () => {
   test('programmatic scrolls are instant', async ({ page }) => {
     await page.goto(CARDED_URL);
     await page.locator('.ic-rail').focus();
-    const target = await page.locator('.ic-card').nth(1).evaluate((c) => c.offsetLeft - (c.parentElement.clientWidth - c.offsetWidth) / 2);
+    const target = await page.locator('.ic-card').nth(1).evaluate((c) => c.offsetLeft - parseFloat(getComputedStyle(c.parentElement).scrollPaddingLeft));
     const after = await page.evaluate(() => new Promise((res) => {
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
       res(document.querySelector('.ic-rail').scrollLeft); // same task: no animation frames elapsed

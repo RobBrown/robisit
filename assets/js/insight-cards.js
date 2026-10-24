@@ -57,17 +57,23 @@
     return true;
   }
 
+  // Cards snap to the rail's start edge (the text column), set by its scroll-padding.
+  function pad() { return parseFloat(getComputedStyle(rail).scrollPaddingLeft) || 0; }
+
   function go(i, instant) {
     i = Math.max(0, Math.min(last(), i));
     var c = rail.children[i];
     aim = i;
-    rail.scrollTo({ left: c.offsetLeft - (rail.clientWidth - c.offsetWidth) / 2, behavior: instant || reduced.matches ? 'auto' : 'smooth' });
+    rail.scrollTo({ left: c.offsetLeft - pad(), behavior: instant || reduced.matches ? 'auto' : 'smooth' });
   }
 
+  // The current card is the one nearest the start edge; at the far end of the
+  // rail, where the last cards can't reach that edge, it's the last card.
   function nearest() {
-    var mid = rail.scrollLeft + rail.clientWidth / 2, best = 0, bd = Infinity;
+    if (rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 2) return last();
+    var edge = rail.scrollLeft + pad(), best = 0, bd = Infinity;
     [].forEach.call(rail.children, function (c, i) {
-      var d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+      var d = Math.abs(c.offsetLeft - edge);
       if (d < bd) { bd = d; best = i; }
     });
     return best;
@@ -75,8 +81,10 @@
 
   function setIdx(i, quiet) {
     if (i === idx) return;
+    if (rail.children[idx]) rail.children[idx].classList.remove('is-current');
     idx = i;
     var c = rail.children[i];
+    c.classList.add('is-current');
     var focused = document.activeElement;
     prev.disabled = i === 0;
     next.disabled = i === last();
@@ -133,13 +141,6 @@
     });
   }
 
-  /* First screen: cards fill the viewport below the masthead, leaving room for the reveal link. */
-  function fit() {
-    var card = terminal.getBoundingClientRect();
-    var below = expand.getBoundingClientRect().bottom - card.bottom;
-    deck.style.setProperty('--ic-fill', Math.floor(window.innerHeight - card.top - window.pageYOffset - below - 8) + 'px');
-  }
-
   radios.forEach(function (r) {
     r.addEventListener('click', function () {
       var id = r.getAttribute('data-path');
@@ -172,8 +173,7 @@
     requestAnimationFrame(function () { queued = false; setIdx(nearest()); });
   }, { passive: true });
 
-  window.addEventListener('resize', function () { fit(); go(idx, true); });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener('resize', function () { go(idx, true); });
 
   /* Boot: show the deck, collapse the article, apply any deep link (PRD 5.7). */
   var q = new URLSearchParams(location.search);
@@ -183,7 +183,6 @@
   deck.hidden = false;
   expand.hidden = false;
   article.hidden = true;
-  fit();
   go(start, true);
   aim = null;
   setIdx(start, true);
