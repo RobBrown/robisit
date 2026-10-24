@@ -1,0 +1,8 @@
+# Fixture site for validation tests. Built by scripts/build-site.sh with the
+# real _layouts, _includes and assets mounted in, output to _site-fixtures/.
+markdown: kramdown
+permalink: pretty
+collections:
+  articles:
+    output: true
+    permalink: /thoughts/:name/

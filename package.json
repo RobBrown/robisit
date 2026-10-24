@@ -1,0 +1,16 @@
+{
+  "name": "robisit-site-tooling",
+  "private": true,
+  "description": "Dev tooling for robisit.com. Nothing here ships to the site.",
+  "scripts": {
+    "build": "bash scripts/build-site.sh",
+    "validate:cards": "node scripts/validate-cards.js --site _site",
+    "test": "playwright test",
+    "test:clean": "rm -rf _site test-results playwright-report && npm run build && playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
+    "js-yaml": "^5.5.0"
+  }
+}
