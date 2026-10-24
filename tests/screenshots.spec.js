@@ -1,6 +1,6 @@
 // Review package (not assertions): carded post at 375 and 1280, light and
-// dark, on the situation card, an insight card, the terminal card, and after
-// reveal. Written to test-results/screenshots/.
+// dark, on the situation card, an insight card, the terminal card, and
+// after the terminal control. Written to test-results/screenshots/.
 const { test } = require('@playwright/test');
 const path = require('path');
 const { CARDED_URL, N, settle, atTopOrEnd } = require('./helpers');
@@ -26,7 +26,7 @@ for (const width of [375, 1280]) {
       await shot('3-terminal');
       await page.locator('.ic-go').click();
       await atTopOrEnd(page, null);
-      await shot('4-revealed');
+      await shot('4-in-article');
     });
   }
 }

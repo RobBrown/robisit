@@ -1,6 +1,6 @@
-/* Insight Cards deck behaviour (PRD v2.1 sections 3, 5, 7, 8). No dependencies.
-   The deck markup is rendered by _includes/insight-cards.html. This script
-   shows it above the article and handles paths, navigation, deep links, the
+/* TL;DR card deck behaviour (Insight Cards, PRD v2.1). No dependencies.
+   The markup is rendered by _includes/insight-cards.html. This script shows
+   the deck above the article and handles paths, navigation, deep links, the
    jump into the article and analytics. If it never runs, the page is the
    plain article. */
 (function () {
@@ -108,9 +108,8 @@
     history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
   }
 
-  /* Handoff (PRD 5.6). The article is always open (owner direction), so the
-     terminal control jumps to the path's anchor. It's recorded once per view. */
-  var depthFired = {}, depthQueued = false;
+  /* Handoff (PRD 5.6). The article is always open, so the terminal control
+     jumps to the path's anchor. It's recorded once per page view. */
   function handoff() {
     var target = anchor ? document.getElementById(anchor.slice(1)) || article : article;
     if (!route) {
@@ -125,6 +124,7 @@
   /* Depth (PRD 7): how far through the article the reader has scrolled, from
      its top. route is 'terminal' once the reader has used the terminal
      control, and 'none' before that. */
+  var depthFired = {}, depthQueued = false;
   function queueDepth() {
     if (depthQueued) return;
     depthQueued = true;
@@ -146,7 +146,6 @@
     });
   });
   terminal.querySelector('.ic-go').addEventListener('click', handoff);
-  window.addEventListener('scroll', queueDepth, { passive: true });
   function step(d) { go((aim !== null ? aim : idx) + d); }
   prev.addEventListener('click', function () { step(-1); });
   next.addEventListener('click', function () { step(1); });
@@ -172,6 +171,7 @@
   }, { passive: true });
 
   window.addEventListener('resize', function () { go(idx, true); });
+  window.addEventListener('scroll', queueDepth, { passive: true });
 
   /* Boot: show the deck and apply any deep link (PRD 5.7). */
   var q = new URLSearchParams(location.search);

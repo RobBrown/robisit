@@ -1,84 +1,89 @@
-/* Insight Cards (PRD v2.1). Loaded only on posts with a valid cards block.
-   Every colour and typeface is the site's own, taken from _layouts/article.html. */
+/* TL;DR card deck (Insight Cards, PRD v2.1). Loaded only on posts with a valid
+   cards block. Every colour is one of the site's own from _layouts/article.html;
+   the only others are black drop shadows. */
 :root{
-  --ic-surface:#14100a;     /* .toc, .menu-dropdown */
-  --ic-raised:#1e1a14;      /* subscribe button, menu hover */
-  --ic-edge:#3d3529;        /* byline and footer dots */
-  --ic-edge-on:#c06800;     /* nav brand (dark amber) */
-  --ic-ink:#d4cfc6;         /* body text */
-  --ic-ink-strong:#eae6df;  /* h1, h2 */
-  --ic-ink-soft:#b8b09e;    /* .body pre code */
-  --ic-rule-strong:#706a5e; /* input focus border */
-  --ic-accent:#ffa000;      /* amber */
+  --ic-surface:#14100a;       /* .toc, .menu-dropdown */
+  --ic-raised:#1e1a14;        /* subscribe button, menu hover */
+  --ic-edge:#3d3529;          /* byline and footer dots */
+  --ic-edge-on:#c06800;       /* nav brand (dark amber) */
+  --ic-ink:#d4cfc6;           /* body text */
+  --ic-ink-strong:#eae6df;    /* h1, h2 */
+  --ic-ink-soft:#b8b09e;      /* .body pre code */
+  --ic-rule-strong:#706a5e;   /* input focus border */
+  --ic-accent:#ffa000;        /* amber */
   --ic-ink-on-accent:#0a0600; /* body background, as text on amber */
-  --ic-link:#b8a47e;        /* .body a, footer .read-more */
   --ic-serif:'Lora',Georgia,'Times New Roman',serif;
   --ic-sans:'Inter',system-ui,sans-serif;
-  --ic-gutter:24px;         /* article side padding */
+  --ic-gutter:24px;           /* article side padding */
   --ic-card:min(80vw,400px);
 }
 @media(max-width:600px){:root{--ic-gutter:20px}}
 
-.ic-deck[hidden],.ic-head[hidden]{display:none}
+.ic-head[hidden],.ic-deck[hidden]{display:none}
 
-/* Carded pages: a compact masthead. The layout leaves out the date and stats
-   (owner direction) and the TL;DR heading row takes the place of the header
-   rule. Scoped to .ic-page so posts without cards are untouched. */
+/* Compact masthead. The layout adds .ic-page and leaves out the date, view
+   counts and rule on carded posts, so posts without cards are untouched. */
 .ic-page{padding-top:28px}
 .ic-page header{margin-bottom:28px}
 .ic-page header h1{margin:0}
-.ic-page header .rule{display:none}
-@media(max-width:600px){.ic-page{padding-top:16px}.ic-page header{margin-bottom:20px}.ic-head{margin-bottom:12px}}
 
-/* Section heading: the TL;DR label (as on the site's TL;DR block) and the
-   card count. */
-.ic-head{margin-bottom:14px}
+/* "TL;DR in N cards" above the deck and "Full Article Published on <date>"
+   below it, in the site's TL;DR label style. The second is never hidden, so
+   without the script it is the post's date line. */
 .ic-label{
   margin:0;font-family:var(--ic-sans);font-size:14px;font-weight:600;letter-spacing:.12em;line-height:1.4;
   color:var(--ic-accent);
 }
-.ic-count{margin-left:8px;font-size:14px;letter-spacing:.01em;font-weight:400;color:var(--ic-ink-soft)}
-/* The same line under the deck introduces the article. It is never hidden,
-   so without JavaScript it serves as the post's date line. */
+.ic-count{margin-left:8px;letter-spacing:.01em;font-weight:400;color:var(--ic-ink-soft)}
+.ic-head{margin-bottom:14px}
 .ic-published{margin-top:6px}
 .ic-deck[hidden] ~ .ic-published{margin-top:0}
-/* Deck: native scroller spanning the column plus its gutters. As in the
-   prototype, the current card lines up with the text column and the next
-   card shows to its right. */
+
+@media(max-width:600px){
+  /* Tighter on phones so the first card fits on a 375x667 screen. */
+  .ic-page{padding-top:16px}
+  .ic-page header{margin-bottom:20px}
+  .ic-head{margin-bottom:12px}
+}
+
+/* Deck: a native scroller spanning the column plus its gutters. The current
+   card snaps to the text column and the next card shows to its right. */
 .ic-deck{position:relative;margin:0 calc(-1 * var(--ic-gutter))}
 .ic-rail{
-  position:relative;display:flex;gap:12px;
+  display:flex;gap:12px;
   overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
   scroll-snap-type:x mandatory;scrollbar-width:none;
-  padding:6px var(--ic-gutter) 30px;
+  padding:6px var(--ic-gutter) 30px; /* room for the shadow */
   scroll-padding-inline:var(--ic-gutter);
 }
 .ic-rail::-webkit-scrollbar{display:none}
 .ic-deck :focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
 .ic-rail:focus-visible{outline-offset:-2px}
 
-/* Cards are compact raised panels on a lighter surface with a solid 2px
-   border. The current card's border turns dark amber. All cards in a deck
-   share the tallest card's height (the rail stretches them). */
+/* Cards: raised panels with a solid border. The current card's border turns
+   dark amber and its neighbours step back. The rail stretches every card to
+   the tallest card's height. No transitions (PRD 5.5). */
 .ic-card{
-  flex:0 0 var(--ic-card);scroll-snap-align:start;scroll-snap-stop:always;
-  display:flex;flex-direction:column;gap:10px;
   --ic-pad-top:20px;--ic-pad-x:20px;
-  position:relative;padding:var(--ic-pad-top) var(--ic-pad-x) 24px;
+  flex:0 0 var(--ic-card);scroll-snap-align:start;scroll-snap-stop:always;
+  position:relative;display:flex;flex-direction:column;gap:10px;
+  padding:var(--ic-pad-top) var(--ic-pad-x) 24px;
   background:var(--ic-raised);
   border:2px solid var(--ic-edge);border-radius:14px;
   box-shadow:0 12px 28px -10px rgba(0,0,0,.9);
   color:var(--ic-ink);font-family:var(--ic-serif);font-size:15.5px;line-height:1.65;
 }
 .ic-card.is-current{border-color:var(--ic-edge-on)}
-/* Neighbours step back so the current card leads; no transition (PRD 5.5). */
-.ic-card:not(.is-current)>:not(.ic-go){opacity:.72} /* lowest that keeps the amber counter at AA contrast */
+/* .72 is the lowest that keeps the amber counter at AA contrast. The button
+   is never dimmed. */
+.ic-card:not(.is-current)>:not(.ic-go){opacity:.72}
+
+/* Counter: top-right, level with the title, so every title starts at the
+   same height whether or not its card has a counter. */
 .ic-n{
-  font-family:var(--ic-sans);font-size:11.5px;font-weight:600;letter-spacing:.14em;line-height:1.4;
-  text-align:right;color:var(--ic-accent);font-variant-numeric:tabular-nums;
-  /* Top-right corner, level with the title, so every card's title starts at
-     the same height whether or not it has a counter. */
   position:absolute;top:calc(var(--ic-pad-top) + 6px);right:var(--ic-pad-x);
+  font-family:var(--ic-sans);font-size:11.5px;font-weight:600;letter-spacing:.14em;line-height:1.4;
+  color:var(--ic-accent);font-variant-numeric:tabular-nums;
 }
 .ic-n + .ic-title,.ic-n + .ic-knows{padding-right:44px}
 .ic-title,.ic-knows{
@@ -86,13 +91,18 @@
   color:var(--ic-ink-strong);
 }
 .ic-resolves{color:var(--ic-ink-soft)}
+
 @media(min-width:601px){
   /* Fade the clipped neighbours into the page instead of cutting them off. */
-  .ic-rail{-webkit-mask-image:linear-gradient(90deg,transparent,black var(--ic-gutter),black calc(100% - var(--ic-gutter)),transparent);mask-image:linear-gradient(90deg,transparent,black var(--ic-gutter),black calc(100% - var(--ic-gutter)),transparent)}
+  .ic-rail{
+    -webkit-mask-image:linear-gradient(90deg,transparent,black var(--ic-gutter),black calc(100% - var(--ic-gutter)),transparent);
+    mask-image:linear-gradient(90deg,transparent,black var(--ic-gutter),black calc(100% - var(--ic-gutter)),transparent);
+  }
   .ic-card{--ic-pad-top:24px;--ic-pad-x:26px;padding-bottom:28px;gap:12px;font-size:16.5px;line-height:1.7}
   .ic-title,.ic-knows{font-size:22px}
 }
 
+/* Situation options. The selected one takes an amber border and left rule. */
 .ic-options{display:flex;flex-direction:column;gap:8px}
 .ic-opt{
   display:block;width:100%;text-align:left;cursor:pointer;
@@ -101,8 +111,12 @@
   border:1px solid var(--ic-edge);border-radius:6px;
 }
 .ic-opt[aria-checked="true"]{border-color:var(--ic-accent);border-left-width:3px;padding-left:10px}
-@media(hover:hover){.ic-opt:hover{border-color:var(--ic-rule-strong)}.ic-opt[aria-checked="true"]:hover{border-left-color:var(--ic-accent)}}
+@media(hover:hover){
+  .ic-opt:hover{border-color:var(--ic-rule-strong)}
+  .ic-opt[aria-checked="true"]:hover{border-color:var(--ic-accent)}
+}
 
+/* Terminal control: the site's amber. */
 .ic-go{
   align-self:flex-start;margin-top:4px;cursor:pointer;white-space:nowrap;
   padding:9px 22px;border:1px solid var(--ic-accent);border-radius:6px;
@@ -111,8 +125,8 @@
 }
 .ic-go:hover{background:transparent;color:var(--ic-accent)}
 
-/* Chevrons, as in the prototype: pointer devices only, quiet until the deck is
-   hovered or focused, sitting over the card edges. */
+/* Chevrons: pointer devices only, hidden until the deck is hovered or a
+   chevron has keyboard focus. */
 .ic-chev{
   position:absolute;top:calc(50% - 12px);transform:translateY(-50%);z-index:1;
   display:none;align-items:center;justify-content:center;
@@ -130,10 +144,11 @@
   .ic-deck:hover .ic-chev,.ic-chev:focus-visible{opacity:1}
 }
 
-
+/* The article. The terminal control moves focus to a heading in it. */
 .ic-article{margin-top:24px}
 .ic-article:focus{outline:none}
 .ic-article [id]{scroll-margin-top:16px}
-.ic-article h1:focus,.ic-article h2:focus,.ic-article h3:focus{outline:none}
-.ic-article h1:focus-visible,.ic-article h2:focus-visible,.ic-article h3:focus-visible{outline:2px solid var(--ic-accent);outline-offset:4px}
+.ic-article :is(h1,h2,h3):focus{outline:none}
+.ic-article :is(h1,h2,h3):focus-visible{outline:2px solid var(--ic-accent);outline-offset:4px}
+
 .ic-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}

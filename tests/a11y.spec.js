@@ -6,22 +6,22 @@ const { CARDED_URL, cards, N, settle, currentIndex } = require('./helpers');
 const WCAG = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 // Contrast failures in the site's existing chrome, present on every post before
-// this change (nav brand, header date and byline stats, TOC subtitle, footer copyright). They are
-// outside the deck layer and flagged in the PR rather than restyled here.
-const PRE_EXISTING = /^color-contrast: (\.brand|\.date|\.stat(:nth-child\(\d\))?( > \.stat-num)?|\.toc-sub|\.copy)$/;
+// this change (nav brand, TOC subtitle, footer copyright). They are outside the
+// deck and flagged in the PR rather than restyled here.
+const PRE_EXISTING = /^color-contrast: (\.brand|\.toc-sub|\.copy)$/;
 
 for (const scheme of ['light', 'dark']) {
-  for (const state of ['situation', 'insight', 'terminal', 'revealed']) {
+  for (const state of ['situation', 'insight', 'terminal', 'in-article']) {
     test(`axe: zero WCAG 2.2 AA violations, ${scheme} scheme, ${state}`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme });
-      const q = { situation: '', insight: '?path=pilot&card=2', terminal: `?card=${N}`, revealed: '' }[state];
+      const q = { situation: '', insight: '?path=pilot&card=2', terminal: `?card=${N}`, 'in-article': `?card=${N}` }[state];
       await page.goto(CARDED_URL + q);
-      if (state === 'revealed') await page.locator('.ic-go').click();
+      if (state === 'in-article') await page.locator('.ic-go').click();
       await page.locator('#ic-deck').hover();
       const flat = (r) => r.violations.flatMap((v) => v.nodes.map((n) => `${v.id}: ${n.target.join(' ')}`));
 
       // The reading layer itself: zero violations.
-      const layer = await new AxeBuilder({ page }).withTags(WCAG).include('#ic-deck').include('#ic-head').analyze();
+      const layer = await new AxeBuilder({ page }).withTags(WCAG).include('#ic-deck').include('#ic-head').include('#ic-published').analyze();
       expect(flat(layer)).toEqual([]);
 
       // The whole page: nothing beyond the site's pre-existing issues.

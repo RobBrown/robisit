@@ -30,7 +30,7 @@ for (const opt of cards.situation.options) {
     expect(await currentIndex(page)).toBe(1);
     expect(await titlesInRail(page)).toEqual(opt.order.map((id) => insightById[id].title));
     await expect(page.getByRole('radio', { name: opt.label })).toHaveAttribute('aria-checked', 'true');
-    // Anchor: the terminal control reveals at this option's anchor.
+    // Anchor: the terminal control jumps to this option's anchor.
     await page.locator('.ic-go').click();
     await expect(page.locator(opt.anchor)).toBeFocused();
     expect(new URL(page.url()).searchParams.get('path')).toBe(opt.id);
@@ -74,8 +74,13 @@ test('counter reads n/N at the top of each card, situation excluded from N', asy
   const counters = await page.locator('.ic-card .ic-n').allTextContents();
   expect(counters).toEqual(Array.from({ length: N }, (_, i) => `${i + 1}/${N}`));
   const firstChild = await page.locator('.ic-insight, .ic-terminal').evaluateAll((els) => els.every((e) => e.firstElementChild.classList.contains('ic-n')));
-  const align = await page.locator('.ic-card .ic-n').evaluateAll((els) => els.map((e) => getComputedStyle(e).textAlign));
-  expect(new Set(align)).toEqual(new Set(['right']));
+  // Right-aligned: each counter ends near its card's right edge, level with the title.
+  const geo = await page.locator('.ic-insight, .ic-terminal').evaluateAll((els) => els.map((c) => {
+    const card = c.getBoundingClientRect(), n = c.querySelector('.ic-n').getBoundingClientRect();
+    const title = c.querySelector('.ic-title, .ic-knows').getBoundingClientRect();
+    return { gap: card.right - n.right, beside: n.top < title.bottom && n.bottom > title.top };
+  }));
+  for (const g of geo) { expect(g.gap).toBeLessThan(32); expect(g.beside).toBe(true); }
   expect(firstChild).toBe(true);
   // Counters stay positional after a reorder.
   await page.getByRole('radio').nth(2).click();

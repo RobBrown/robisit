@@ -1,19 +1,16 @@
 {%- comment -%}
-  Insight Cards deck (PRD v2.1 sections 3, 5, 6, 8). Rendered only when
-  insight-cards-valid.html has set ic_valid, between the site's own article
-  header and the body. The deck and its heading ship `hidden`;
-  assets/js/insight-cards.js unhides them above the always-open article, so
-  with no script (or a failed one) the page is the plain article.
-  Insight cards render in the default order; the script reorders them per path.
+  TL;DR card deck (Insight Cards, PRD v2.1). Rendered by _layouts/article.html
+  between the article header and the body, only when insight-cards-valid.html
+  has set ic_valid. The heading and deck ship `hidden`; assets/js/insight-cards.js
+  shows them, so without the script the page is the plain article. Insight
+  cards render in the default order and the script reorders them for a path.
 {%- endcomment -%}
 {%- assign ic = page.cards -%}
 {%- assign ic_ids = ic.insights | map: "id" -%}
 {%- assign ic_order = ic.default_order | default: ic_ids -%}
 {%- assign ic_total = ic.insights | size | plus: 1 -%}
-<div class="ic-head" id="ic-head" hidden>
-    <h2 class="ic-label" id="ic-label">TL;DR <span class="ic-count">in {{ ic_total }} cards</span></h2>
-  </div>
-  <section class="ic-deck" id="ic-deck" role="region" aria-labelledby="ic-label" hidden>
+  <h2 class="ic-label ic-head" id="ic-head" hidden>TL;DR <span class="ic-count">in {{ ic_total }} cards</span></h2>
+  <section class="ic-deck" id="ic-deck" role="region" aria-labelledby="ic-head" hidden>
     <div class="ic-rail" tabindex="0">
       {%- if ic.situation %}
       <div class="ic-card ic-situation" role="group" aria-roledescription="card" aria-label="Start">

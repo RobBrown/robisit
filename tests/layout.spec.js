@@ -21,9 +21,7 @@ test('at 375px no card has internal overflow, in every path', async ({ page }, i
     for (const c of cards) {
       expect(c.scroll, `${p.id || 'default'} ${c.label}`).toBeLessThanOrEqual(c.client);
       expect(c.children).toBe(true);
-      // PRD 6.3 caps cards at 520px, but in the site's own type a near-ceiling
-      // card measures ~546px at 375px wide. Owner's call: the site's type wins.
-      // A whole card must still fit on one 667px screen.
+      // A whole card fits on one screen (PRD 3.6).
       expect(c.height).toBeLessThanOrEqual(page.viewportSize().height);
       expect(c.contentBottom, `${p.id || 'default'} ${c.label} content inside card`).toBeLessThanOrEqual(c.height);
     }
@@ -76,7 +74,6 @@ for (const width of [375, 414, 768, 1280]) {
     });
 
     test('cards are capped at 520px tall at this width (PRD 6.3)', async ({ page }) => {
-      test.skip(width < 390, 'site type exceeds the cap on the narrowest phones; see the 375px test');
       await page.goto(CARDED_URL);
       await page.evaluate(() => document.fonts.ready);
       const h = await page.locator('.ic-card').first().evaluate((el) => el.getBoundingClientRect().height);
@@ -103,7 +100,7 @@ for (const scheme of ['light', 'dark']) {
     const allowed = siteColours();
     const used = await page.evaluate((props) => {
       const out = new Set();
-      const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-head *');
+      const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-head *, #ic-published, #ic-published *');
       for (const el of els) {
         const cs = getComputedStyle(el);
         for (const p of props) {

@@ -401,8 +401,8 @@ footer .copy{
       <span class="stat"><span class="stat-num">{{ page.linkedin | default: 0 }}</span> LinkedIn</span>
       <span class="dot">·</span>
       <span class="stat"><span class="stat-num">{{ page.bluesky | default: 0 }}</span> Bluesky</span>
-    </div>{% endunless %}
-    <span class="rule"></span>
+    </div>
+    <span class="rule"></span>{% endunless %}
   </header>
 {% if ic_valid %}
   {% include insight-cards.html %}

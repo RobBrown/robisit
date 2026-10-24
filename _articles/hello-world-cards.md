@@ -17,17 +17,17 @@ cards:
     options:
       - id: basics
         label: "Show me the basics"
-        order: [hello, counter, swipe, reveal, links]
+        order: [hello, counter, swipe, jump, links]
         anchor: "#hello-world"
       - id: order
         label: "Test a reordered deck"
-        order: [links, reveal, swipe, counter, hello]
+        order: [links, jump, swipe, counter, hello]
         anchor: "#second-section"
       - id: pilot
         label: "Test deep links (pilot path)"
-        order: [swipe, links, hello, reveal, counter]
+        order: [swipe, links, hello, jump, counter]
         anchor: "#third-section"
-  default_order: [hello, counter, swipe, reveal, links]
+  default_order: [hello, counter, swipe, jump, links]
   default_anchor: "#hello-world"
   insights:
     - id: hello
@@ -35,13 +35,13 @@ cards:
       body: "This page exists to test the Insight Cards feature on robisit.com. It is not a real article, and nothing on it is advice. If you found it by accident, hello, and sorry for the detour. Each card on this page is written close to the ninety-word ceiling so the deck can be checked on small phones. A real card would teach one complete idea here: the claim, why it holds, and what to do about it."
     - id: counter
       title: "Test card two checks the counter"
-      body: "The small number at the top of this card should read two of six when you arrive in the default order. The situation card is not counted, and the last card is. Pick a different path on the first card and this card moves, but the counter stays positional, so it always tells you where you are in the deck rather than which card this is. This sentence is filler to bring the body close to the word ceiling."
+      body: "The small number in the top corner of this card should read two of six when you arrive in the default order. The situation card is not counted, and the last card is. Pick a different path on the first card and this card moves, but the counter stays positional, so it always tells you where you are in the deck rather than which card this is. This sentence is filler to bring the body close to the word ceiling."
     - id: swipe
       title: "Test card three checks swiping and keys"
       body: "Swipe sideways to move between cards. On a laptop, use the arrow keys or hover over the deck to show the chevrons. Scrolling up and down over the deck should move the page, never the cards. Navigation stops at the first and last card without wrapping around. The address bar should change as you move, so copying it shares the card you are on. This sentence is filler to bring the body close to the word ceiling."
-    - id: reveal
-      title: "Test card four checks the reveal"
-      body: "Under the deck there is one link that opens the full article from the top. The last card has a button that opens it at the section matching the path you picked on the first card. Either way, the link under the deck disappears, the page scrolls to the right heading, and keyboard focus moves there too. The cards stay above the article afterwards. This sentence is filler to bring the body close to the ninety-word ceiling."
+    - id: jump
+      title: "Test card four checks the jump into the article"
+      body: "The full article is already open below the deck, under the Full Article line. The last card has a button that jumps to the section matching the path you picked on the first card. The page scrolls to that heading and keyboard focus moves there too. Scrolling down past the deck works just as well. The cards stay above the article the whole time. This sentence is filler to bring the body close to the ninety-word ceiling."
     - id: links
       title: "Test card five checks deep links"
       body: "Open this page with a path and card in the address, such as path equals pilot and card equals three, and the deck should apply that path and land on that card straight away, with no animation. An unknown path is ignored and a card number past the end lands on the last card. Other parts of the address, such as campaign tags, are kept. This sentence is filler to bring the body close to the ninety-word ceiling."
