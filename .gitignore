@@ -6,3 +6,9 @@
 .planning/
 CLAUDE.md
 Gemfile.lock
+node_modules/
+_site/
+test-results/
+playwright-report/
+.jekyll-cache/
+_site-fixtures/

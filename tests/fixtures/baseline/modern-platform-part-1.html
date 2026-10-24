@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Your Legacy Platform is now an AI Tax — Rob Brown</title>
+<meta name="description" content="The complexity we've normalized over the last decade has become an AI tax. The abstraction layer is the strategy.">
+<meta property="og:title" content="Why Your Legacy Platform is now an AI Tax">
+<meta property="og:description" content="The complexity we've normalized over the last decade has become an AI tax. The abstraction layer is the strategy.">
+<meta property="og:image" content="">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://robisit.com/thoughts/modern-platform-part-1/">
+<meta name="twitter:card" content="summary_large_image">
+<!-- PostHog -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageviewId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_2kfjmGaj5A7KtH79AFffVClaAxl0upvAxb7mmtXrbKr',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:#0a0600;
+  color:#d4cfc6;
+  font-family:'Lora',Georgia,'Times New Roman',serif;
+  font-size:19px;
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Navigation ── */
+nav{
+  max-width:660px;margin:0 auto;
+  padding:20px 24px 0;
+  display:flex;justify-content:space-between;align-items:center;
+}
+nav a{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;letter-spacing:.02em;
+  color:#ffa000;text-decoration:none;
+  transition:color .2s;
+}
+nav a:hover{color:#ffe4a0}
+nav .brand{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:.04em;
+  color:#c06800;text-decoration:none;
+  position:relative;
+  text-shadow:
+    0 0 2px rgba(255,160,60,.9),
+    0 0 6px rgba(210,100,0,.8),
+    0 0 14px rgba(180,80,0,.6),
+    0 0 30px rgba(150,60,0,.35),
+    0 0 55px rgba(120,50,0,.2);
+  animation:brand-flicker 6s step-end infinite;
+  -webkit-font-smoothing:antialiased;
+}
+nav .brand:hover{color:#ffe4a0}
+@keyframes brand-flicker{
+  0%,100%{opacity:1}
+  4%{opacity:.85}
+  4.2%{opacity:1}
+  62%{opacity:1}
+  62.5%{opacity:.75}
+  63%{opacity:1}
+  83%{opacity:1}
+  83.4%{opacity:.9}
+  83.8%{opacity:1}
+}
+
+/* ── Hamburger menu ── */
+.menu{position:relative}
+.menu-toggle{
+  background:none;border:none;cursor:pointer;
+  padding:8px;display:flex;flex-direction:column;gap:4px;
+}
+.menu-toggle span{
+  display:block;width:18px;height:2px;
+  background:#706a5e;transition:background .2s;
+}
+.menu-toggle:hover span{background:#ffa000}
+.menu-toggle.open span{background:#ffa000}
+.menu-dropdown{
+  display:none;position:absolute;right:0;top:100%;
+  margin-top:8px;
+  background:#14100a;border:1px solid #1e1a14;border-radius:4px;
+  padding:4px 0;min-width:140px;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+.menu-dropdown.open{display:block}
+.menu-dropdown a{
+  display:block;padding:10px 16px;
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;color:#d4cfc6;text-decoration:none;
+  text-align:right;
+}
+.menu-dropdown a:hover{background:#1e1a14;color:#ffa000}
+
+/* ── Article container ── */
+article{
+  max-width:660px;
+  margin:0 auto;
+  padding:48px 24px 20px;
+}
+
+/* ── Header group ── */
+header{margin-bottom:40px}
+
+h1{
+  font-family:'Lora',Georgia,serif;
+  font-size:36px;
+  font-weight:700;
+  line-height:1.2;
+  color:#eae6df;
+  letter-spacing:-0.015em;
+  margin-bottom:16px;
+}
+@media(max-width:600px){h1{font-size:28px}}
+
+.date{
+  display:block;
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;
+  color:#706a5e;
+  letter-spacing:.01em;
+  margin-bottom:12px;
+}
+.byline{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;
+  color:#585249;
+  letter-spacing:.01em;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.byline .dot{color:#3d3529}
+.byline .stat{display:flex;align-items:center;gap:5px}
+.byline .stat-num{color:#706a5e;font-weight:600}
+
+header .rule{
+  display:block;height:1px;
+  background:#1e1a14;
+  margin-top:20px;
+}
+
+/* ── Body content ── */
+.body{margin-bottom:0}
+
+.body p{margin-bottom:20px}
+
+.body h2{
+  font-family:'Lora',Georgia,serif;
+  font-size:24px;font-weight:700;line-height:1.3;
+  color:#eae6df;
+  margin:48px 0 16px;
+}
+
+.body h3{
+  font-family:'Lora',Georgia,serif;
+  font-size:20px;font-weight:700;line-height:1.4;
+  color:#eae6df;
+  margin:36px 0 12px;
+}
+
+.body a{color:#b8a47e;text-decoration:underline;text-underline-offset:3px}
+.body a:hover{color:#d4cfc6}
+
+.body ul,.body ol{margin-bottom:20px;padding-left:24px}
+.body li{margin-bottom:8px}
+
+.body blockquote{
+  border-left:2px solid #2e2820;
+  padding:0 0 0 20px;margin:32px 0;
+  color:#9e9789;font-style:italic;
+}
+
+.body blockquote.tldr{
+  border-left:3px solid #ffa000;
+  background:linear-gradient(90deg,#1a1206,rgba(26,18,6,0));
+  padding:22px 24px;margin:8px 0 40px;
+  border-radius:0 6px 6px 0;
+  color:#eae6df;font-style:italic;
+  font-size:21px;line-height:1.65;
+}
+.body blockquote.tldr p{margin-bottom:0}
+.body blockquote.tldr p::before{
+  content:"TL;DR";
+  display:block;margin-bottom:6px;
+  font-family:'Inter',system-ui,sans-serif;font-style:normal;
+  font-size:12px;font-weight:600;letter-spacing:.14em;
+  color:#ffa000;
+}
+@media(max-width:600px){
+  .body blockquote.tldr{font-size:19px;padding:18px}
+}
+
+.body code{
+  font-family:ui-monospace,'SF Mono',monospace;font-size:15px;
+  background:#14100a;color:#c4b998;
+  padding:2px 6px;border-radius:3px;
+}
+
+.body pre{
+  background:#0e0b06;
+  padding:20px;margin:28px 0;
+  overflow-x:auto;border-radius:5px;
+  border:1px solid #1a1610;
+}
+.body pre code{
+  background:none;color:#b8b09e;
+  padding:0;font-size:14px;line-height:1.65;
+}
+
+.body hr{border:none;border-top:1px solid #1e1a14;margin:48px 0}
+
+.body img{max-width:100%;height:auto;display:block;margin:32px 0}
+
+.body strong{font-weight:700;color:#eae6df}
+
+.body table{
+  width:100%;
+  border-collapse:collapse;
+  margin:32px 0;
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;
+  line-height:1.55;
+}
+.body thead th{
+  text-align:left;
+  font-weight:600;
+  color:#eae6df;
+  padding:10px 12px;
+  border-bottom:1px solid #3a3228;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  font-size:12px;
+}
+.body tbody td{
+  padding:10px 12px;
+  border-bottom:1px solid #1e1a14;
+  vertical-align:top;
+  color:#c0b9ae;
+}
+.body tbody tr:last-child td{border-bottom:none}
+.body tbody tr:hover td{background:rgba(255,160,0,0.03)}
+.body table code{font-size:13px}
+
+/* ── Table of contents ── */
+.toc{
+  display:flex;
+  gap:28px;
+  align-items:flex-start;
+  font-family:'Inter',system-ui,sans-serif;
+  background:#14100a;
+  border:1px solid #241f18;
+  border-radius:6px;
+  padding:18px 24px;
+  margin:36px 0;
+}
+.toc-head{
+  order:1;
+  flex:0 0 auto;
+  text-align:left;
+}
+.toc .toc-title{
+  font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:#ffa000;
+  margin-bottom:3px;
+}
+.toc .toc-sub{
+  font-size:13px;font-style:italic;
+  color:#585249;
+  margin-bottom:0;
+}
+.toc ul{order:2;flex:1;list-style:none;margin:0;padding:0}
+.toc li{margin:0}
+.toc a{
+  display:block;
+  padding:7px 0;
+  font-size:15px;line-height:1.4;
+  color:#b8a47e;text-decoration:none;
+  border-bottom:1px solid #16120b;
+  transition:color .2s;
+}
+.toc li:last-child a{border-bottom:none}
+.toc a:hover{color:#ffa000}
+.toc .toc-h2 a{padding-left:18px;font-size:14px;color:#9e9789}
+.toc .toc-h2 a:hover{color:#ffa000}
+@media(max-width:600px){
+  .toc{flex-direction:column;gap:14px}
+}
+
+/* ── Footer stats + copyright ── */
+footer{
+  max-width:660px;margin:0 auto;
+  padding:0 24px 48px;
+}
+
+footer .stats{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;color:#585249;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:20px 0;
+  border-top:1px solid #1e1a14;
+  border-bottom:1px solid #1e1a14;
+  margin-bottom:20px;
+}
+footer .stats .stat{display:flex;align-items:center;gap:5px}
+footer .stats .stat-num{color:#706a5e;font-weight:600}
+footer .stats .dot{color:#3d3529}
+
+.subscribe{
+  border-top:none;
+  padding:0 0 28px;
+  margin-bottom:8px;
+}
+.subscribe p{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;color:#ffa000;
+  margin-bottom:12px;
+}
+.subscribe .thanks{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;color:#ffa000;
+}
+.subscribe form{
+  display:flex;gap:8px;
+}
+.subscribe input[type="email"]{
+  flex:1;min-width:0;
+  font-family:'Inter',system-ui,sans-serif;font-size:14px;
+  background:#14100a;color:#d4cfc6;
+  border:1px solid #2e2820;border-radius:4px;
+  padding:10px 12px;
+  outline:none;transition:border-color .2s;
+}
+.subscribe input[type="email"]::placeholder{color:#585249}
+.subscribe input[type="email"]:focus{border-color:#706a5e}
+.subscribe button{
+  font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:600;
+  background:#1e1a14;color:#b8a47e;
+  border:1px solid #2e2820;border-radius:4px;
+  padding:10px 20px;cursor:pointer;
+  transition:background .2s,color .2s;
+  white-space:nowrap;
+}
+.subscribe button:hover{background:#2e2820;color:#d4cfc6}
+
+footer .read-more{
+  display:block;
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;font-weight:600;
+  color:#b8a47e;text-decoration:none;
+  padding:20px 0;
+  transition:color .2s;
+}
+footer .read-more:hover{color:#d4cfc6}
+
+footer .copy{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:12px;color:#3d3529;
+}
+
+/* ── Mobile adjustments ── */
+@media(max-width:600px){
+  body{font-size:17px;line-height:1.8}
+  article{padding:36px 20px 48px}
+  nav{padding:16px 20px 0}
+  footer{padding:0 20px 36px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="brand">ROB BROWN</a>
+  <div class="menu">
+    <button class="menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="menu-dropdown">
+      <a href="/">Home</a>
+      <a href="#subscribe" onclick="this.closest('.menu-dropdown').classList.remove('open');document.querySelector('#subscribe-form input[type=email]').focus()">Subscribe</a>
+      <a href="/content">All Content</a>
+    </div>
+  </div>
+</nav>
+
+<article>
+  <header>
+    <h1>Why Your Legacy Platform is now an AI Tax</h1>
+    <div class="date">April 12, 2026</div>
+    <div class="byline">
+      <span class="stat"><span class="stat-num">1847</span> reads</span>
+      <span class="dot">·</span>
+      <span class="stat"><span class="stat-num">284</span> LinkedIn</span>
+      <span class="dot">·</span>
+      <span class="stat"><span class="stat-num">63</span> Bluesky</span>
+    </div>
+    <span class="rule"></span>
+  </header>
+
+  <div class="body">
+    <p>AWS has 200+ services. Your AI agents don’t care about any of them.</p>
+
+<p>The complexity we’ve normalized over the last decade, that “enterprise-grade” overhead we wear like a badge of honor… Theyve become a tax.</p>
+
+<p>[subscribe]</p>
+
+<p>You pay it every time an agent stalls on a Jenkins pipeline or chokes on a permissions error from a service built for a human operator.</p>
+
+<p>The teams outrunning you right now aren’t “optimizing” on GCP or Azure. They’ve realized that interfacing directly with the Big Three is a waste of senior engineering time. Sure, Render and Supabase run on AWS, but that’s irrelevant. The point is they aren’t the ones navigating it.</p>
+
+<p><strong>The abstraction layer is the strategy.</strong> CSPs were built for humans with mice and keyboards. The tools sitting on top of them were built for API-first automation.</p>
+
+<hr />
+
+<h2 id="ephemeral-environments-docker-isnt-the-answer">Ephemeral Environments: Docker Isn’t the Answer</h2>
+
+<p>We’ve been told for years that the answer to scale is Docker, Terraform, or some unholy mix of both wrapped in a 600-line YAML file that nobody dares touch after six months.</p>
+
+<p>That model works for humans. It’s a bottleneck for AI-native development.</p>
+
+<p>The flaw is the assumption that an environment is an <em>artifact</em>, something you provision, configure, and eventually kill. That’s too slow. When an agent is spinning up ten parallel workstreams before your first cup of coffee, you can’t wait for a provisioning ticket or a container to warm up.</p>
+
+<p>The platform shouldn’t be a static monolith you maintain; it should be a composition you swap on the fly. If you need a Vercel-specific edge feature, you swap it. If the rest of your platform notices, your architecture is too brittle. Loosely coupled decisions are no longer a “best practice”; they are the prerequisite for an agentic workforce.</p>
+
+<hr />
+
+<h2 id="the-agent-ready-stack">The “Agent-Ready” Stack</h2>
+
+<p>I’m running this stack today. Every choice was made because it works as well for a headless agent as it does for a Senior Dev.</p>
+
+<p>Estimated monthly spend at ~1,000 active users. For the stack I’ve chosen there is <em>$0 cost during development and testing phases</em>. If you’re paying for “idle” time in 2026, you’re overpaying.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Service</th>
+      <th style="text-align: left">The Job</th>
+      <th style="text-align: left">Why it beats Legacy CSP’s</th>
+      <th style="text-align: left">Cost/1k</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Render</strong></td>
+      <td style="text-align: left">Compute</td>
+      <td style="text-align: left">No Terraform plans. It spins up a preview per branch, period.</td>
+      <td style="text-align: left">~$25</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Cloudflare</strong></td>
+      <td style="text-align: left">The Edge</td>
+      <td style="text-align: left">Replaces half a dozen AWS products with one navigable control plane.</td>
+      <td style="text-align: left">~$5</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Supabase</strong></td>
+      <td style="text-align: left">Postgres</td>
+      <td style="text-align: left">Database branching. Every workstream gets an isolated sandbox.</td>
+      <td style="text-align: left">$25</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Clerk</strong></td>
+      <td style="text-align: left">Auth</td>
+      <td style="text-align: left">Full identity management so agents never touch credential logic.</td>
+      <td style="text-align: left">$0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Resend</strong></td>
+      <td style="text-align: left">Email</td>
+      <td style="text-align: left">One API. No SMTP hell. No SES policy debugging.</td>
+      <td style="text-align: left">$20</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Stripe</strong></td>
+      <td style="text-align: left">Payments</td>
+      <td style="text-align: left">The CSPs haven’t even tried to compete here.</td>
+      <td style="text-align: left">2.9%</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>PostHog</strong></td>
+      <td style="text-align: left">Analytics</td>
+      <td style="text-align: left">Product-led growth in a box. No data engineering required.</td>
+      <td style="text-align: left">$0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Sentry</strong></td>
+      <td style="text-align: left">Observability</td>
+      <td style="text-align: left">It tells you <em>what</em> broke, not just that a log was fired.</td>
+      <td style="text-align: left">$26</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Upstash</strong></td>
+      <td style="text-align: left">Serverless Redis</td>
+      <td style="text-align: left">Pay per request. Zero cost for idle dev environments.</td>
+      <td style="text-align: left">$10</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Doppler</strong></td>
+      <td style="text-align: left">Secrets</td>
+      <td style="text-align: left">Scoped tokens. The only safe way to let agents work.</td>
+      <td style="text-align: left">$0</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="the-bottom-line-its-not-about-the-bill">The Bottom Line: It’s Not About the Bill</h2>
+
+<p>In dev, this stack costs <strong>$0</strong>. At 1,000 users, you’re looking at <strong>$130/mo</strong> max.</p>
+
+<p>Compare that to the “Enterprise” equivalent… <strong>EC2, RDS, Cognito, Secrets Manager, CloudWatch, and SES</strong>. You’ll pay $55/mo just to keep the lights on in development (those idle RDS instances add up) and $300+ at 1,000 users.</p>
+
+<p>But if you’re choosing this stack to save $170, you’re missing the point. We’re choosing these tools because they have <strong>capabilities that don’t exist</strong> in the legacy world.</p>
+
+<p>Render’s instant previews and Supabase’s database branching aren’t “nice to haves”, they are the fuel for an automated workforce. You aren’t picking these because they’re cheaper. You’re picking them because they’re faster than you are.</p>
+
+<hr />
+
+<h2 id="what-happens-when-the-agent-breaks-it">What Happens When the Agent Breaks It?</h2>
+
+<p>Picking the stack is the easy part. The harder question is one most CTOs are avoiding:</p>
+
+<p>When an agent inevitably breaks production, and it will, who is actually responsible? I don’t mean “philosophically.” I mean operationally. How do you enforce boundaries structurally so an LLM doesn’t hallucinate a <code class="language-plaintext highlighter-rouge">DROP TABLE</code> command?</p>
+
+<p>Most of us don’t have a structural answer. We have “trust.” In an AI-native world, trust is a liability.</p>
+
+<p><strong>That’s Part 2. Next week.</strong></p>
+
+  </div>
+</article>
+
+<footer>
+  <div class="subscribe" id="subscribe">
+    <p id="subscribe-label">Thanks for reading. Want more like this? Subscribe.</p>
+    <form id="subscribe-form">
+      <input type="email" name="entry.99560001" placeholder="you@email.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+  <script>
+  document.getElementById('subscribe-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var email=this.querySelector('input[type="email"]').value;
+    var data=new FormData();
+    data.append('entry.99560001',email);
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse',{
+      method:'POST',body:data,mode:'no-cors'
+    });
+    this.style.display='none';
+    var label=document.getElementById('subscribe-label');
+    label.textContent="Thanks! You'll receive future articles via email.";
+    label.className='thanks';
+  });
+  </script>
+  <script>
+  // Inline subscribe blocks: replace each [subscribe] marker in the body
+  // with an inbox form. Type [subscribe] on its own line in the Markdown,
+  // anywhere you want a block. Use it as many times as you like, or not at all.
+  (function(){
+    var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse';
+    var FIELD = 'entry.99560001';
+    function buildInlineSubscribe(){
+      var div = document.createElement('div');
+      div.className = 'subscribe subscribe--inline';
+      div.style.cssText = 'border-top:none;padding:8px 0 0;margin:12px 0 0;text-align:center;';
+      var label = document.createElement('p');
+      label.textContent = 'Get new articles in your inbox.';
+      var form = document.createElement('form');
+      form.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:8px;';
+      var input = document.createElement('input');
+      input.type = 'email';
+      input.name = FIELD;
+      input.placeholder = 'you@email.com';
+      input.required = true;
+      input.style.cssText = 'width:50%;min-width:200px;text-align:center;';
+      var btn = document.createElement('button');
+      btn.type = 'submit';
+      btn.textContent = 'Subscribe';
+      form.appendChild(input);
+      form.appendChild(btn);
+      div.appendChild(label);
+      div.appendChild(form);
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var data = new FormData();
+        data.append(FIELD, input.value);
+        fetch(FORM_URL, { method:'POST', body:data, mode:'no-cors' });
+        form.style.display = 'none';
+        label.textContent = "Thanks! You'll receive future articles via email.";
+        label.className = 'thanks';
+      });
+      return div;
+    }
+    document.querySelectorAll('.body p').forEach(function(p){
+      if (p.textContent.trim() !== '[subscribe]') return;
+      var block = buildInlineSubscribe();
+      p.parentNode.replaceChild(block, p);
+      if (block.nextElementSibling && block.nextElementSibling.tagName === 'HR') {
+        block.nextElementSibling.style.marginTop = '16px';
+      } else {
+        block.style.marginBottom = '36px';
+      }
+    });
+  })();
+  </script>
+  <script>
+  // Table of contents: replace each [contents] marker with a list of links to
+  // the article's H1/H2 section headings. Type [contents] on its own line.
+  (function(){
+    function slugify(text){
+      return text.toLowerCase().trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+    var markers = [];
+    document.querySelectorAll('.body p').forEach(function(p){
+      if (p.textContent.trim() === '[contents]') markers.push(p);
+    });
+    if (!markers.length) return;
+    var headings = document.querySelectorAll('.body h1, .body h2');
+    if (!headings.length) { markers.forEach(function(p){ p.remove(); }); return; }
+    function buildToc(){
+      var nav = document.createElement('nav');
+      nav.className = 'toc';
+      var head = document.createElement('div');
+      head.className = 'toc-head';
+      var title = document.createElement('div');
+      title.className = 'toc-title';
+      title.textContent = 'Table of Contents';
+      var sub = document.createElement('div');
+      sub.className = 'toc-sub';
+      sub.textContent = 'Jump to a section in the article';
+      head.appendChild(title);
+      head.appendChild(sub);
+      var ul = document.createElement('ul');
+      headings.forEach(function(h){
+        if (!h.id) h.id = slugify(h.textContent);
+        var li = document.createElement('li');
+        li.className = 'toc-' + h.tagName.toLowerCase();
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      nav.appendChild(head);
+      nav.appendChild(ul);
+      return nav;
+    }
+    markers.forEach(function(p){
+      p.parentNode.replaceChild(buildToc(), p);
+    });
+  })();
+  </script>
+  <div class="copy">© 2026 Rob Brown</div>
+</footer>
+
+</body>
+</html>

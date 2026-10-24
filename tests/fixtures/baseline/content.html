@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content — Rob Brown</title>
+<meta name="description" content="All articles by Rob Brown.">
+<meta property="og:title" content="Content — Rob Brown">
+<meta property="og:description" content="All articles by Rob Brown.">
+<meta property="og:type" content="website">
+<!-- PostHog -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageviewId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_2kfjmGaj5A7KtH79AFffVClaAxl0upvAxb7mmtXrbKr',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:#0a0600;
+  color:#d4cfc6;
+  font-family:'Lora',Georgia,'Times New Roman',serif;
+  font-size:19px;
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Navigation ── */
+nav{
+  max-width:660px;margin:0 auto;
+  padding:20px 24px 0;
+  display:flex;justify-content:space-between;align-items:center;
+}
+nav a{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;letter-spacing:.02em;
+  color:#ffa000;text-decoration:none;
+  transition:color .2s;
+}
+nav a:hover{color:#ffe4a0}
+nav .brand{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:.04em;
+  color:#c06800;text-decoration:none;
+  position:relative;
+  text-shadow:
+    0 0 2px rgba(255,160,60,.9),
+    0 0 6px rgba(210,100,0,.8),
+    0 0 14px rgba(180,80,0,.6),
+    0 0 30px rgba(150,60,0,.35),
+    0 0 55px rgba(120,50,0,.2);
+  animation:brand-flicker 6s step-end infinite;
+  -webkit-font-smoothing:antialiased;
+}
+nav .brand:hover{color:#ffe4a0}
+@keyframes brand-flicker{
+  0%,100%{opacity:1}
+  4%{opacity:.85}
+  4.2%{opacity:1}
+  62%{opacity:1}
+  62.5%{opacity:.75}
+  63%{opacity:1}
+  83%{opacity:1}
+  83.4%{opacity:.9}
+  83.8%{opacity:1}
+}
+
+/* ── Hamburger menu ── */
+.menu{position:relative}
+.menu-toggle{
+  background:none;border:none;cursor:pointer;
+  padding:8px;display:flex;flex-direction:column;gap:4px;
+}
+.menu-toggle span{
+  display:block;width:18px;height:2px;
+  background:#706a5e;transition:background .2s;
+}
+.menu-toggle:hover span{background:#ffa000}
+.menu-toggle.open span{background:#ffa000}
+.menu-dropdown{
+  display:none;position:absolute;right:0;top:100%;
+  margin-top:8px;
+  background:#14100a;border:1px solid #1e1a14;border-radius:4px;
+  padding:4px 0;min-width:140px;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+.menu-dropdown.open{display:block}
+.menu-dropdown a{
+  display:block;padding:10px 16px;
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;color:#d4cfc6;text-decoration:none;
+  text-align:right;
+}
+.menu-dropdown a:hover{background:#1e1a14;color:#ffa000}
+
+/* ── Content area ── */
+.content{
+  max-width:660px;
+  margin:0 auto;
+  padding:36px 24px 60px;
+}
+
+/* ── Page quote ── */
+.hero-quote{
+  margin-bottom:65px;
+}
+.hero-quote blockquote{
+  font-family:'Lora',Georgia,serif;
+  font-size:24px;
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:#eae6df;
+  letter-spacing:-0.01em;
+  margin:0 0 12px;
+}
+@media(max-width:600px){.hero-quote blockquote{font-size:20px}}
+.hero-quote cite{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;
+  font-style:italic;
+  color:#706a5e;
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+
+/* ── Sort controls ── */
+.sort-bar{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:24px;
+  color:#585249;
+}
+.sort-bar span{margin-right:4px}
+.sort-btn{
+  background:none;border:1px solid #2e2820;border-radius:4px;
+  font-family:'Inter',system-ui,sans-serif;font-size:12px;
+  color:#706a5e;padding:5px 12px;cursor:pointer;
+  transition:color .2s,border-color .2s,background .2s;
+}
+.sort-btn:hover{color:#b8a47e;border-color:#b8a47e}
+.sort-btn.active{color:#ffa000;border-color:#ffa000;background:rgba(255,160,0,.06)}
+
+/* ── Article list ── */
+.articles{list-style:none;padding:0;margin:0}
+
+.article-row{
+  padding:28px 0;
+  border-bottom:1px solid #1e1a14;
+}
+.article-row:first-child{
+  padding-top:0;
+}
+
+.article-row h2{
+  font-family:'Lora',Georgia,serif;
+  font-size:22px;font-weight:700;line-height:1.3;
+  margin:0 0 6px;
+}
+.article-row h2 a{
+  color:#eae6df;text-decoration:none;
+  transition:color .2s;
+}
+.article-row h2 a:hover{color:#b8a47e}
+
+.article-row .meta{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13px;color:#585249;
+  letter-spacing:.01em;
+  margin-bottom:8px;
+}
+
+.article-row .excerpt{
+  font-family:'Lora',Georgia,serif;
+  font-size:16px;line-height:1.7;
+  color:#9e9789;
+}
+
+/* ── Empty state ── */
+.empty{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;color:#585249;
+  padding:32px 0;
+}
+
+/* ── Subscribe ── */
+.subscribe{
+  border-top:1px solid #1e1a14;
+  padding:28px 0;
+  margin-bottom:8px;
+}
+.subscribe p{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;color:#ffa000;
+  margin-bottom:12px;
+}
+.subscribe .thanks{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;color:#ffa000;
+}
+.subscribe form{
+  display:flex;gap:8px;
+}
+.subscribe input[type="email"]{
+  flex:1;min-width:0;
+  font-family:'Inter',system-ui,sans-serif;font-size:14px;
+  background:#14100a;color:#d4cfc6;
+  border:1px solid #2e2820;border-radius:4px;
+  padding:10px 12px;
+  outline:none;transition:border-color .2s;
+}
+.subscribe input[type="email"]::placeholder{color:#585249}
+.subscribe input[type="email"]:focus{border-color:#706a5e}
+.subscribe button{
+  font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:600;
+  background:#1e1a14;color:#b8a47e;
+  border:1px solid #2e2820;border-radius:4px;
+  padding:10px 20px;cursor:pointer;
+  transition:background .2s,color .2s;
+  white-space:nowrap;
+}
+.subscribe button:hover{background:#2e2820;color:#d4cfc6}
+
+/* ── Footer ── */
+footer{
+  max-width:660px;margin:0 auto;
+  padding:0 24px 48px;
+}
+footer .copy{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:12px;color:#3d3529;
+}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  body{font-size:17px;line-height:1.8}
+  .content{padding:36px 20px 48px}
+  nav{padding:16px 20px 0}
+  footer{padding:0 20px 36px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="brand">ROB BROWN</a>
+  <div class="menu">
+    <button class="menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="menu-dropdown">
+      <a href="/">Home</a>
+      <a href="#subscribe" onclick="this.closest('.menu-dropdown').classList.remove('open');document.querySelector('#subscribe-form input[type=email]').focus()">Subscribe</a>
+    </div>
+  </div>
+</nav>
+
+<main class="content">
+  <div class="hero-quote">
+    <blockquote>"The most dangerous phrase in the language is, 'We've always done it this way.'" &nbsp; &nbsp;<cite>-- Grace Hopper</cite></blockquote>
+  </div>
+
+  
+  
+    <div class="sort-bar">
+      <span>⇅</span>
+      <button class="sort-btn active" data-sort="featured">Featured</button>
+      <button class="sort-btn" data-sort="date">Date</button>
+      <button class="sort-btn" data-sort="views">Views</button>
+    </div>
+    <ul class="articles" id="article-list">
+      
+      <li class="article-row" data-featured="false" data-date="20261024" data-views="294">
+        <h2><a href="/thoughts/vendor-no-longer-gets-last-word/">The Vendor No Longer Gets the Last Word</a></h2>
+        <p class="excerpt">For forty years, software decided what users got. AI is changing that, and users are starting to decide what features are implemented themselves.</p>
+      </li>
+      
+      <li class="article-row" data-featured="true" data-date="20260706" data-views="1145">
+        <h2><a href="/thoughts/ai-framework/">AI Transformation Isn't a Migration: A Framework for Engineering Leaders</a></h2>
+        <p class="excerpt">A framework for engineering leaders navigating AI transformation: seven perspectives adapted from AWS's Cloud Adoption Framework, grounded in DORA, Team Topologies, and Stanford research on AI-assisted development.</p>
+      </li>
+      
+      <li class="article-row" data-featured="false" data-date="20260421" data-views="1192">
+        <h2><a href="/thoughts/modern-platform-part-2/">The Operating Model: Who's Actually Running Your Platform?</a></h2>
+        <p class="excerpt">The Vercel breach shows trust is a liability. The access matrix, shared responsibility model, and enforcement that makes agentic platforms safe.</p>
+      </li>
+      
+      <li class="article-row" data-featured="true" data-date="20260412" data-views="1847">
+        <h2><a href="/thoughts/modern-platform-part-1/">Why Your Legacy Platform is now an AI Tax</a></h2>
+        <p class="excerpt">The complexity we've normalized over the last decade has become an AI tax. The abstraction layer is the strategy.</p>
+      </li>
+      
+      <li class="article-row" data-featured="true" data-date="20260404" data-views="2473">
+        <h2><a href="/thoughts/stop-building-islands/">Stop Building Islands: Designing Software for the Agentic Era</a></h2>
+        <p class="excerpt">The real opportunity of AI isn't shipping faster. It's the rare chance to revisit foundational decisions before the complexity that AI generates makes them permanent.</p>
+      </li>
+      
+    </ul>
+    <script>
+    (function(){
+      var btns=document.querySelectorAll('.sort-btn');
+      var list=document.getElementById('article-list');
+      function sortList(mode){
+        var rows=Array.from(list.children);
+        rows.sort(function(a,b){
+          if(mode==='featured'){
+            var af=a.dataset.featured==='true'?1:0;
+            var bf=b.dataset.featured==='true'?1:0;
+            if(bf!==af) return bf-af;
+            return parseInt(b.dataset.date)-parseInt(a.dataset.date);
+          }
+          if(mode==='date') return parseInt(b.dataset.date)-parseInt(a.dataset.date);
+          if(mode==='views') return parseInt(b.dataset.views)-parseInt(a.dataset.views);
+        });
+        rows.forEach(function(r){list.appendChild(r)});
+      }
+      btns.forEach(function(btn){
+        btn.addEventListener('click',function(){
+          btns.forEach(function(b){b.classList.remove('active')});
+          btn.classList.add('active');
+          sortList(btn.dataset.sort);
+        });
+      });
+      sortList('featured');
+    })();
+    </script>
+  
+</main>
+
+<footer>
+  <div class="subscribe" id="subscribe">
+    <p id="subscribe-label">Get notified when Rob publishes something new.</p>
+    <form id="subscribe-form">
+      <input type="email" name="entry.99560001" placeholder="you@email.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+  <script>
+  document.getElementById('subscribe-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var email=this.querySelector('input[type="email"]').value;
+    var data=new FormData();
+    data.append('entry.99560001',email);
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSd6ORInfKLf9z-oFbkEvtYWAC1fFZdmnkQvRJCVw5u2jCLPMA/formResponse',{
+      method:'POST',body:data,mode:'no-cors'
+    });
+    this.style.display='none';
+    var label=document.getElementById('subscribe-label');
+    label.textContent="Thanks! You'll receive future articles via email.";
+    label.className='thanks';
+  });
+  </script>
+  <div class="copy">© 2026 Rob Brown</div>
+</footer>
+
+</body>
+</html>

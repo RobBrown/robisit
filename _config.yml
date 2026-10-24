@@ -16,6 +16,16 @@ exclude:
   - vendor/
   - README.md
   - TEMPLATE.md
+  - DECISIONS.md
+  - package.json
+  - package-lock.json
+  - node_modules/
+  - scripts/
+  - tests/
+  - playwright.config.js
+  - test-results/
+  - playwright-report/
+  - _site-fixtures/
 
 # Collections for articles
 collections:

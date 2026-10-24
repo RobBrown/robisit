@@ -1,0 +1,56 @@
+{%- comment -%}
+  Decides whether page.cards is a valid cards block (PRD 4.2) and sets
+  `ic_valid`. Outputs nothing. An invalid block renders the article as today
+  (PRD 4.3); scripts/validate-cards.js reports why in CI. GitHub Pages runs no
+  plugins, so this Liquid mirror of the validator is the build-time gate.
+  Anchors are checked against the rendered `content`, i.e. the heading ids the
+  Markdown converter actually generated.
+{%- endcomment -%}
+{%- assign ic_valid = false -%}
+{%- assign ic = page.cards -%}
+{%- assign ic_ok = true -%}
+{%- unless ic.insights and ic.terminal and ic.default_anchor -%}{%- assign ic_ok = false -%}{%- endunless -%}
+{%- if ic_ok -%}
+  {%- assign ic_n = ic.insights | size -%}
+  {%- if ic_n < 5 or ic_n > 8 -%}{%- assign ic_ok = false -%}{%- endif -%}
+  {%- for i in ic.insights -%}
+    {%- unless i.id and i.title and i.body -%}{%- assign ic_ok = false -%}{%- endunless -%}
+  {%- endfor -%}
+  {%- assign ic_ids = ic.insights | map: "id" -%}
+  {%- assign ic_uniq = ic_ids | uniq | size -%}
+  {%- if ic_uniq != ic_n -%}{%- assign ic_ok = false -%}{%- endif -%}
+  {%- unless ic.terminal.knows and ic.terminal.resolves -%}{%- assign ic_ok = false -%}{%- endunless -%}
+
+  {%- comment -%} Every order lists every insight id exactly once: same size, contains all ids, ids unique. {%- endcomment -%}
+  {%- assign ic_orders = "" | split: "" -%}
+  {%- if ic.default_order -%}{%- assign ic_orders = ic_orders | push: ic.default_order -%}{%- endif -%}
+  {%- assign ic_anchors = "" | split: "" | push: ic.default_anchor -%}
+  {%- if ic.situation -%}
+    {%- assign ic_opts = ic.situation.options | size -%}
+    {%- unless ic.situation.prompt and ic_opts >= 2 and ic_opts <= 4 -%}{%- assign ic_ok = false -%}{%- endunless -%}
+    {%- for o in ic.situation.options -%}
+      {%- unless o.id and o.label and o.order and o.anchor -%}{%- assign ic_ok = false -%}{%- endunless -%}
+      {%- assign ic_orders = ic_orders | push: o.order -%}
+      {%- assign ic_anchors = ic_anchors | push: o.anchor -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- for o in ic_orders -%}
+    {%- assign ic_size = o | size -%}
+    {%- if ic_size != ic_n -%}{%- assign ic_ok = false -%}{%- endif -%}
+    {%- for id in ic_ids -%}
+      {%- unless o contains id -%}{%- assign ic_ok = false -%}{%- endunless -%}
+    {%- endfor -%}
+  {%- endfor -%}
+
+  {%- for a in ic_anchors -%}
+    {%- assign ic_first = a | slice: 0 -%}
+    {%- if ic_first != "#" -%}{%- assign ic_ok = false -%}{%- endif -%}
+    {%- assign ic_found = false -%}
+    {%- for level in (1..6) -%}
+      {%- assign ic_needle = a | remove_first: "#" | prepend: ' id="' | prepend: level | prepend: "<h" | append: '"' -%}
+      {%- if content contains ic_needle -%}{%- assign ic_found = true -%}{%- endif -%}
+    {%- endfor -%}
+    {%- unless ic_found -%}{%- assign ic_ok = false -%}{%- endunless -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign ic_valid = ic_ok -%}
