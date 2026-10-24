@@ -32,12 +32,16 @@
 
 /* Section heading: the TL;DR label (as on the site's TL;DR block), the card
    count, and the way out to the full article on the right. */
-.ic-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:12px}
+.ic-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px}
 .ic-label{
-  margin:0;font-family:var(--ic-sans);font-size:12px;font-weight:600;letter-spacing:.14em;line-height:1.4;
+  margin:0;font-family:var(--ic-sans);font-size:14px;font-weight:600;letter-spacing:.12em;line-height:1.4;
   color:var(--ic-accent);
 }
-.ic-count{margin-left:6px;letter-spacing:.02em;font-weight:400;color:var(--ic-ink-soft)}
+.ic-count{margin-left:8px;font-size:14px;letter-spacing:.01em;font-weight:400;color:var(--ic-ink-soft)}
+/* The same line under the deck introduces the article. It is never hidden,
+   so without JavaScript it serves as the post's date line. */
+.ic-published{margin-top:6px}
+.ic-deck[hidden] ~ .ic-published{margin-top:0}
 /* Deck: native scroller spanning the column plus its gutters. As in the
    prototype, the current card lines up with the text column and the next
    card shows to its right. */
@@ -128,7 +132,7 @@
 
 .ic-reveal{
   cursor:pointer;padding:6px 0;background:none;border:0;white-space:nowrap;
-  font-family:var(--ic-sans);font-size:13px;font-weight:600;
+  font-family:var(--ic-sans);font-size:14px;font-weight:600;
   color:var(--ic-link);
 }
 .ic-reveal:hover{color:var(--ic-accent)}

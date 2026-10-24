@@ -13,13 +13,14 @@ test('carded post renders the site header, deck and reveal link; article collaps
   // Owner direction: carded pages leave out the date and view counts.
   await expect(masthead.locator('.date')).toHaveCount(0);
   await expect(masthead.locator('.byline')).toHaveCount(0);
+  await expect(page.locator('#ic-published')).toHaveText(/^Full Article Published on [A-Z][a-z]+ \d{1,2}, \d{4}$/);
   await expect(page.getByRole('region', { name: /^TL;DR/ })).toBeVisible();
   await expect(page.locator('.ic-card')).toHaveCount(1 + cards.insights.length + 1);
   await expect(page.getByRole('button', { name: 'Read the full article' })).toBeVisible();
   await expect(page.locator('#ic-article')).toBeHidden();
 
-  // Order on the page: masthead, TL;DR heading with the reveal link, deck, article.
-  const order = await page.evaluate(() => ['article > header', '#ic-head', '#ic-expand', '#ic-deck', '#ic-article']
+  // Order on the page: masthead, TL;DR heading with the reveal link, deck, published line, article.
+  const order = await page.evaluate(() => ['article > header', '#ic-head', '#ic-expand', '#ic-deck', '#ic-published', '#ic-article']
     .map((s) => document.querySelector(s)).every((el, i, a) => i === 0 || (a[i - 1].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)));
   expect(order).toBe(true);
 });

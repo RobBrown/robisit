@@ -53,6 +53,7 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 
   Posts without cards are byte-identical (the baseline tests). The same treatment could go site-wide later, but that changes every post.
 - **The deck is titled "TL;DR" (owner direction).** A heading row above the deck holds an `h2` "TL;DR" in the site's TL;DR label style (amber Inter 12px, tracked), "in N cards" in muted text, and "Read the full article →" on the right. The deck region is labelled by that heading. The arrow is `aria-hidden` and the button keeps the name "Read the full article". The heading row replaces the PRD's ban on lede and hint text, by owner direction.
+- **"Full Article Published on <date>" sits under the deck** in the same style as the TL;DR line (owner direction). It's an `h2` that introduces the revealed article, and it's never hidden. Without JavaScript it is the post's date line, since carded pages leave the header date out. The TL;DR line is 14px (up from 12px), and the reveal link matches it.
 
 ### Deck behaviour and markup (PRD 3, 5, 8)
 

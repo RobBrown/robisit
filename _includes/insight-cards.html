@@ -45,4 +45,5 @@
     <button type="button" class="ic-chev ic-next" aria-label="Next card">›</button>
     <div class="ic-sr" id="ic-live" aria-live="polite"></div>
   </section>
+  <h2 class="ic-label ic-published" id="ic-published">Full Article <span class="ic-count">Published on {{ page.date | date: "%B %-d, %Y" }}</span></h2>
   <script type="application/json" id="ic-data">{"default_anchor":{{ ic.default_anchor | jsonify }},"options":{{ ic.situation.options | default: "" | jsonify | replace: "</", "<\/" }}}</script>
