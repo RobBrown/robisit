@@ -10,8 +10,9 @@ test('carded post renders the site header, deck and reveal link; article collaps
   await page.goto(CARDED_URL);
   const masthead = page.locator('article > header');
   await expect(masthead.locator('h1')).toHaveText(/Hello, World/);
-  await expect(masthead.locator('.date')).toHaveCount(1);
-  await expect(masthead.locator('.byline')).toHaveCount(1);
+  // Owner direction: carded pages leave out the date and view counts.
+  await expect(masthead.locator('.date')).toHaveCount(0);
+  await expect(masthead.locator('.byline')).toHaveCount(0);
   await expect(page.getByRole('region', { name: /^TL;DR/ })).toBeVisible();
   await expect(page.locator('.ic-card')).toHaveCount(1 + cards.insights.length + 1);
   await expect(page.getByRole('button', { name: 'Read the full article' })).toBeVisible();

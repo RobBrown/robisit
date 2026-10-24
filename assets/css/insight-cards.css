@@ -21,22 +21,14 @@
 
 .ic-deck[hidden],.ic-head[hidden],.ic-expand[hidden]{display:none}
 
-/* Carded pages: a compact masthead. Date and stats share one line above the
-   title, and the TL;DR heading row takes the place of the header rule. Scoped
-   to .ic-page so posts without cards are untouched. */
+/* Carded pages: a compact masthead. The layout leaves out the date and stats
+   (owner direction) and the TL;DR heading row takes the place of the header
+   rule. Scoped to .ic-page so posts without cards are untouched. */
 .ic-page{padding-top:28px}
-.ic-page header{display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;row-gap:4px;margin-bottom:28px}
-.ic-page header .date{order:-1;margin:0}
-.ic-page header .byline{order:-1;margin-left:auto}
-.ic-page header h1{flex:1 0 100%;margin:10px 0 0}
+.ic-page header{margin-bottom:28px}
+.ic-page header h1{margin:0}
 .ic-page header .rule{display:none}
-@media(max-width:600px){
-  /* Keep date and stats on one line at 375px. */
-  .ic-page{padding-top:24px}
-  .ic-page header{column-gap:9px}
-  .ic-page header .date,.ic-page header .byline{font-size:12px;letter-spacing:0}
-  .ic-page header .byline{gap:9px}
-}
+@media(max-width:600px){.ic-page{padding-top:24px}}
 
 /* Section heading: the TL;DR label (as on the site's TL;DR block), the card
    count, and the way out to the full article on the right. */

@@ -47,11 +47,11 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 - **The selected option** takes an amber border with a 3px amber left rule (PRD 6.3), as in the prototype. The terminal control is the PRD's amber primary.
 - **The chevrons' opacity transition was removed.** PRD 5.5 says "no other animation exists".
 - **Masthead: the site's article header, compacted on carded pages (owner direction, 2026-10-24: "too much whitespace").** The layout adds `class="ic-page"` to `<article>` only when the deck renders, and `insight-cards.css` restyles that header:
-  - The date and stats share one line above the title, with the date on the left and the stats on the right. When the line is too narrow, the stats wrap to their own right-aligned line.
+  - The date and view counts are left out (owner direction). The layout wraps them in `{% unless ic_valid %}` inline, so the output of non-carded posts doesn't change.
   - The header rule is hidden.
   - Top padding is 28px (24px on phones) instead of 48px, and the gap below the title is 28px instead of 40px.
 
-  The markup is unchanged and posts without cards are byte-identical (the baseline tests). The same treatment could go site-wide later, but that changes every post.
+  Posts without cards are byte-identical (the baseline tests). The same treatment could go site-wide later, but that changes every post.
 - **The deck is titled "TL;DR" (owner direction).** A heading row above the deck holds an `h2` "TL;DR" in the site's TL;DR label style (amber Inter 12px, tracked), "in N cards" in muted text, and "Read the full article →" on the right. The deck region is labelled by that heading. The arrow is `aria-hidden` and the button keeps the name "Read the full article". The heading row replaces the PRD's ban on lede and hint text, by owner direction.
 
 ### Deck behaviour and markup (PRD 3, 5, 8)
