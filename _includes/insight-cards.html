@@ -18,7 +18,6 @@
     <div class="ic-rail" tabindex="0">
       {%- if ic.situation %}
       <div class="ic-card ic-situation" role="group" aria-roledescription="card" aria-label="Start">
-        <div class="ic-n" aria-hidden="true">Start</div>
         <h2 class="ic-title" id="ic-prompt">{{ ic.situation.prompt | escape }}</h2>
         <div class="ic-options" role="radiogroup" aria-labelledby="ic-prompt">
           {%- for o in ic.situation.options %}

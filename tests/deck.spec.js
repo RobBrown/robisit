@@ -10,11 +10,11 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
 });
 
-test('situation card shows Start, the question and the options', async ({ page }) => {
+test('situation card shows the question and the options, with no counter', async ({ page }) => {
   await page.goto(CARDED_URL);
   const s = page.locator('.ic-card').first();
   await expect(s).toHaveClass(/ic-situation/);
-  await expect(s.locator('.ic-n')).toHaveText('Start');
+  await expect(s.locator('.ic-n')).toHaveCount(0); // owner direction: no "Start" label
   await expect(s.locator('.ic-title')).toHaveText(cards.situation.prompt);
   const radios = s.getByRole('radio');
   await expect(radios).toHaveText(cards.situation.options.map((o) => o.label));
@@ -72,8 +72,10 @@ test('terminal card shows counter, knows, resolves and one control', async ({ pa
 test('counter reads n/N at the top of each card, situation excluded from N', async ({ page }) => {
   await page.goto(CARDED_URL);
   const counters = await page.locator('.ic-card .ic-n').allTextContents();
-  expect(counters).toEqual(['Start', ...Array.from({ length: N }, (_, i) => `${i + 1}/${N}`)]);
-  const firstChild = await page.locator('.ic-card').evaluateAll((els) => els.every((e) => e.firstElementChild.classList.contains('ic-n')));
+  expect(counters).toEqual(Array.from({ length: N }, (_, i) => `${i + 1}/${N}`));
+  const firstChild = await page.locator('.ic-insight, .ic-terminal').evaluateAll((els) => els.every((e) => e.firstElementChild.classList.contains('ic-n')));
+  const align = await page.locator('.ic-card .ic-n').evaluateAll((els) => els.map((e) => getComputedStyle(e).textAlign));
+  expect(new Set(align)).toEqual(new Set(['right']));
   expect(firstChild).toBe(true);
   // Counters stay positional after a reorder.
   await page.getByRole('radio').nth(2).click();
