@@ -1,0 +1,44 @@
+# Validates Insight Cards front matter (PRD 4.2) on pull requests.
+# Problems surface as warning annotations on the PR. This job never fails
+# because of them: an invalid deck falls back to the plain article and must
+# not block publishing (PRD 4.3, 4.4). Deployment is unaffected; the site
+# still builds with GitHub Pages' own builder.
+name: Validate cards
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build with the github-pages gem so anchors are checked against the
+      # heading ids Jekyll really generates.
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - name: Build site
+        id: build
+        continue-on-error: true
+        run: bundle exec jekyll build --quiet -d _site
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+
+      - name: Validate cards
+        run: |
+          if [ "${{ steps.build.outcome }}" = "success" ]; then
+            node scripts/validate-cards.js --site _site
+          else
+            echo "::warning title=Insight Cards::Jekyll build failed; checking anchors against ids derived from the Markdown."
+            node scripts/validate-cards.js
+          fi
