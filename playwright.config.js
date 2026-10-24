@@ -12,7 +12,7 @@ module.exports = defineConfig({
   webServer: { command: `PORT=${PORT} node tests/serve.js`, port: PORT, reuseExistingServer: true },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    // iPhone SE on WebKit: the closest local stand-in for iOS Safari.
-    { name: 'iphone-se', use: { ...devices['iPhone SE'] }, testMatch: /layout\.spec\.js/ },
+    // iPhone SE (375x667) on WebKit: the closest local stand-in for iOS Safari.
+    { name: 'iphone-se', use: { ...devices['iPhone SE (3rd gen)'] }, testMatch: /layout\.spec\.js/ },
   ],
 });

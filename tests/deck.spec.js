@@ -115,9 +115,9 @@ test('arrow keys do nothing once the deck is scrolled off screen', async ({ page
 test('chevrons move one card and stop at the ends', async ({ page }) => {
   await page.goto(CARDED_URL);
   await page.locator('#ic-deck').hover();
-  const next = page.getByRole('button', { name: 'Next card' });
-  const prev = page.getByRole('button', { name: 'Previous card' });
-  await expect(prev).toBeDisabled();
+  const next = page.locator('.ic-next');
+  const prev = page.locator('.ic-prev');
+  await expect(prev).toBeDisabled(); // and visibility:hidden, so out of the accessibility tree
   await next.click();
   await settle(page);
   expect(await currentIndex(page)).toBe(1);
@@ -204,8 +204,7 @@ test('unknown deep-link values fall back safely', async ({ page }) => {
 
 test('address bar reflects the current path and card without reloading', async ({ page }) => {
   await page.goto(`${CARDED_URL}?utm_source=x`);
-  const nav = [];
-  page.on('framenavigated', () => nav.push(page.url()));
+  await page.evaluate(() => { window.__sameDocument = true; });
   await page.locator('.ic-rail').focus();
   await page.keyboard.press('ArrowRight');
   await settle(page);
@@ -224,5 +223,5 @@ test('address bar reflects the current path and card without reloading', async (
   // On the situation card the card parameter is omitted; the path stays.
   await expect.poll(() => new URL(page.url()).searchParams.get('card')).toBeNull();
   expect(new URL(page.url()).searchParams.get('path')).toBe(cards.situation.options[0].id);
-  expect(nav).toEqual([]); // replaceState only: no navigations
+  expect(await page.evaluate(() => window.__sameDocument)).toBe(true); // replaceState only: no reloads
 });

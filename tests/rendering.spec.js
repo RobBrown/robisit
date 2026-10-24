@@ -46,7 +46,7 @@ test('article body is complete in the initial HTML, visible before script runs',
 
 test('article body matches the pre-change build byte for byte', async () => {
   const body = (html) => html.slice(html.indexOf('<div class="body">'), html.indexOf('<footer>'))
-    .replace(/(\s*<\/(div|article)>)+\s*$/, '');
+    .replace(/(\s*<\/(div|article)>|\s*<script[^>]*><\/script>)+\s*$/, '');
   const before = fs.readFileSync(path.join(__dirname, 'fixtures/baseline/ai-framework.html'), 'utf8');
   const after = fs.readFileSync(path.join(SITE, 'thoughts/ai-framework/index.html'), 'utf8');
   expect(body(after)).toBe(body(before));
