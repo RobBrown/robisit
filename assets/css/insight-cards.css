@@ -6,10 +6,12 @@
   --ic-ink:#d4cfc6;         /* body text */
   --ic-ink-strong:#eae6df;  /* h1, h2 */
   --ic-ink-soft:#9e9789;    /* blockquote, .toc-h2 */
+  --ic-rule-faint:#1e1a14;  /* header rule, subscribe button */
   --ic-rule:#241f18;        /* .toc border */
   --ic-rule-mid:#2e2820;    /* blockquote rule, input border */
   --ic-rule-strong:#706a5e; /* input focus border */
   --ic-accent:#ffa000;      /* amber */
+  --ic-link:#b8a47e;        /* .body a, footer .read-more */
   --ic-serif:'Lora',Georgia,'Times New Roman',serif;
   --ic-sans:'Inter',system-ui,sans-serif;
   --ic-gutter:24px;         /* article side padding */
@@ -18,9 +20,6 @@
 @media(max-width:600px){:root{--ic-gutter:20px}}
 
 .ic-deck[hidden],.ic-expand[hidden]{display:none}
-.ic-masthead{margin-bottom:24px}
-.ic-masthead .date{margin-bottom:0;color:var(--ic-ink-soft)}
-
 /* Deck: full-bleed native scroller; padding centres the first and last card
    so the neighbour's edge always shows. */
 .ic-deck{position:relative;margin:0 calc(-1 * var(--ic-gutter))}
@@ -34,47 +33,48 @@
 .ic-deck :focus-visible,.ic-expand :focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
 .ic-rail:focus-visible{outline-offset:-2px}
 
+/* Each element borrows an existing site component: the card is the .toc box,
+   the title is .body h2, the body is .body p, options are the subscribe input,
+   the selected option takes the TL;DR amber rule, the control is the subscribe
+   button, and the reveal link is footer .read-more. */
 .ic-card{
   flex:0 0 var(--ic-card);scroll-snap-align:center;scroll-snap-stop:always;
-  display:flex;flex-direction:column;gap:14px;
+  display:flex;flex-direction:column;gap:12px;
   min-height:min(520px,var(--ic-fill,440px));
-  padding:22px 18px 20px;
+  padding:20px 20px 22px;
   background:var(--ic-surface);border:1px solid var(--ic-rule);border-radius:6px;
-  color:var(--ic-ink);font-family:var(--ic-serif);
+  color:var(--ic-ink);font-family:var(--ic-serif);font-size:17px;line-height:1.8;
 }
 .ic-n{
-  font-family:var(--ic-sans);font-size:12px;letter-spacing:.08em;line-height:1.4;
+  font-family:var(--ic-sans);font-size:13px;letter-spacing:.01em;line-height:1.4;
   color:var(--ic-ink-soft);font-variant-numeric:tabular-nums;
 }
-.ic-title{
-  font-family:var(--ic-serif);font-size:22px;font-weight:700;line-height:1.28;
-  color:var(--ic-ink-strong);text-wrap:balance;
+.ic-title,.ic-knows{
+  font-family:var(--ic-serif);font-size:24px;font-weight:700;line-height:1.3;
+  color:var(--ic-ink-strong);
 }
-.ic-body,.ic-knows,.ic-resolves{font-size:16px;line-height:1.55}
-.ic-knows{font-size:22px;font-weight:700;line-height:1.28;color:var(--ic-ink-strong)}
 .ic-resolves{color:var(--ic-ink-soft)}
 @media(min-width:601px){
-  .ic-card{padding:28px 28px 24px;gap:16px}
-  .ic-title,.ic-knows{font-size:24px}
-  .ic-body,.ic-knows+.ic-resolves{font-size:17px}
+  .ic-card{padding:24px 28px 28px;gap:16px;font-size:19px;line-height:1.85}
 }
 
 .ic-options{display:flex;flex-direction:column;gap:8px}
 .ic-opt{
   display:block;width:100%;text-align:left;cursor:pointer;
-  padding:12px 14px;font:inherit;font-size:16px;line-height:1.4;
-  color:var(--ic-ink);background:none;
+  padding:10px 12px;font:inherit;font-size:17px;line-height:1.5;
+  color:var(--ic-ink);background:var(--ic-surface);
   border:1px solid var(--ic-rule-mid);border-radius:4px;
 }
-.ic-opt[aria-checked="true"]{border-left-color:var(--ic-accent);box-shadow:inset 2px 0 0 var(--ic-accent)}
+.ic-opt[aria-checked="true"]{border-left:3px solid var(--ic-accent);padding-left:10px}
 @media(hover:hover){.ic-opt:hover{border-color:var(--ic-rule-strong)}.ic-opt[aria-checked="true"]:hover{border-left-color:var(--ic-accent)}}
 
 .ic-go{
-  align-self:flex-start;margin-top:4px;cursor:pointer;
-  padding:12px 20px;border:0;border-radius:4px;
-  font-family:var(--ic-sans);font-size:15px;font-weight:600;
-  color:var(--ic-bg);background:var(--ic-accent);
+  align-self:flex-start;margin-top:4px;cursor:pointer;white-space:nowrap;
+  padding:10px 20px;border:1px solid var(--ic-rule-mid);border-radius:4px;
+  font-family:var(--ic-sans);font-size:14px;font-weight:600;line-height:1.85;
+  color:var(--ic-link);background:var(--ic-rule-faint);
 }
+.ic-go:hover{background:var(--ic-rule-mid);color:var(--ic-ink)}
 
 /* Chevrons: pointer devices only, quiet until the deck is hovered or focused. */
 .ic-chev{
@@ -95,8 +95,8 @@
 .ic-expand{display:flex;justify-content:center;margin-top:14px}
 .ic-reveal{
   cursor:pointer;padding:10px 4px;background:none;border:0;
-  font-family:var(--ic-sans);font-size:14px;
-  color:var(--ic-ink-soft);text-decoration:underline;text-underline-offset:4px;
+  font-family:var(--ic-sans);font-size:14px;font-weight:600;
+  color:var(--ic-link);
 }
 .ic-reveal:hover{color:var(--ic-ink)}
 

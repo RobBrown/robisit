@@ -135,8 +135,9 @@
 
   /* First screen: cards fill the viewport below the masthead, leaving room for the reveal link. */
   function fit() {
-    var top = rail.getBoundingClientRect().top + window.pageYOffset;
-    deck.style.setProperty('--ic-fill', Math.round(window.innerHeight - top - 64) + 'px');
+    var card = terminal.getBoundingClientRect();
+    var below = expand.getBoundingClientRect().bottom - card.bottom;
+    deck.style.setProperty('--ic-fill', Math.floor(window.innerHeight - card.top - window.pageYOffset - below - 8) + 'px');
   }
 
   radios.forEach(function (r) {
