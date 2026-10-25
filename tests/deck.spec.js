@@ -116,6 +116,7 @@ test('arrow keys move one card; navigation stops at both ends', async ({ page })
 
 test('arrow keys do nothing once the deck is scrolled off screen', async ({ page }) => {
   await page.goto(CARDED_URL);
+  await page.locator('#ic-open').click(); // the article starts collapsed; open it so the page can scroll
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(400);
@@ -170,14 +171,52 @@ test('vertical scroll over the deck scrolls the page, not the deck', async ({ pa
   expect(await scrollLeft(page)).toBe(0);
 });
 
-test('terminal control jumps to the path anchor in the open article', async ({ page }) => {
+test('terminal control opens the article and jumps to the path anchor', async ({ page }) => {
   await page.goto(`${CARDED_URL}?card=${N}`);
-  await expect(page.locator('#ic-article')).toBeVisible();
+  await expect(page.locator('#ic-article')).toBeHidden();
   await page.locator('.ic-go').click();
+  await expect(page.locator('#ic-article')).toBeVisible();
+  await expect(page.locator('#ic-open')).toHaveAttribute('aria-expanded', 'true');
   const target = page.locator(cards.default_anchor);
   await expect(target).toBeFocused();
   await atTopOrEnd(page, cards.default_anchor);
   await expect(page.locator('#ic-deck')).toBeAttached(); // deck stays above
+});
+
+test('the article starts collapsed; the button under the deck opens it and jumps to its top', async ({ page }) => {
+  await page.goto(`${CARDED_URL}?card=2`);
+  const open = page.locator('#ic-open');
+  await expect(page.locator('#ic-article')).toBeHidden();
+  await expect(open).toHaveAttribute('aria-controls', 'ic-article');
+  await open.click();
+  await expect(page.locator('#ic-article')).toBeVisible();
+  await expect(open).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#ic-article')).toBeFocused();
+  await atTopOrEnd(page, '#ic-article');
+  await expect(open).toBeVisible(); // stays, and jumps back to the top when pressed again
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await open.click();
+  await atTopOrEnd(page, '#ic-article');
+});
+
+test('the button under the deck works from the keyboard', async ({ page }) => {
+  await page.goto(CARDED_URL);
+  await page.locator('#ic-open').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#ic-article')).toBeVisible();
+  await expect(page.locator('#ic-article')).toBeFocused();
+});
+
+test('a link to a section of the article opens it', async ({ page }) => {
+  await page.goto(`${CARDED_URL}${cards.default_anchor}`);
+  await expect(page.locator('#ic-article')).toBeVisible();
+  await expect(page.locator('#ic-open')).toHaveAttribute('aria-expanded', 'true');
+  await page.goto(CARDED_URL);
+  await expect(page.locator('#ic-article')).toBeHidden();
+  await page.evaluate((h) => { location.hash = h; }, cards.default_anchor);
+  await expect(page.locator('#ic-article')).toBeVisible();
+  await expect(page.locator(cards.default_anchor)).toBeInViewport();
 });
 
 test('deep link ?path=pilot&card=3 applies the path and lands on card 3', async ({ page }) => {

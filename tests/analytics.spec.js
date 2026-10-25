@@ -41,11 +41,23 @@ test('cards_handoff fires once per page view', async ({ page }) => {
   expect((await events(page)).filter((e) => e.name === 'cards_handoff')).toHaveLength(1);
 });
 
-// The article is always open, so depth is tracked from load. route is 'none'
-// until the reader uses the terminal control.
-test('cards_depth fires 25/50/75/100 once each, with route none before any handoff', async ({ page }) => {
+test('cards_handoff via the button under the deck has route button and the article anchor', async ({ page }) => {
+  await page.goto(`${CARDED_URL}?path=pilot&card=2`);
+  await page.locator('#ic-open').click();
+  await page.locator('.ic-go').evaluate((b) => b.click());
+  const h = (await events(page)).filter((e) => e.name === 'cards_handoff');
+  expect(h.map((e) => e.props)).toEqual([{ route: 'button', card: 2, path: 'pilot', anchor: '#ic-article' }]);
+});
+
+// Depth counts only while the article is open. route is the control that
+// first opened it.
+test('cards_depth fires nothing while collapsed, then 25/50/75/100 once each with the opening route', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(CARDED_URL);
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(150);
+  expect((await events(page)).filter((e) => e.name === 'cards_depth')).toEqual([]);
+  await page.locator('#ic-open').click();
   for (const f of [0.3, 0.55, 0.8, 1.2, 0.1, 1.2]) {
     await page.evaluate((f) => {
       const a = document.querySelector('#ic-article');
@@ -55,7 +67,7 @@ test('cards_depth fires 25/50/75/100 once each, with route none before any hando
     await page.waitForTimeout(150);
   }
   const depth = (await events(page)).filter((e) => e.name === 'cards_depth').map((e) => e.props);
-  expect(depth).toEqual([25, 50, 75, 100].map((d) => ({ depth: d, route: 'none' })));
+  expect(depth).toEqual([25, 50, 75, 100].map((d) => ({ depth: d, route: 'button' })));
 });
 
 test('default adapter logs to the console', async ({ browser }) => {

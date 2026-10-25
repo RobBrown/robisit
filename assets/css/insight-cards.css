@@ -29,16 +29,22 @@
 .ic-page header{margin-bottom:28px}
 .ic-page header h1{margin:0}
 
-/* "TL;DR in N cards" above the deck and "Full Article Published on <date>"
-   below it, in the site's TL;DR label style. The second is never hidden, so
-   without the script it is the post's date line. */
+/* "TL;DR in N cards" above the deck, in the site's TL;DR label style. Below
+   the deck: the "Read the article" button (shown by the script) and the
+   "Published on <date>" line, which is never hidden, so without the script it
+   is the post's date line. */
 .ic-label{
   margin:0;font-family:var(--ic-sans);font-size:14px;font-weight:600;letter-spacing:.12em;line-height:1.4;
   color:var(--ic-accent);
 }
 .ic-count{margin-left:8px;letter-spacing:.01em;font-weight:400;color:var(--ic-ink-soft)}
 .ic-head{margin-bottom:14px}
-.ic-published{margin-top:6px}
+.ic-open{display:block;margin-top:2px}
+.ic-open[hidden]{display:none}
+.ic-published{
+  margin:12px 0 0;font-family:var(--ic-sans);font-size:14px;letter-spacing:.01em;line-height:1.4;
+  color:var(--ic-ink-soft);
+}
 .ic-deck[hidden] ~ .ic-published{margin-top:0}
 
 @media(max-width:600px){
@@ -133,14 +139,15 @@
   .ic-opt[aria-checked="true"]:hover{border-color:var(--ic-accent)}
 }
 
-/* Terminal control: the site's amber. */
-.ic-go{
+/* Terminal control and the button under the deck: the site's amber. */
+.ic-go,.ic-open{
   align-self:flex-start;margin-top:4px;cursor:pointer;white-space:nowrap;
   padding:9px 22px;border:1px solid var(--ic-accent);border-radius:6px;
   font-family:var(--ic-sans);font-size:14px;font-weight:600;line-height:1.85;
   color:var(--ic-ink-on-accent);background:var(--ic-accent);
 }
-.ic-go:hover{background:transparent;color:var(--ic-accent)}
+.ic-go:hover,.ic-open:hover{background:transparent;color:var(--ic-accent)}
+.ic-open:focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
 
 /* Chevrons: pointer devices only, hidden until the deck is hovered or a
    chevron has keyboard focus. */
@@ -161,7 +168,9 @@
   .ic-deck:hover .ic-chev,.ic-chev:focus-visible{opacity:1}
 }
 
-/* The article. The terminal control moves focus to a heading in it. */
+/* The article. It starts collapsed (hidden="until-found", set by the script);
+   the button under the deck opens it and moves focus to its top, and the
+   terminal control opens it and moves focus to a heading in it. */
 .ic-article{margin-top:24px}
 .ic-article:focus{outline:none}
 .ic-article [id]{scroll-margin-top:16px}

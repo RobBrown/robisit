@@ -21,7 +21,7 @@ for (const scheme of ['light', 'dark']) {
       const flat = (r) => r.violations.flatMap((v) => v.nodes.map((n) => `${v.id}: ${n.target.join(' ')}`));
 
       // The reading layer itself: zero violations.
-      const layer = await new AxeBuilder({ page }).withTags(WCAG).include('#ic-deck').include('#ic-head').include('#ic-published').analyze();
+      const layer = await new AxeBuilder({ page }).withTags(WCAG).include('#ic-deck').include('#ic-head').include('#ic-open').include('#ic-published').analyze();
       expect(flat(layer)).toEqual([]);
 
       // The whole page: nothing beyond the site's pre-existing issues.

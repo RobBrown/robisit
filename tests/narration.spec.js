@@ -448,7 +448,7 @@ test.describe('playback', () => {
     });
     await page.goto(URL_PILOT5);
     await settle(page);
-    await page.locator('#ic-article p').first().click();
+    await page.locator('article > header h1').click();
     await page.keyboard.press('a');
     await page.waitForTimeout(400);
     expect(await page.evaluate(() => window.__plays)).toBe(0);

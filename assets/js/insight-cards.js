@@ -1,8 +1,8 @@
 /* TL;DR card deck behaviour (Insight Cards, PRD v2.1). No dependencies.
    The markup is rendered by _includes/insight-cards.html. This script shows
-   the deck above the article and handles paths, navigation, deep links, the
-   jump into the article and analytics. If it never runs, the page is the
-   plain article. */
+   the deck above the article, collapses the article behind the "Read the
+   article" button, and handles paths, navigation, deep links, the jump into
+   the article and analytics. If it never runs, the page is the plain article. */
 (function () {
   var deck = document.getElementById('ic-deck');
   var article = document.getElementById('ic-article');
@@ -27,6 +27,7 @@
   var next = deck.querySelector('.ic-next');
   var live = document.getElementById('ic-live');
   var head = document.getElementById('ic-head');
+  var openBtn = document.getElementById('ic-open');
   var situation = rail.querySelector('.ic-situation');
   var terminal = rail.querySelector('.ic-terminal');
   var radios = [].slice.call(rail.querySelectorAll('.ic-opt'));
@@ -123,12 +124,29 @@
     history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
   }
 
-  /* Handoff (PRD 5.6). The article is always open, so the terminal control
-     jumps to the path's anchor. It's recorded once per page view. */
-  function handoff() {
-    var target = anchor ? document.getElementById(anchor.slice(1)) || article : article;
+  /* The article starts collapsed. hidden="until-found" keeps it findable:
+     find in page opens it (beforematch). Browsers without until-found treat it
+     as plain hidden, so the button and the terminal control still open it. */
+  function isOpen() { return !article.hasAttribute('hidden'); }
+  function setOpen(open) {
+    if (open) article.removeAttribute('hidden'); else article.setAttribute('hidden', 'until-found');
+    openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  // The element a #fragment in the URL points at, when it is inside the article.
+  function hashTarget() {
+    var id = location.hash.slice(1), t = null;
+    try { t = id && document.getElementById(decodeURIComponent(id)); } catch (e) { /* malformed escape */ }
+    return t && article.contains(t) ? t : null;
+  }
+
+  /* Handoff (PRD 5.6). Both controls open the article. The button under the
+     deck jumps to the article's top, the terminal control to the path's
+     anchor. It's recorded once per page view, with the route used first. */
+  function handoff(how) {
+    setOpen(true);
+    var target = how === 'button' ? article : anchor ? document.getElementById(anchor.slice(1)) || article : article;
     if (!route) {
-      route = 'terminal';
+      route = how;
       trackEvent('cards_handoff', { route: route, card: counter(Math.max(idx, 0)), path: path || 'default', anchor: target === article ? '#ic-article' : anchor });
     }
     if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
@@ -137,8 +155,8 @@
   }
 
   /* Depth (PRD 7): how far through the article the reader has scrolled, from
-     its top. route is 'terminal' once the reader has used the terminal
-     control, and 'none' before that. */
+     its top, counted only while it is open. route is the control the reader
+     first opened it with ('button' or 'terminal'), and 'none' before that. */
   var depthFired = {}, depthQueued = false;
   function queueDepth() {
     if (depthQueued) return;
@@ -146,6 +164,7 @@
     requestAnimationFrame(function () { depthQueued = false; depth(); });
   }
   function depth() {
+    if (!isOpen()) return;
     var y = window.pageYOffset, top = article.getBoundingClientRect().top + y;
     var span = article.offsetHeight, seen = y + window.innerHeight - top;
     var pct = span > 0 ? seen / span * 100 : 100;
@@ -160,7 +179,14 @@
       if (applyPath(id)) { trackEvent('cards_path', { path: id }); go(1); }
     });
   });
-  terminal.querySelector('.ic-go').addEventListener('click', handoff);
+  terminal.querySelector('.ic-go').addEventListener('click', function () { handoff('terminal'); });
+  openBtn.addEventListener('click', function () { handoff('button'); });
+  article.addEventListener('beforematch', function () { openBtn.setAttribute('aria-expanded', 'true'); });
+  // A link to a section of the article (#id) opens it, then scrolls there.
+  window.addEventListener('hashchange', function () {
+    var t = hashTarget();
+    if (t && !isOpen()) { setOpen(true); t.scrollIntoView(); }
+  });
   function step(d) { go((aim !== null ? aim : idx) + d); }
   prev.addEventListener('click', function () { step(-1); });
   next.addEventListener('click', function () { step(1); });
@@ -196,6 +222,8 @@
   var start = Math.max(0, Math.min(isNaN(card) ? 0 : card - offset, last()));
   deck.hidden = false;
   head.hidden = false;
+  openBtn.hidden = false;
+  setOpen(!!hashTarget()); // collapsed, unless the URL points into the article
   go(start, true);
   aim = null;
   setIdx(start, true);

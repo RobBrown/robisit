@@ -2,7 +2,9 @@
   TL;DR card deck (Insight Cards, PRD v2.1). Rendered by _layouts/article.html
   between the article header and the body, only when insight-cards-valid.html
   has set ic_valid. The heading and deck ship `hidden`; assets/js/insight-cards.js
-  shows them, so without the script the page is the plain article. Insight
+  shows them, so without the script the page is the plain article. The script
+  also collapses the article and shows the "Read the article" button under
+  the deck, which opens it. Insight
   cards render in the default order and the script reorders them for a path.
   A card with generated narration (see insight-cards-narration.html) renders
   its phrase-wrapped fragment and one read-aloud button, shown by
@@ -54,5 +56,6 @@
     <button type="button" class="ic-chev ic-next" aria-label="Next card">›</button>
     <div class="ic-sr" id="ic-live" aria-live="polite"></div>
   </section>
-  <h2 class="ic-label ic-published" id="ic-published">Full Article <span class="ic-count">Published on {{ page.date | date: "%B %-d, %Y" }}</span></h2>
+  <button type="button" class="ic-open" id="ic-open" aria-controls="ic-article" aria-expanded="true" hidden>Read the article</button>
+  <p class="ic-published" id="ic-published">Published on {{ page.date | date: "%B %-d, %Y" }}</p>
   <script type="application/json" id="ic-data">{"default_anchor":{{ ic.default_anchor | jsonify }},"options":{{ ic.situation.options | default: "" | jsonify | replace: "</", "<\/" }}}</script>

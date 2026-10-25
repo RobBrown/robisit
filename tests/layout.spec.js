@@ -100,7 +100,7 @@ for (const scheme of ['light', 'dark']) {
     const allowed = siteColours();
     const used = await page.evaluate((props) => {
       const out = new Set();
-      const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-head *, #ic-published, #ic-published *');
+      const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-head *, #ic-open, #ic-published, #ic-published *');
       for (const el of els) {
         const cs = getComputedStyle(el);
         for (const p of props) {
