@@ -1,6 +1,6 @@
 // The TL;DR / Full article view switch (owner brief, 2026-10-25).
 const { test, expect } = require('@playwright/test');
-const { CARDED_URL, settle, currentIndex, atTopOrEnd, captureEvents } = require('./helpers');
+const { CARDED_URL, settle, currentIndex, captureEvents } = require('./helpers');
 
 const tldr = (page) => page.getByRole('tab', { name: /^TL;DR/ });
 const full = (page) => page.getByRole('tab', { name: 'Full article' });
@@ -25,33 +25,36 @@ test('the heading is a two-tab switch; TL;DR is the default view', async ({ page
   await expect(page.locator('#ic-switch')).toHaveAttribute('role', 'tablist');
   await expect(page.getByRole('tab')).toHaveCount(2);
   await expect(page.getByRole('tab')).toHaveText(['TL;DR', 'Full article']);
-  await expect(page.locator('#ic-switch')).toHaveAttribute('data-view', 'tldr');
   await showing(page, 'tldr');
   await expect(page.getByRole('tabpanel', { name: /^TL;DR/ })).toHaveAttribute('id', 'ic-deck');
   expect(hash(page)).toBe('#tldr');
 });
 
-test('Full article shows the article, puts the switch at the top and focuses the article', async ({ page }) => {
+// Owner direction (2026-10-25): switching never repositions the page.
+test('Full article shows the article in place and focuses it; the page does not move', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 500 });
   await page.goto(CARDED_URL);
+  await page.evaluate(() => window.scrollTo(0, 100));
   await full(page).click();
   await showing(page, 'article');
   await expect(page.getByRole('tabpanel', { name: 'Full article' })).toHaveAttribute('id', 'ic-article');
   await expect(page.locator('#ic-article')).toBeFocused();
-  await atTopOrEnd(page, '#ic-switch');
+  await page.waitForTimeout(700); // past the transition
+  expect(await page.evaluate(() => window.scrollY)).toBe(100);
   expect(hash(page)).toBe('#article');
-  await expect(page.locator('#ic-switch')).toHaveAttribute('data-view', 'article'); // the lit segment follows
 });
 
-test('switching back from deep in the article puts the switch at the top', async ({ page }) => {
+test('switching back to TL;DR keeps the page still and the deck in its place', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 500 });
   await page.goto(`${CARDED_URL}?card=3`);
   await full(page).click();
   await showing(page, 'article');
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight * 0.6));
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(() => window.scrollTo(0, 100));
   await tldr(page).click();
   await showing(page, 'tldr');
   await expect(page.locator('#ic-deck')).toBeFocused();
-  await expect(page.locator('#ic-switch')).toBeInViewport();
+  await page.waitForTimeout(700);
+  expect(await page.evaluate(() => window.scrollY)).toBe(100);
   await settle(page);
   expect(await currentIndex(page)).toBe(3); // the deck keeps its place
   expect(hash(page)).toBe('#tldr');
@@ -79,7 +82,6 @@ test('back and forward move between views, one entry per switch', async ({ page 
   await showing(page, 'tldr');
   await page.goForward();
   await showing(page, 'article');
-  await atTopOrEnd(page, '#ic-switch');
 });
 
 test('deck navigation does not add history entries', async ({ page }) => {

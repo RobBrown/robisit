@@ -187,14 +187,17 @@ test('terminal control switches to the article and lands on the path anchor', as
   expect(new URL(page.url()).hash).toBe('#article');
 });
 
-test('the button under the deck switches to the article with the switch at the top', async ({ page }) => {
+test('the button under the deck switches to the article in place', async ({ page }) => {
   await page.goto(`${CARDED_URL}?card=2`);
   const open = page.locator('#ic-open');
   await expect(page.locator('#ic-article')).toBeHidden();
+  await open.scrollIntoViewIfNeeded();
+  const y = await page.evaluate(() => window.scrollY);
   await open.click();
   await expect(page.locator('#ic-article')).toBeVisible();
   await expect(page.locator('#ic-article')).toBeFocused();
-  await atTopOrEnd(page, '#ic-switch');
+  await page.waitForTimeout(700);
+  expect(await page.evaluate(() => window.scrollY)).toBe(y); // the page does not move
   await expect(open).toBeHidden(); // part of the TL;DR view
 });
 

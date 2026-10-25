@@ -149,7 +149,6 @@
   }
 
   function select(v) {
-    sw.setAttribute('data-view', v);
     for (var k in tabs) {
       tabs[k].setAttribute('aria-selected', k === v ? 'true' : 'false');
       tabs[k].tabIndex = k === v ? 0 : -1;
@@ -166,12 +165,10 @@
     changed();
   }
 
-  // Switch (or the terminal's anchor) to the top, then focus the view's start.
+  // The page stays where it is: only a landing target (the terminal's path
+  // anchor, a section link) scrolls. Focus moves to the view's start.
   function land(v, o) {
-    if (o.scroll !== false) {
-      if (o.land) o.land.scrollIntoView({ block: 'start', behavior: 'instant' });
-      else window.scrollTo({ top: Math.max(0, sw.getBoundingClientRect().top + window.pageYOffset - 12), behavior: 'instant' });
-    }
+    if (o.land) o.land.scrollIntoView({ block: 'start', behavior: 'instant' });
     if (o.focus === false) return;
     var f = o.focus || o.land || panels[v];
     if (!f.hasAttribute('tabindex')) f.setAttribute('tabindex', '-1');
@@ -179,8 +176,7 @@
   }
 
   /* CRT transition (index.html crt-off, quicker): the old view collapses to a
-     bright line mid-screen, the page scrolls while the screen is dark, and
-     the new view opens from the line. Instant under reduced motion; a new
+     bright line mid-screen and the new view opens from the line. Instant under reduced motion; a new
      switch cuts it short. */
   var OFF = [
     { transform: 'scaleY(1)', filter: 'brightness(1)', opacity: 1 },
@@ -289,7 +285,7 @@
   });
   openBtn.addEventListener('click', function () { setView('article', { route: 'button', history: 'push' }); });
   // Find in page reveals the article itself and scrolls to the match.
-  article.addEventListener('beforematch', function () { setView('article', { history: 'replace', instant: true, scroll: false, focus: false }); });
+  article.addEventListener('beforematch', function () { setView('article', { history: 'replace', instant: true, focus: false }); });
   window.addEventListener('popstate', sync);
   window.addEventListener('hashchange', sync);
   function step(d) { go((aim !== null ? aim : idx) + d); }

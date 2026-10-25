@@ -16,7 +16,7 @@
 {%- assign ic_ids = ic.insights | map: "id" -%}
 {%- assign ic_order = ic.default_order | default: ic_ids -%}
 {%- assign ic_total = ic.insights | size | plus: 1 -%}
-  <div class="ic-switch" id="ic-switch" role="tablist" aria-label="View" data-view="tldr" hidden>
+  <div class="ic-switch" id="ic-switch" role="tablist" aria-label="View" hidden>
     <button type="button" class="ic-tab" id="ic-tab-tldr" role="tab" aria-controls="ic-deck" aria-selected="true">TL;DR</button>
     <button type="button" class="ic-tab" id="ic-tab-article" role="tab" aria-controls="ic-article" aria-selected="false" tabindex="-1">Full article</button>
   </div>

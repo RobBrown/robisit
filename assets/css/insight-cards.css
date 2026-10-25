@@ -46,33 +46,25 @@
 .ic-page header{margin-bottom:28px}
 .ic-page header h1{margin:0}
 
-/* The view switch: a two-position selector in the housing. A lit segment of
-   amber glass slides under the selected view; each position has a lamp.
-   "Published on <date>" is never hidden: without the script it is the date. */
+/* The view switch: two labels in the readout type, no box. Each has a lamp:
+   lit amber for the view on screen, a dim ring for the other, so it reads as
+   a choice without competing with the cards. "Published on <date>" is never
+   hidden: without the script it is the date. */
 .ic-switch{
-  position:relative;display:inline-grid;grid-template-columns:1fr 1fr;
-  margin:0 0 16px;padding:3px;border:1px solid var(--ic-bezel);border-radius:12px;
-  background:var(--ic-housing);box-shadow:inset 0 1px 6px rgba(0,0,0,.7);
+  display:flex;gap:26px;margin:0 0 10px;
   font-family:var(--ic-mono);font-size:13px;letter-spacing:.18em;line-height:1.4;text-transform:uppercase;
 }
-.ic-switch::before{
-  content:"";position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);
-  border:1px solid var(--ic-bezel-on);border-radius:9px;
-  background:repeating-linear-gradient(to bottom,transparent 0 2px,var(--ic-scan) 2px 3px),rgba(255,160,0,.13);
-  box-shadow:0 0 14px -3px var(--ic-halo),inset 0 0 10px rgba(255,160,0,.1);
-}
-.ic-switch[data-view="article"]::before{transform:translateX(100%)}
 .ic-tab{
-  position:relative;display:flex;align-items:center;justify-content:center;gap:9px;
-  margin:0;padding:9px 18px;cursor:pointer;white-space:nowrap;
+  display:flex;align-items:center;gap:9px;margin:0;padding:6px 0;cursor:pointer;white-space:nowrap;
   font:inherit;letter-spacing:inherit;text-transform:inherit;
-  color:var(--ic-ink-soft);background:none;border:0;border-radius:9px;
+  color:var(--ic-ink-soft);background:none;border:0;border-radius:2px;
 }
-.ic-tab::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:rgba(210,100,0,.35)}
-.ic-tab[aria-selected="true"]{color:var(--ic-phosphor);text-shadow:var(--ic-readout-glow)}
+.ic-tab::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--ic-row-edge-on)}
+.ic-tab[aria-selected="true"]{color:var(--ic-accent);text-shadow:var(--ic-readout-glow)}
 .ic-tab[aria-selected="true"]::before{background:var(--ic-accent);box-shadow:var(--ic-readout-glow)}
 .ic-tab[aria-selected="false"]:hover{color:var(--ic-ink)}
-.ic-tab:focus-visible{outline:2px solid var(--ic-accent);outline-offset:2px}
+.ic-tab[aria-selected="false"]:hover::before{box-shadow:inset 0 0 0 1px var(--ic-accent)}
+.ic-tab:focus-visible{outline:2px solid var(--ic-accent);outline-offset:4px}
 .ic-open{display:block;margin-top:2px}
 .ic-open[hidden]{display:none}
 .ic-published{
@@ -85,8 +77,7 @@
   /* Tighter on phones so the first card fits on a 375x667 screen. */
   .ic-page{padding-top:16px}
   .ic-page header{margin-bottom:20px}
-  .ic-switch{display:grid;margin-bottom:12px;letter-spacing:.12em}
-  .ic-tab{padding:9px 12px}
+  .ic-switch{gap:22px;margin-bottom:8px;letter-spacing:.14em}
 }
 
 /* Deck: a native scroller spanning the column plus its gutters. The current
@@ -246,7 +237,6 @@
      cycle, never more than one dip a second. */
   .ic-card.is-current::before{animation:ic-bezel-flicker 7s step-end infinite}
   .ic-opt{transition:background .2s,border-color .2s,color .2s,transform .2s}
-  .ic-switch::before{transition:transform .32s cubic-bezier(.3,.7,.2,1)}
   .ic-tab,.ic-tab::before{transition:color .2s,text-shadow .2s,background .2s,box-shadow .2s}
   .ic-opt::before{transition:transform .2s}
   @media(hover:hover){.ic-opt:hover{transform:translateX(3px)}}
