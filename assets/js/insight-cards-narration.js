@@ -4,7 +4,9 @@
    underlined, chosen from the audio's currentTime against the card's phrase
    timings, never from a timer. Any card change stops it, and moving to a
    narrated card starts it, until the reader pauses: then nothing starts
-   again until a Play button is pressed. Browsers may block audio before the
+   again until a Play button is pressed. When a card finishes reading, the
+   deck waits a second and moves to the next card, which then starts reading
+   the same way. Browsers may block audio before the
    reader has interacted with the page; a blocked start rests silently, and
    the reader's first tap, click or key press in the deck primes the audio
    element so later starts are allowed (see prime()).
@@ -22,8 +24,9 @@
   var card = null, btn = null, phrases = null, spoken = null, frame = 0, meta = {};
   // auto: start narration when a card becomes current. A pause turns it off;
   // pressing Play turns it back on.
-  var auto = true, current = null, autoTimer = 0, announce = false;
+  var auto = true, current = null, autoTimer = 0, advanceTimer = 0, announce = false;
   var AUTO_DELAY = 350; // ms the deck must rest on a card first, so a fast swipe through cards plays nothing
+  var ADVANCE_DELAY = 1000; // ms of quiet after a card finishes before the deck moves on
 
   function setButton(b, playing) {
     b.setAttribute('aria-pressed', playing ? 'true' : 'false');
@@ -88,6 +91,7 @@
   }
 
   function start(b, trigger) {
+    clearTimeout(advanceTimer);
     stop();
     var session = card = b.closest('.ic-card');
     btn = b;
@@ -131,7 +135,18 @@
   audio.addEventListener('pause', function () { if (card && !audio.ended) { auto = false; setButton(btn, false); stopLoop(); sync(); } });
   audio.addEventListener('timeupdate', sync);
   audio.addEventListener('seeked', sync);
-  audio.addEventListener('ended', function () { if (card) { stop(); say('Finished reading.'); } });
+  // A finished card hands on to the next one after a pause, unless the reader
+  // has moved or paused in the meantime. The deck's move then autoplays it.
+  audio.addEventListener('ended', function () {
+    if (!card) return;
+    var done = card;
+    stop();
+    say('Finished reading.');
+    clearTimeout(advanceTimer);
+    advanceTimer = setTimeout(function () {
+      if (auto && current === done && !card) deck.dispatchEvent(new CustomEvent('ic:next'));
+    }, ADVANCE_DELAY);
+  });
   audio.addEventListener('error', function () { if (card && audio.error) fail('audio failed to load (' + audio.getAttribute('src') + ')'); });
 
   /* Priming. iOS Safari lets an audio element start without a tap only after
@@ -184,6 +199,7 @@
     if (card && c !== card) stop();
     arrive(c);
     clearTimeout(autoTimer);
+    clearTimeout(advanceTimer);
     afterPrime = null;
     var b = c && c.querySelector('.ic-play');
     if (auto && b && card !== c) {

@@ -187,7 +187,7 @@ test.describe('playback', () => {
     await expect.poll(() => spoken(page), { timeout: 1000 }).toEqual(['p4']);
   });
 
-  test('completion clears the underline and resets the button; no auto-advance', async ({ page }) => {
+  test('completion clears the underline and resets the button; the deck waits a second, then moves on', async ({ page }) => {
     const m = meta(idAt5);
     await page.goto(URL_PILOT5);
     await settle(page);
@@ -203,6 +203,44 @@ test.describe('playback', () => {
     await page.waitForTimeout(500);
     expect(await page.locator('.ic-card.is-current').getAttribute('data-id')).toBe(cardBefore);
     expect((await audio(page)).paused).toBe(true);
+    // Card 5 is the last insight on this path, so the deck moves to the silent terminal card.
+    await expect(page.locator('.ic-card.is-current')).toHaveClass(/ic-terminal/, { timeout: 2500 });
+    expect((await audio(page)).paused).toBe(true);
+  });
+
+  test('a finished card hands on to the next narrated card, which starts reading', async ({ page }) => {
+    const id4 = pilot.order[3];
+    await page.goto(`${CARDED_URL}?path=pilot&card=4`);
+    await settle(page);
+    await page.evaluate(() => {
+      const deck = document.getElementById('ic-deck');
+      deck.querySelector('audio').addEventListener('ended', () => { window.__endedAt = performance.now(); });
+      deck.addEventListener('ic:next', () => { window.__nextAt = performance.now(); });
+    });
+    await playButton(page).click();
+    await playing(page);
+    await seek(page, meta(id4).duration - 0.3);
+    await expect(page.locator('.ic-card.is-current')).toHaveAttribute('data-id', idAt5, { timeout: 4000 });
+    const gap = await page.evaluate(() => window.__nextAt - window.__endedAt);
+    expect(gap).toBeGreaterThanOrEqual(990);
+    expect(gap).toBeLessThan(1300);
+    await playing(page);
+    expect((await audio(page)).src).toBe(`/assets/narration/${SLUG}/${idAt5}.mp3`);
+  });
+
+  test('pressing Play during the pause after a card replays it instead of moving on', async ({ page }) => {
+    const id4 = pilot.order[3];
+    await page.goto(`${CARDED_URL}?path=pilot&card=4`);
+    await settle(page);
+    await playButton(page).click();
+    await playing(page);
+    await seek(page, meta(id4).duration - 0.3);
+    await expect(page.locator('#ic-live')).toHaveText('Finished reading.', { timeout: 3000 });
+    await playButton(page).click();
+    await playing(page);
+    await page.waitForTimeout(1500);
+    expect(await page.locator('.ic-card.is-current').getAttribute('data-id')).toBe(id4);
+    expect((await audio(page)).src).toBe(`/assets/narration/${SLUG}/${id4}.mp3`);
   });
 
   // Each route lands on a different card: card 4 (narrated) or the terminal card (not narrated).

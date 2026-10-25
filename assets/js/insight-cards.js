@@ -103,7 +103,8 @@
 
   /* Narration hooks (insight-cards-narration.js): 'ic:change' tells it the
      current card may have changed; it sends 'ic:track' events, recorded here
-     with the card's position and the path. */
+     with the card's position and the path, and 'ic:next' when a card has
+     finished reading and the deck should move on. */
   function changed() { deck.dispatchEvent(new CustomEvent('ic:change', { detail: { card: rail.children[idx] } })); }
   deck.addEventListener('ic:track', function (e) {
     var i = [].indexOf.call(rail.children, e.detail.card);
@@ -163,6 +164,7 @@
   function step(d) { go((aim !== null ? aim : idx) + d); }
   prev.addEventListener('click', function () { step(-1); });
   next.addEventListener('click', function () { step(1); });
+  deck.addEventListener('ic:next', function () { step(1); });
 
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
