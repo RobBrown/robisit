@@ -325,6 +325,56 @@ test.describe('playback', () => {
     expect(plays[0].props.card).toBe(await page.locator('.ic-card.is-current .ic-n').evaluate((n) => parseInt(n.textContent, 10)));
   });
 
+  test('from the situation card, choosing a path starts the first card reading with no Play press', async ({ page }) => {
+    await captureEvents(page);
+    await page.goto(CARDED_URL);
+    await settle(page);
+    await page.getByRole('radio', { name: pilot.label }).click();
+    await settle(page);
+    await playing(page);
+    expect((await audio(page)).src).toBe(`/assets/narration/${SLUG}/${pilot.order[0]}.mp3`);
+    const plays = (await page.evaluate(() => window.__events)).filter((e) => e.name === 'cards_play');
+    expect(plays).toEqual([{ name: 'cards_play', props: { card: 1, path: 'pilot', trigger: 'auto' } }]);
+  });
+
+  test('the first gesture in the deck primes the audio element with silence, then card 1 autoplays', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.__srcs = [];
+      const orig = HTMLMediaElement.prototype.play;
+      HTMLMediaElement.prototype.play = function () { window.__srcs.push(this.getAttribute('src')); return orig.apply(this, arguments); };
+    });
+    await page.goto(CARDED_URL);
+    await settle(page);
+    await page.locator('.ic-rail').focus();
+    await page.keyboard.press('ArrowRight'); // the move from the situation card to card 1
+    await settle(page);
+    await playing(page);
+    const srcs = await page.evaluate(() => window.__srcs);
+    expect(srcs[0]).toMatch(/^data:audio\/mpeg;base64,/);
+    expect(srcs.slice(1)).toEqual([`/assets/narration/${SLUG}/${cards.default_order[0]}.mp3`]);
+    // Priming is silent: one announcement, for the real start only.
+    await expect(page.locator('#ic-live')).toHaveText('Reading card aloud.');
+    // It happens once: later gestures don't prime again.
+    await page.keyboard.press('ArrowRight');
+    await settle(page);
+    await playing(page);
+    expect((await page.evaluate(() => window.__srcs)).filter((x) => x.startsWith('data:'))).toHaveLength(1);
+  });
+
+  test('a tap outside the deck does not prime or play anything', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.__plays = 0;
+      const orig = HTMLMediaElement.prototype.play;
+      HTMLMediaElement.prototype.play = function () { window.__plays++; return orig.apply(this, arguments); };
+    });
+    await page.goto(URL_PILOT5);
+    await settle(page);
+    await page.locator('#ic-article p').first().click();
+    await page.keyboard.press('a');
+    await page.waitForTimeout(400);
+    expect(await page.evaluate(() => window.__plays)).toBe(0);
+  });
+
   test('a start the browser blocks (autoplay policy) rests silently, with no warning', async ({ page }) => {
     const warnings = [];
     page.on('console', (m) => { if (m.type() === 'warning') warnings.push(m.text()); });

@@ -5,7 +5,9 @@
    timings, never from a timer. Any card change stops it, and moving to a
    narrated card starts it, until the reader pauses: then nothing starts
    again until a Play button is pressed. Browsers may block audio before the
-   reader has interacted with the page; a blocked start rests silently.
+   reader has interacted with the page; a blocked start rests silently, and
+   the reader's first tap, click or key press in the deck primes the audio
+   element so later starts are allowed (see prime()).
    Nothing starts on page load. If this never runs, the buttons stay hidden. */
 (function () {
   var deck = document.getElementById('ic-deck');
@@ -131,6 +133,38 @@
   audio.addEventListener('seeked', sync);
   audio.addEventListener('ended', function () { if (card) { stop(); say('Finished reading.'); } });
   audio.addEventListener('error', function () { if (card && audio.error) fail('audio failed to load (' + audio.getAttribute('src') + ')'); });
+
+  /* Priming. iOS Safari lets an audio element start without a tap only after
+     it has played inside one; other browsers ask for any earlier tap, click
+     or key press on the page. So the reader's first such gesture in the deck
+     (choosing a path, a chevron, an arrow key, the touch that ends a swipe)
+     plays a tenth of a second of silence on the deck's one element. Later
+     autoplay, which runs from a timer rather than a gesture, is then allowed.
+     It is limited to the deck so a tap elsewhere on the page never takes over
+     the phone's audio (other apps pause when a page plays sound). */
+  var SILENCE = 'data:audio/mpeg;base64,//NExAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExFMAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKYAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+  var primed = false, priming = false;
+  function prime(e) {
+    if (primed || priming || card) return;
+    var t = e.target;
+    var inDeck = t && t.closest && t.closest('#ic-deck');
+    if (e.type === 'keydown' ? !(inDeck || e.key === 'ArrowLeft' || e.key === 'ArrowRight') : !inDeck) return;
+    if (inDeck && t.closest('.ic-play')) return; // the button starts real audio itself
+    priming = true;
+    audio.src = SILENCE;
+    var p = audio.play();
+    var done = function (ok) {
+      priming = false;
+      if (ok) {
+        primed = true;
+        ['touchend', 'pointerup', 'click', 'keydown'].forEach(function (type) { document.removeEventListener(type, prime, true); });
+      }
+      if (!card && audio.getAttribute('src') === SILENCE) { audio.pause(); audio.removeAttribute('src'); audio.load(); }
+    };
+    if (p && p.then) p.then(function () { done(true); }, function () { done(false); });
+    else done(true);
+  }
+  ['touchend', 'pointerup', 'click', 'keydown'].forEach(function (type) { document.addEventListener(type, prime, true); });
 
   // Moving to any other card (swipe, keys, chevrons, a path) stops narration,
   // and, while auto is on, starts the new card once the deck rests on it.
