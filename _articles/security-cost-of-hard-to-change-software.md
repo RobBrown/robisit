@@ -28,7 +28,7 @@ cards:
   default_anchor: "#old-security-decisions-deserve-another-look"
   insights:
     - id: risk
-      title: "A security decision can expire without the software changing"
+      title: "Nothing changed but the odds."
       body: |
         A vulnerability considered too difficult to exploit two years ago
         can become a practical attack today. AI is reducing the effort
