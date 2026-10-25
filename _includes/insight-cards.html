@@ -12,7 +12,7 @@
   its phrase-wrapped fragment and one read-aloud button, shown by
   assets/js/insight-cards-narration.js.
   An insight with `art` (a 960x320 transparent image, see
-  docs/insight-cards-design.md) shows it at the foot of its card, decorative.
+  docs/insight-cards-design.md) shows it at the foot of its card, decorative, as a background.
 {%- endcomment -%}
 {%- assign ic = page.cards -%}
 {%- assign ic_ids = ic.insights | map: "id" -%}
@@ -44,7 +44,7 @@
         <h2 class="ic-title">{{ ic_narr_title }}</h2>
         <p class="ic-body">{{ ic_narr_body }}</p>
         {%- if i.art %}
-        <img class="ic-art" src="{{ i.art | relative_url }}" alt="" width="960" height="320" loading="lazy" decoding="async">
+        <div class="ic-art" style="background-image:url('{{ i.art | relative_url }}')" aria-hidden="true"></div>
         {%- endif %}
       </div>
       {%- else %}
@@ -53,7 +53,7 @@
         <h2 class="ic-title">{{ i.title | escape }}</h2>
         <p class="ic-body">{{ i.body | strip | escape }}</p>
         {%- if i.art %}
-        <img class="ic-art" src="{{ i.art | relative_url }}" alt="" width="960" height="320" loading="lazy" decoding="async">
+        <div class="ic-art" style="background-image:url('{{ i.art | relative_url }}')" aria-hidden="true"></div>
         {%- endif %}
       </div>
       {%- endif %}
