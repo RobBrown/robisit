@@ -1,160 +1,160 @@
 {
   "cardId": "links",
-  "hash": "9257e8eb24d1d9b4827761832c0defbdb2986858438bc984c6f7add66ce9ad02",
-  "voice": "en-US-Neural2-D",
+  "hash": "0f5c834f42292fcc6b1145c43027d1be63e68023d30e1089314c1eb4f64bf0fd",
+  "voice": "en-US-Casual-K",
   "segmentation": "v1",
   "audio": "/assets/narration/hello-world-cards/links.mp3",
-  "duration": 27.168,
+  "duration": 26.4,
   "phrases": [
     {
       "id": "p0",
       "text": "Test card five",
-      "start": 0.015,
-      "end": 0.951
+      "start": 0.056,
+      "end": 0.777
     },
     {
       "id": "p1",
       "text": "checks deep links",
-      "start": 0.951,
-      "end": 2.465
+      "start": 0.777,
+      "end": 2.308
     },
     {
       "id": "p2",
       "text": "Open this page",
-      "start": 2.465,
-      "end": 3.307
+      "start": 2.308,
+      "end": 3.16
     },
     {
       "id": "p3",
       "text": "with a path",
-      "start": 3.307,
-      "end": 3.905
+      "start": 3.16,
+      "end": 3.703
     },
     {
       "id": "p4",
       "text": "and card",
-      "start": 3.905,
-      "end": 4.349
+      "start": 3.703,
+      "end": 4.169
     },
     {
       "id": "p5",
       "text": "in the address,",
-      "start": 4.349,
-      "end": 5.45
+      "start": 4.169,
+      "end": 5.329
     },
     {
       "id": "p6",
       "text": "such as path equals pilot",
-      "start": 5.45,
-      "end": 6.954
+      "start": 5.329,
+      "end": 6.714
     },
     {
       "id": "p7",
       "text": "and card equals three,",
-      "start": 6.954,
-      "end": 8.59
+      "start": 6.714,
+      "end": 8.3
     },
     {
       "id": "p8",
       "text": "and the deck",
-      "start": 8.59,
-      "end": 9.02
+      "start": 8.3,
+      "end": 8.709
     },
     {
       "id": "p9",
       "text": "should apply that path",
-      "start": 9.02,
-      "end": 10.163
+      "start": 8.709,
+      "end": 9.831
     },
     {
       "id": "p10",
       "text": "and land",
-      "start": 10.163,
-      "end": 10.679
+      "start": 9.831,
+      "end": 10.341
     },
     {
       "id": "p11",
       "text": "on that card",
-      "start": 10.679,
-      "end": 11.234
+      "start": 10.341,
+      "end": 10.883
     },
     {
       "id": "p12",
       "text": "straight away,",
-      "start": 11.234,
-      "end": 12.101
+      "start": 10.883,
+      "end": 11.995
     },
     {
       "id": "p13",
       "text": "with no animation.",
-      "start": 12.101,
-      "end": 13.783
+      "start": 11.995,
+      "end": 13.705
     },
     {
       "id": "p14",
       "text": "An unknown path is ignored",
-      "start": 13.783,
-      "end": 15.349
+      "start": 13.705,
+      "end": 15.133
     },
     {
       "id": "p15",
       "text": "and a card number",
-      "start": 15.349,
-      "end": 16.115
+      "start": 15.133,
+      "end": 15.816
     },
     {
       "id": "p16",
       "text": "past the end lands",
-      "start": 16.115,
-      "end": 17.17
+      "start": 15.816,
+      "end": 16.744
     },
     {
       "id": "p17",
       "text": "on the last card.",
-      "start": 17.17,
-      "end": 18.778
+      "start": 16.744,
+      "end": 18.303
     },
     {
       "id": "p18",
       "text": "Other parts of the address,",
-      "start": 18.778,
-      "end": 20.254
+      "start": 18.303,
+      "end": 19.803
     },
     {
       "id": "p19",
       "text": "such as campaign tags,",
-      "start": 20.254,
-      "end": 21.496
+      "start": 19.803,
+      "end": 21.299
     },
     {
       "id": "p20",
       "text": "are kept.",
-      "start": 21.496,
-      "end": 22.72
+      "start": 21.299,
+      "end": 22.529
     },
     {
       "id": "p21",
       "text": "This sentence is",
-      "start": 22.72,
-      "end": 23.566
+      "start": 22.529,
+      "end": 23.2
     },
     {
       "id": "p22",
       "text": "filler to bring",
-      "start": 23.566,
-      "end": 24.306
+      "start": 23.2,
+      "end": 23.895
     },
     {
       "id": "p23",
       "text": "the body close",
-      "start": 24.306,
-      "end": 25.125
+      "start": 23.895,
+      "end": 24.564
     },
     {
       "id": "p24",
       "text": "to the ninety-word ceiling.",
-      "start": 25.125,
-      "end": 27.168
+      "start": 24.564,
+      "end": 26.4
     }
   ]
 }
