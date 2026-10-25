@@ -43,6 +43,16 @@ Read-aloud narration with a synchronized phrase underline on insight cards. Ever
 - **The title and body of one card share one fragment file,** split by `<!--ic-body-->`. The include keeps its own `<h2>` and `<p>` markup, so the fragment carries only phrase spans.
 - **Narration CSS and JS are separate files**, loaded only on posts that have narration assets. That gives them their own 6 KB budget and leaves the deck's 10 KB budget meaningful. The deck script gained two hooks and nothing else: it dispatches `ic:change` with the current card element, and it records `ic:track` events through its existing `trackEvent`. No globals, and `trackEvent` stays the single analytics path.
 
+### Spend cap (owner request, 2026-10-24: "At $50 the functionality should stop")
+
+- **A budget alone can't stop spending; it only sends notifications.** So the budget "robisit-tts spend cap" (50 CAD, the billing account's currency, scoped to `robisit-tts`, with thresholds at 50/90/100% emailed to billing admins) publishes to the Pub/Sub topic `budget-cap`. The Cloud Run function `spend-cap` (`ops/spend-cap/`) disables `texttospeech.googleapis.com` once `costAmount >= budgetAmount`.
+- **Disabling the API, not unlinking billing.** Unlinking billing would stop every service in the project and can lose resources. Disabling only Text-to-Speech stops the only thing that costs money and is undone with a single `gcloud services enable`. The published MP3s are static files on GitHub Pages, so readers notice nothing.
+- **Its own service account, `spend-cap@`, with only Service Usage Admin.** `narration-ci@` has only Service Usage Consumer, so CI can't re-enable the API by itself. Re-enabling is a deliberate owner action.
+- **A malformed or below-budget message does nothing.** The decision is a pure function (`overBudget`), unit-tested. The trigger doesn't retry, so a failure can't loop, and the next budget notification (several a day) retries naturally.
+- **Lag.** Billing data arrives hours late, so actual spend can overshoot 50 CAD somewhat. At Text-to-Speech prices (a few CAD per million characters) and this site's volume, that overshoot is small.
+- **Verified 2026-10-24** with hand-published messages: 12.5 of 50 left the API on; 50 of 50 disabled it, and `narrate --check` then failed with "API … disabled"; `gcloud services enable` restored it and the check passed.
+- **Deployment** is `ops/spend-cap/deploy.sh` (idempotent; owner credentials). `ops/` is excluded from the Jekyll build.
+
 ### Segmentation (`scripts/narration/segment.js`, version `v1`)
 
 - **The input is the include's rendered HTML.** The tokenizer keeps tags, decodes entities, drops `href` (so URLs go) and keeps link text. Phrases are character ranges over the decoded text, so the fragment is the original markup with spans inserted. It's byte-identical with the spans removed, by construction and by test.

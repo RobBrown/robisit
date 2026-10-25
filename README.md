@@ -35,6 +35,18 @@ The voice is set in `scripts/narration/config.js`. Changing it regenerates
 every card on the next run. A card whose text changed after generation shows
 no Play button until it is regenerated.
 
+**Spend cap.** Google Cloud spending on the `robisit-tts` project is capped at
+50 CAD. When billing reports that the budget has been reached, a small function
+(`ops/spend-cap/`) switches off the Text-to-Speech API. Narration that is already
+published keeps playing, but new cards get no audio and the Narrate cards Action
+warns that it failed. Billing data lags by a few hours, so spending can go a
+little past 50 before the cap trips. You'll get emails at 50%, 90% and 100%. To
+turn generation back on after checking the bill:
+
+    gcloud services enable texttospeech.googleapis.com --project robisit-tts
+
+Then re-run the Action from the Actions tab (Narrate cards → Run workflow).
+
 ## Email Collection
 
 The subscribe form submits directly to a Google Form. Email addresses are stored in a private Google Sheet. No backend infrastructure involved.

@@ -26,6 +26,7 @@ exclude:
   - test-results/
   - playwright-report/
   - _site-fixtures/
+  - ops/
 
 # Collections for articles
 collections:

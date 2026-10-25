@@ -1,0 +1,11 @@
+{
+  "name": "robisit-spend-cap",
+  "private": true,
+  "description": "Disables Text-to-Speech on robisit-tts when the budget is reached. See index.js.",
+  "main": "index.js",
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^4.0.0",
+    "google-auth-library": "^11.3.1"
+  }
+}
