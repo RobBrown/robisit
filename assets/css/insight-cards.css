@@ -7,7 +7,7 @@
   --ic-raised:#1e1a14;        /* subscribe button, menu hover */
   --ic-edge:#3d3529;          /* byline and footer dots */
   --ic-edge-on:#c06800;       /* nav brand (dark amber) */
-  --ic-edge-on-start:#00a800; /* index.html green theme --p-dim, amber's #c06800 counterpart */
+  --ic-edge-on-start:#00c800; /* index.html green theme --p (phosphor green) */
   --ic-ink:#d4cfc6;           /* body text */
   --ic-ink-strong:#eae6df;    /* h1, h2 */
   --ic-ink-soft:#b8b09e;      /* .body pre code */
@@ -76,8 +76,24 @@
   color:var(--ic-ink);font-family:var(--ic-serif);font-size:15.5px;line-height:1.65;
 }
 .ic-card.is-current{border-color:var(--ic-edge-on)}
-/* The opening question card is green, so it reads as a different kind of card. */
-.ic-situation.is-current{border-color:var(--ic-edge-on-start)}
+/* The opening question card is green, so it reads as a different kind of card.
+   Its edge is drawn like a line on a green CRT: the border itself goes clear
+   and a blurred copy sits on top with the stacked phosphor glow from the home
+   page h1 (index.html green theme --p-r1..r4). The rail clips above 6px, so
+   the outer glow stays tight and the inner glow does the rest. */
+.ic-situation.is-current{border-color:transparent}
+.ic-situation.is-current::after{
+  content:"";position:absolute;inset:-2px;pointer-events:none;
+  border:2px solid var(--ic-edge-on-start);border-radius:14px;
+  filter:blur(.6px);
+  box-shadow:
+    0 0 2px  rgba(100,255,100,.9),
+    0 0 5px  rgba(0,200,0,.65),
+    0 0 10px rgba(0,160,0,.35),
+    inset 0 0 3px  rgba(100,255,100,.55),
+    inset 0 0 9px  rgba(0,200,0,.3),
+    inset 0 0 20px rgba(0,120,0,.15);
+}
 /* .72 is the lowest that keeps the amber counter at AA contrast. The button
    is never dimmed. */
 .ic-card:not(.is-current)>:not(.ic-go){opacity:.72}
