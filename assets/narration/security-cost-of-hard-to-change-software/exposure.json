@@ -1,118 +1,118 @@
 {
   "cardId": "exposure",
-  "hash": "bc0094e6a987ead18ba201eded8115c18ce60c8f9e1cbc57fea72f3ad30c9d3c",
+  "hash": "1de6a5491c71ca732f5f40e703f9b4e3cabb99c5346a891d290ede25e18247ce",
   "voice": "en-US-Casual-K",
   "segmentation": "v1",
   "audio": "/assets/narration/security-cost-of-hard-to-change-software/exposure.mp3",
-  "duration": 25.728,
+  "duration": 24.816,
   "phrases": [
     {
       "id": "p0",
-      "text": "AI is changing the economics",
-      "start": 0.075,
-      "end": 1.622
+      "text": "The price of finding",
+      "start": 0.07,
+      "end": 0.9
     },
     {
       "id": "p1",
-      "text": "of exploiting old weaknesses",
-      "start": 1.622,
-      "end": 3.663
+      "text": "security exploits fell.",
+      "start": 0.9,
+      "end": 2.799
     },
     {
       "id": "p2",
       "text": "The PHP vulnerabilities disclosed",
-      "start": 3.663,
-      "end": 5.696
+      "start": 2.799,
+      "end": 4.747
     },
     {
       "id": "p3",
       "text": "in October 2026",
-      "start": 5.696,
-      "end": 7.143
+      "start": 4.747,
+      "end": 6.223
     },
     {
       "id": "p4",
       "text": "illustrate the shift.",
-      "start": 7.143,
-      "end": 8.794
+      "start": 6.223,
+      "end": 7.902
     },
     {
       "id": "p5",
       "text": "An underlying weakness",
-      "start": 8.794,
-      "end": 9.894
+      "start": 7.902,
+      "end": 9.002
     },
     {
       "id": "p6",
       "text": "reportedly known since",
-      "start": 9.894,
-      "end": 10.921
+      "start": 9.002,
+      "end": 10.029
     },
     {
       "id": "p7",
       "text": "2020 became part",
-      "start": 10.921,
-      "end": 12.11
+      "start": 10.029,
+      "end": 11.218
     },
     {
       "id": "p8",
       "text": "of a practical",
-      "start": 12.11,
-      "end": 12.754
+      "start": 11.218,
+      "end": 11.862
     },
     {
       "id": "p9",
       "text": "exploit chain developed",
-      "start": 12.754,
-      "end": 13.861
+      "start": 11.862,
+      "end": 12.969
     },
     {
       "id": "p10",
       "text": "with AI-assisted research.",
-      "start": 13.861,
-      "end": 15.893
+      "start": 12.969,
+      "end": 15.001
     },
     {
       "id": "p11",
       "text": "The code had",
-      "start": 15.893,
-      "end": 16.402
+      "start": 15.001,
+      "end": 15.51
     },
     {
       "id": "p12",
       "text": "not suddenly become vulnerable.",
-      "start": 16.402,
-      "end": 18.39
+      "start": 15.51,
+      "end": 17.498
     },
     {
       "id": "p13",
       "text": "The ability to exploit",
-      "start": 18.39,
-      "end": 19.433
+      "start": 17.498,
+      "end": 18.541
     },
     {
       "id": "p14",
       "text": "it had changed.",
-      "start": 19.433,
-      "end": 20.691
+      "start": 18.541,
+      "end": 19.799
     },
     {
       "id": "p15",
       "text": "Organizations can no longer",
-      "start": 20.691,
-      "end": 22.017
+      "start": 19.799,
+      "end": 21.124
     },
     {
       "id": "p16",
       "text": "assume that yesterday's difficulty",
-      "start": 22.017,
-      "end": 23.513
+      "start": 21.124,
+      "end": 22.621
     },
     {
       "id": "p17",
       "text": "will protect tomorrow's systems.",
-      "start": 23.513,
-      "end": 25.728
+      "start": 22.621,
+      "end": 24.816
     }
   ]
 }
