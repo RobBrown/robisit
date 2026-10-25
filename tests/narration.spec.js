@@ -361,6 +361,34 @@ test.describe('playback', () => {
     expect((await page.evaluate(() => window.__srcs)).filter((x) => x.startsWith('data:'))).toHaveLength(1);
   });
 
+  // iOS model: an element is unlocked only once a play() started in a gesture
+  // actually gets going, which on a phone can take a while. Until then, any
+  // play() outside a gesture is refused. Here the silent clip takes 1.5 s to
+  // start, longer than the deck takes to settle and autoplay to fire.
+  test('autoplay waits for a slow unlock instead of cancelling it (first swipe on iPhone)', async ({ page }) => {
+    await page.addInitScript(() => {
+      let unlocked = false;
+      const orig = HTMLMediaElement.prototype.play;
+      HTMLMediaElement.prototype.play = function () {
+        const el = this, src = el.getAttribute('src') || '';
+        if (src.startsWith('data:')) {
+          return new Promise((res, rej) => setTimeout(() => {
+            if (el.getAttribute('src') === src) { unlocked = true; res(); } else rej(new DOMException('interrupted', 'AbortError'));
+          }, 1500));
+        }
+        if (!unlocked) return Promise.reject(new DOMException('needs a gesture', 'NotAllowedError'));
+        return orig.apply(el, arguments);
+      };
+    });
+    await page.goto(CARDED_URL);
+    await settle(page);
+    await page.locator('.ic-rail').focus();
+    await page.keyboard.press('ArrowRight'); // the one gesture: first move off the situation card
+    await settle(page);
+    await page.waitForFunction(() => { const a = document.querySelector('#ic-deck audio'); return !a.paused && a.currentTime > 0.3; }, null, { timeout: 5000 });
+    expect((await audio(page)).src).toBe(`/assets/narration/${SLUG}/${cards.default_order[0]}.mp3`);
+  });
+
   test('a tap outside the deck does not prime or play anything', async ({ page }) => {
     await page.addInitScript(() => {
       window.__plays = 0;
