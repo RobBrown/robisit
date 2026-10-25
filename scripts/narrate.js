@@ -2,6 +2,8 @@
 /* Generates read-aloud narration for one carded post's insight cards.
  *
  *   npm run narrate -- <post-slug> [--only <cardId>] [--force] [--dry-run]
+ *   npm run narrate -- --all      every post with cards (used by CI)
+ *   npm run narrate -- --check    credentials checkpoint only
  *
  * For each insight card it writes, under the post's slug:
  *   assets/narration/<slug>/<cardId>.mp3    audio (MP3, mono, 24 kHz)
@@ -178,24 +180,58 @@ async function narrate(slug, opts = {}) {
   return { rows, apiCalls };
 }
 
+// Slugs of every post with an insights block, in file order.
+function carded(root) {
+  const slugs = [];
+  for (const dir of COLLECTION_DIRS) {
+    const d = path.join(root, dir);
+    if (!fs.existsSync(d)) continue;
+    for (const f of fs.readdirSync(d).sort()) {
+      if (!/\.(md|markdown)$/.test(f)) continue;
+      let cards = null;
+      try { cards = loadCards(path.join(d, f)); } catch (e) { /* unreadable front matter: validate-cards reports it */ }
+      if (cards) slugs.push(f.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.(md|markdown)$/, ''));
+    }
+  }
+  return slugs;
+}
+
+const USAGE = 'usage: npm run narrate -- <post-slug> [--only <cardId>] [--force] [--dry-run]\n'
+  + '       npm run narrate -- --all      every post with cards\n'
+  + '       npm run narrate -- --check    credentials checkpoint only';
+
 async function main(argv) {
   const opts = {};
   const rest = [];
+  let all = false, check = false;
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--only') opts.only = argv[++i];
     else if (argv[i] === '--force') opts.force = true;
     else if (argv[i] === '--dry-run') opts.dryRun = true;
+    else if (argv[i] === '--all') all = true;
+    else if (argv[i] === '--check') check = true;
     else rest.push(argv[i]);
   }
-  if (rest.length !== 1) { console.error('usage: npm run narrate -- <post-slug> [--only <cardId>] [--force] [--dry-run]'); process.exit(2); }
-  try {
-    const { rows } = await narrate(rest[0], opts);
-    if (rows.some((r) => r.status === 'failed')) process.exit(1);
-  } catch (e) {
-    console.error(`narrate: ${e.message}`);
-    process.exit(1);
+  if (check) {
+    const r = await require('./narration/synthesize').checkCredentials(config.voice);
+    console.log(r.ok ? `credentials ok; ${config.voice.name} available` : `credentials checkpoint failed (${r.step}): ${r.message}`);
+    process.exit(r.ok ? 0 : 1);
   }
+  if (all ? rest.length !== 0 : rest.length !== 1) { console.error(USAGE); process.exit(2); }
+  let failed = false;
+  for (const slug of all ? carded(ROOT) : rest) {
+    if (all) console.log(`\n${slug}`);
+    try {
+      const { rows } = await narrate(slug, opts);
+      if (rows.some((r) => r.status === 'failed')) failed = true;
+    } catch (e) {
+      console.error(`narrate: ${slug}: ${e.message}`);
+      failed = true;
+      if (e.checkpoint) break; // no credentials: every other post would fail the same way
+    }
+  }
+  if (failed) process.exit(1);
 }
 
-module.exports = { narrate, prepare, findPost, loadCards };
+module.exports = { narrate, prepare, findPost, loadCards, carded };
 if (require.main === module) main(process.argv.slice(2));

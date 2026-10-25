@@ -14,17 +14,26 @@ Copy `TEMPLATE.md` to `_articles/your-slug.md`, fill in the front matter, write 
 
 ## Card narration
 
-Insight cards can be read aloud with the spoken phrase underlined. After adding
-or editing a post's `cards` block, run:
+Insight cards are read aloud with the spoken phrase underlined. You don't need
+to do anything: when a post with a `cards` block reaches `main`, the
+**Narrate cards** GitHub Action generates the audio, timings and phrase markup,
+commits them to `main`, and republishes. The Play buttons appear a few minutes
+after your push. Unchanged cards are skipped with no API call.
 
-    npm run narrate -- <post-slug>
+Because the Action commits to `main`, **pull before your next push**
+(`git pull`), or that push will be rejected.
 
-It calls Google Cloud Text-to-Speech with Application Default Credentials (if
-the credentials check fails, it stops and writes `SETUP.md` with the exact
-`gcloud` steps) and writes audio and timings to
-`assets/narration/<slug>/` and phrase markup to `_includes/narration/<slug>/`.
-Commit those files. Unchanged cards are skipped with no API call. A card whose
-text changed after generation simply shows no Play button until you re-run it.
+To run it by hand instead (needs Google Cloud Application Default
+Credentials on your machine; if the check fails it writes `SETUP.md` with the
+exact `gcloud` steps):
+
+    npm run narrate -- <post-slug>     # one post
+    npm run narrate -- --all           # every carded post
+    npm run narrate -- --check         # credentials only
+
+The voice is set in `scripts/narration/config.js`. Changing it regenerates
+every card on the next run. A card whose text changed after generation shows
+no Play button until it is regenerated.
 
 ## Email Collection
 

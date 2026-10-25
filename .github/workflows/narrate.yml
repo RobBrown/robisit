@@ -1,0 +1,83 @@
+# Generates read-aloud narration for posts with Insight Cards after they reach
+# main, so publishing stays "push the markdown" (npm run narrate on a laptop is
+# no longer needed). Unchanged cards are skipped with no API call. Generated
+# audio, timings and phrase markup are committed back to main, then a Pages
+# build is requested, because pushes made with GITHUB_TOKEN don't start one.
+#
+# Google auth is keyless: GitHub's OIDC token is exchanged through Workload
+# Identity Federation (pool "github", provider "robisit" in project
+# robisit-tts) for the narration-ci service account, which can only call
+# Text-to-Speech. The provider accepts only RobBrown/robisit on main.
+#
+# A failure never blocks publishing: the article is already live and simply
+# shows no Play button on cards that weren't narrated.
+name: Narrate cards
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '_articles/**'
+      - '_posts/**'
+      - 'scripts/narrate.js'
+      - 'scripts/narration/**'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Regenerate every card, even unchanged ones (makes API calls)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write  # commit generated narration
+  pages: write     # request a Pages build
+  id-token: write  # keyless auth to Google Cloud
+
+concurrency:
+  group: narrate
+  cancel-in-progress: false
+
+jobs:
+  narrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Check credentials
+        run: node scripts/narrate.js --check
+
+      - name: Generate narration
+        id: narrate
+        continue-on-error: true
+        run: node scripts/narrate.js --all ${{ inputs.force && '--force' || '' }}
+
+      - name: Report failures
+        if: steps.narrate.outcome == 'failure'
+        run: echo "::warning title=Narration::Some cards could not be narrated. They publish without a Play button; see the Generate narration step."
+
+      - name: Commit and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Only generated narration is ever committed (never the auth step's credentials file).
+          git add assets/narration _includes/narration
+          if git diff --cached --quiet; then echo "No new narration."; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "content(narration): generate narration for carded posts"
+          for i in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && break
+            sleep 5
+          done
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" --silent
+          git log -1 --stat --format='Committed %h: %s'

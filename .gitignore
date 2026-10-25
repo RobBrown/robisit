@@ -18,3 +18,5 @@ application_default_credentials.json
 *-credentials.json
 .gcloud/
 *.tmp-*
+# google-github-actions/auth writes its credentials file into the workspace.
+gha-creds-*.json
