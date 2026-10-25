@@ -1,23 +1,43 @@
 /* TL;DR card deck (Insight Cards, PRD v2.1). Loaded only on posts with a valid
-   cards block. Every colour is one of the site's own from _layouts/article.html,
-   except the situation card's green, which is the home page's green theme; the
-   only others are black drop shadows. */
+   cards block. Each card is a small CRT screen: rounded tube glass in a dark
+   bezel, with the home page's phosphor glow, tinted borders and Share Tech
+   Mono readouts. Prose stays in the article's Lora. Colours are the site's
+   own, from _layouts/article.html or index.html (amber and green themes); see
+   docs/insight-cards-design.md. */
 :root{
   --ic-surface:#14100a;       /* .toc, .menu-dropdown */
-  --ic-raised:#1e1a14;        /* subscribe button, menu hover */
-  --ic-edge:#3d3529;          /* byline and footer dots */
-  --ic-edge-on:#c06800;       /* nav brand (dark amber) */
-  --ic-edge-on-start:#00c800; /* index.html green theme --p (phosphor green) */
   --ic-ink:#d4cfc6;           /* body text */
-  --ic-ink-strong:#eae6df;    /* h1, h2 */
   --ic-ink-soft:#b8b09e;      /* .body pre code */
-  --ic-rule-strong:#706a5e;   /* input focus border */
-  --ic-accent:#ffa000;        /* amber */
+  --ic-accent:#ffa000;        /* amber, index.html --p */
   --ic-ink-on-accent:#0a0600; /* body background, as text on amber */
+  --ic-phosphor:#ffe4a0;      /* index.html --p-text */
   --ic-serif:'Lora',Georgia,'Times New Roman',serif;
   --ic-sans:'Inter',system-ui,sans-serif;
+  --ic-mono:'Share Tech Mono',ui-monospace,'SF Mono',monospace; /* index.html labels */
   --ic-gutter:24px;           /* article side padding */
   --ic-card:min(80vw,400px);
+
+  /* The screen. Amber values are index.html --p-r1/--p-r2 (255,160,60 / 210,100,0)
+     and --p (255,160,0); green values are its body.green theme. */
+  --ic-glass:var(--ic-surface);
+  --ic-scan:rgba(0,0,0,.3);                 /* scanline, under the text */
+  --ic-tube:rgba(0,0,0,.55);                /* edge darkening of the tube */
+  --ic-bloom:rgba(255,160,0,.05);           /* centre of the glass */
+  --ic-bezel:rgba(210,100,0,.2);            /* index.html .card border */
+  --ic-bezel-on:rgba(210,100,0,.5);
+  --ic-tube-r:26px / 30px;                  /* CRT face: soft, slightly elliptical corners */
+  --ic-housing:#0e0b06;                     /* bezel ring, article.html pre */
+  --ic-glare:rgba(255,228,160,.045);        /* reflection on the glass, index.html --p-text */
+  --ic-halo:rgba(210,100,0,.3);
+  --ic-title-glow:0 0 12px rgba(255,160,60,.22);
+  --ic-readout-glow:0 0 6px rgba(255,160,0,.45);
+  --ic-row:rgba(210,100,0,.022);            /* index.html .ci */
+  --ic-row-edge:rgba(210,100,0,.18);
+  --ic-row-on:rgba(210,100,0,.08);          /* index.html .ci:hover */
+  --ic-row-edge-on:rgba(210,100,0,.45);
+  --ic-row-rule:var(--ic-accent);
+  /* The phrase being read aloud: a faint beam over its own ink. */
+  --ic-spoken-glow:0 0 .6em rgba(255,160,60,.35);
 }
 @media(max-width:600px){:root{--ic-gutter:20px}}
 
@@ -29,15 +49,17 @@
 .ic-page header{margin-bottom:28px}
 .ic-page header h1{margin:0}
 
-/* "TL;DR in N cards" above the deck, in the site's TL;DR label style. Below
-   the deck: the "Read the article" button (shown by the script) and the
+/* "TL;DR in N cards" above the deck, as the home page's eyebrow label. Below
+   the deck: the "Read The Full Article" button (shown by the script) and the
    "Published on <date>" line, which is never hidden, so without the script it
    is the post's date line. */
 .ic-label{
-  margin:0;font-family:var(--ic-sans);font-size:14px;font-weight:600;letter-spacing:.12em;line-height:1.4;
-  color:var(--ic-accent);
+  display:flex;align-items:center;gap:10px;
+  margin:0;font-family:var(--ic-mono);font-size:13px;font-weight:400;letter-spacing:.24em;line-height:1.4;
+  text-transform:uppercase;color:var(--ic-accent);
 }
-.ic-count{margin-left:8px;letter-spacing:.01em;font-weight:400;color:var(--ic-ink-soft)}
+.ic-label::before{content:"";flex:0 0 22px;height:1px;background:var(--ic-accent)}
+.ic-count{letter-spacing:.16em;color:var(--ic-ink-soft)}
 .ic-head{margin-bottom:14px}
 .ic-open{display:block;margin-top:2px}
 .ic-open[hidden]{display:none}
@@ -58,60 +80,87 @@
    card snaps to the text column and the next card shows to its right. */
 .ic-deck{position:relative;margin:0 calc(-1 * var(--ic-gutter))}
 .ic-rail{
-  display:flex;gap:12px;
+  --ic-in-l:max(var(--ic-gutter),env(safe-area-inset-left));
+  --ic-in-r:max(var(--ic-gutter),env(safe-area-inset-right));
+  display:flex;gap:18px;
   overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
   scroll-snap-type:x mandatory;scrollbar-width:none;
-  padding:6px var(--ic-gutter) 30px; /* room for the shadow */
-  scroll-padding-inline:var(--ic-gutter);
+  padding:6px var(--ic-in-r) 30px var(--ic-in-l); /* room for the shadow */
+  scroll-padding-left:var(--ic-in-l);scroll-padding-right:var(--ic-in-r);
 }
 .ic-rail::-webkit-scrollbar{display:none}
 .ic-deck :focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
 .ic-rail:focus-visible{outline-offset:-2px}
 
-/* Cards: raised panels with a solid border. The current card's border turns
-   dark amber and its neighbours step back. The rail stretches every card to
-   the tallest card's height. No transitions (PRD 5.5). */
+/* Cards: a picture tube in its bezel. The glass has the soft, slightly
+   elliptical corners of a CRT face, darkens towards its edges, and carries
+   scanlines and a centre bloom, all as background under the text. The bezel is
+   a dark ring drawn with shadows, so it takes no layout space. The rail
+   stretches every card to the tallest card's height. */
 .ic-card{
   --ic-pad-top:20px;--ic-pad-x:20px;
   flex:0 0 var(--ic-card);scroll-snap-align:start;scroll-snap-stop:always;
   position:relative;display:flex;flex-direction:column;gap:10px;
   padding:var(--ic-pad-top) var(--ic-pad-x) 24px;
-  background:var(--ic-raised);
-  border:2px solid var(--ic-edge);border-radius:14px;
-  box-shadow:0 12px 28px -10px rgba(0,0,0,.9);
+  background:
+    radial-gradient(ellipse 70% 45% at 22% 8%,var(--ic-glare),transparent 70%), /* curved glass reflection */
+    repeating-linear-gradient(to bottom,transparent 0 2px,var(--ic-scan) 2px 3px),
+    radial-gradient(ellipse 110% 80% at 50% 40%,var(--ic-bloom),transparent 70%),
+    var(--ic-glass);
+  border:1px solid var(--ic-bezel);border-radius:var(--ic-tube-r);
+  box-shadow:inset 0 0 56px var(--ic-tube),inset 0 0 14px var(--ic-tube),
+    0 0 0 5px var(--ic-housing),0 0 0 6px var(--ic-bezel),0 14px 30px -8px rgba(0,0,0,.9);
   color:var(--ic-ink);font-family:var(--ic-serif);font-size:15.5px;line-height:1.65;
 }
-.ic-card.is-current{border-color:var(--ic-edge-on)}
-/* The opening question card is green, so it reads as a different kind of card.
-   Its edge is a thin, softly lit line, like a trace on a green CRT: the border
-   itself goes clear and a slightly blurred 1px line sits in its place with a faint
-   phosphor glow (index.html green theme). An accent, not a focal point. */
-.ic-situation.is-current{border-color:transparent}
-.ic-situation.is-current::after{
-  /* Kept inside the card's padding box (inset 0) and drawn with shadows, which
-     never count as overflow, so the card's height and fit are unchanged. */
-  content:"";position:absolute;inset:0;pointer-events:none;border-radius:12px;
-  filter:blur(.8px);
-  box-shadow:
-    0 0 0 1px rgba(0,200,0,.8),
-    0 0 3px 1px rgba(0,200,0,.25),
-    inset 0 0 4px rgba(0,200,0,.12);
+/* The lit bezel: the current card's glowing border, ring and halo, on a layer
+   of its own so it can flicker by opacity alone. Shadows on a layer at inset 0
+   cover the border exactly and never count as overflow. */
+.ic-card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:0;
+  box-shadow:0 0 0 1px var(--ic-bezel-on),0 0 0 5px var(--ic-housing),0 0 0 6px var(--ic-bezel-on),0 0 30px -4px var(--ic-halo);
 }
-/* .72 is the lowest that keeps the amber counter at AA contrast. The button
-   is never dimmed. */
+.ic-card.is-current::before{opacity:1}
+/* .72 keeps every text colour, the amber counter included, above AA. The
+   button is never dimmed. */
 .ic-card:not(.is-current)>:not(.ic-go){opacity:.72}
 
-/* Counter: top-right, level with the title, so every title starts at the
-   same height whether or not its card has a counter. */
+/* Power-on: when a card becomes current, a dim amber line opens across the
+   glass and fades (index.html crt-off, reversed). It is a layer over the
+   text that ends fully transparent; the text is there from the first frame. */
+.ic-card::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:0;border-radius:inherit;
+  background:linear-gradient(to bottom,transparent,var(--ic-power) 50%,transparent);
+  --ic-power:rgba(255,160,60,.16);
+}
+
+/* The opening question is the same screen in the home page's green theme:
+   green bezel, glass and options. Its title keeps the cards' amber phosphor. */
+.ic-situation{
+  --ic-bloom:rgba(0,200,0,.05);
+  --ic-bezel:rgba(0,160,0,.2);
+  --ic-bezel-on:rgba(0,160,0,.5);
+  --ic-glare:rgba(160,232,160,.04);
+  --ic-halo:rgba(0,160,0,.3);
+  --ic-row:rgba(0,200,0,.022);
+  --ic-row-edge:rgba(0,200,0,.18);
+  --ic-row-on:rgba(0,200,0,.08);
+  --ic-row-edge-on:rgba(0,200,0,.45);
+  --ic-row-rule:#00c800;
+  --ic-row-ink:#a0e8a0;       /* index.html body.green --p-text */
+}
+.ic-situation::after{--ic-power:rgba(100,255,100,.12)}
+
+/* Counter: a terminal readout, top-right, level with the title, so every
+   title starts at the same height whether or not its card has a counter. */
 .ic-n{
-  position:absolute;top:calc(var(--ic-pad-top) + 6px);right:var(--ic-pad-x);
-  font-family:var(--ic-sans);font-size:11.5px;font-weight:600;letter-spacing:.14em;line-height:1.4;
-  color:var(--ic-accent);font-variant-numeric:tabular-nums;
+  position:absolute;top:calc(var(--ic-pad-top) + 5px);right:var(--ic-pad-x);
+  font-family:var(--ic-mono);font-size:13px;letter-spacing:.16em;line-height:1.4;
+  color:var(--ic-accent);font-variant-numeric:tabular-nums;text-shadow:var(--ic-readout-glow);
 }
 .ic-n + .ic-title,.ic-n + .ic-knows{padding-right:44px}
 .ic-title,.ic-knows{
   font-family:var(--ic-serif);font-size:20px;font-weight:700;line-height:1.3;text-wrap:balance;
-  color:var(--ic-ink-strong);
+  color:var(--ic-phosphor);text-shadow:var(--ic-title-glow);
 }
 .ic-resolves{color:var(--ic-ink-soft)}
 
@@ -125,47 +174,82 @@
   .ic-title,.ic-knows{font-size:22px}
 }
 
-/* Situation options. The selected one takes an amber border and left rule. */
+/* Situation options: the home page's link rows (.ci). The selected one keeps
+   the lit left rule. */
 .ic-options{display:flex;flex-direction:column;gap:8px}
 .ic-opt{
+  position:relative;overflow:hidden;
   display:block;width:100%;text-align:left;cursor:pointer;
-  padding:10px 12px;font:inherit;line-height:1.4;
-  color:var(--ic-ink);background:var(--ic-surface);
-  border:1px solid var(--ic-edge);border-radius:6px;
+  padding:10px 12px 10px 14px;font:inherit;line-height:1.4;
+  color:var(--ic-ink);background:var(--ic-row);
+  border:1px solid var(--ic-row-edge);border-radius:0;
 }
-.ic-opt[aria-checked="true"]{border-color:var(--ic-accent);border-left-width:3px;padding-left:10px}
+.ic-opt::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--ic-row-rule);transform:scaleY(0);
+}
+.ic-opt[aria-checked="true"]{color:var(--ic-row-ink,var(--ic-phosphor));background:var(--ic-row-on);border-color:var(--ic-row-edge-on)}
+.ic-opt[aria-checked="true"]::before{transform:scaleY(1)}
 @media(hover:hover){
-  .ic-opt:hover{border-color:var(--ic-rule-strong)}
-  .ic-opt[aria-checked="true"]:hover{border-color:var(--ic-accent)}
+  .ic-opt:hover{background:var(--ic-row-on);border-color:var(--ic-row-edge-on)}
+  .ic-opt:hover::before{transform:scaleY(1)}
 }
 
-/* Terminal control and the button under the deck: the site's amber. */
+/* Terminal control and the button under the deck: amber, in the readout type. */
 .ic-go,.ic-open{
   align-self:flex-start;margin-top:4px;cursor:pointer;white-space:nowrap;
-  padding:9px 22px;border:1px solid var(--ic-accent);border-radius:6px;
-  font-family:var(--ic-sans);font-size:14px;font-weight:600;line-height:1.85;
+  padding:9px 20px;border:1px solid var(--ic-accent);border-radius:2px;
+  font-family:var(--ic-mono);font-size:14px;letter-spacing:.14em;line-height:1.85;text-transform:uppercase;
   color:var(--ic-ink-on-accent);background:var(--ic-accent);
 }
-.ic-go:hover,.ic-open:hover{background:transparent;color:var(--ic-accent)}
+.ic-go:hover,.ic-open:hover{background:transparent;color:var(--ic-accent);text-shadow:var(--ic-readout-glow)}
 .ic-open:focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
 
-/* Chevrons: pointer devices only, hidden until the deck is hovered or a
-   chevron has keyboard focus. */
+/* Chevrons: small square terminal keys, pointer devices only, hidden until
+   the deck is hovered or a chevron has keyboard focus. */
 .ic-chev{
   position:absolute;top:calc(50% - 12px);transform:translateY(-50%);z-index:1;
   display:none;align-items:center;justify-content:center;
-  width:40px;height:40px;padding:0 0 3px;cursor:pointer;opacity:0;
-  font-family:var(--ic-sans);font-size:22px;line-height:1;
-  color:var(--ic-ink);background:var(--ic-raised);
-  border:2px solid var(--ic-edge);border-radius:50%;
+  width:36px;height:36px;padding:0 0 2px;cursor:pointer;opacity:0;
+  font-family:var(--ic-mono);font-size:22px;line-height:1;
+  color:var(--ic-ink);background:var(--ic-glass);
+  border:1px solid var(--ic-row-edge-on);border-radius:2px;
   box-shadow:0 2px 8px rgba(0,0,0,.6);
 }
-.ic-chev:hover{color:var(--ic-accent);border-color:var(--ic-accent)}
+.ic-chev:hover{color:var(--ic-accent);border-color:var(--ic-accent);text-shadow:var(--ic-readout-glow)}
 .ic-prev{left:4px}.ic-next{right:4px}
 .ic-chev:disabled{visibility:hidden}
 @media(hover:hover) and (pointer:fine){
   .ic-chev{display:flex}
   .ic-deck:hover .ic-chev,.ic-chev:focus-visible{opacity:1}
+}
+
+/* Motion: only when the reader allows it. Without it, the design above is
+   the whole design: cards are lit or dimmed, with no change in between. */
+@media(prefers-reduced-motion:no-preference){
+  .ic-card::before{transition:opacity .25s ease}
+  .ic-card.is-current::after{animation:ic-power-on .45s ease-out}
+  /* The lit bezel flickers like the nav brand: brief dips on a slow step
+     cycle, never more than one dip a second. */
+  .ic-card.is-current::before{animation:ic-bezel-flicker 7s step-end infinite}
+  .ic-opt{transition:background .2s,border-color .2s,color .2s,transform .2s}
+  .ic-opt::before{transition:transform .2s}
+  @media(hover:hover){.ic-opt:hover{transform:translateX(3px)}}
+}
+@keyframes ic-power-on{
+  0%  {opacity:1;transform:scaleY(.02)}
+  45% {opacity:1;transform:scaleY(1)}
+  100%{opacity:0;transform:scaleY(1)}
+}
+@keyframes ic-bezel-flicker{   /* _layouts/article.html brand-flicker, retimed */
+  0%,100%{opacity:1}
+  22%{opacity:.55}
+  22.6%{opacity:1}
+  58%{opacity:.8}
+  58.5%{opacity:.4}
+  59.2%{opacity:1}
+  86%{opacity:.7}
+  86.5%{opacity:1}
 }
 
 /* The article. It starts collapsed (hidden="until-found", set by the script);

@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
-const { ROOT, CARDED_URL, paths, siteColours, settle } = require('./helpers');
+const { ROOT, CARDED_URL, paths, deckChannels, settle } = require('./helpers');
 
 async function selectPath(page, id) {
   await page.goto(id ? `${CARDED_URL}?path=${id}` : CARDED_URL);
@@ -90,46 +90,81 @@ for (const width of [375, 414, 768, 1280]) {
   });
 }
 
-const PROPS = ['color', 'background-color', 'border-top-color', 'border-right-color', 'border-bottom-color', 'border-left-color', 'outline-color', 'box-shadow', 'text-decoration-color'];
+const PROPS = ['color', 'background-color', 'border-top-color', 'border-right-color', 'border-bottom-color', 'border-left-color', 'outline-color', 'box-shadow', 'text-shadow', 'text-decoration-color'];
+
+// A colour is in the deck's palette when its channels are a site colour (any
+// alpha), or it is a black shadow, or it is fully transparent.
+function inPalette(c, channels) {
+  const m = /^rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)$/.exec(c);
+  if (!m) return false;
+  if (m[4] !== undefined && Number(m[4]) === 0) return true;
+  return channels.has(`${m[1]}, ${m[2]}, ${m[3]}`) || (m[1] === '0' && m[2] === '0' && m[3] === '0' && m[4] !== undefined);
+}
 
 for (const scheme of ['light', 'dark']) {
-  test(`${scheme} scheme: every colour on the deck is from the site's token set`, async ({ page }) => {
+  test(`${scheme} scheme: every colour on the deck is from the site's palette`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: scheme });
     await page.goto(`${CARDED_URL}?path=pilot&card=1`);
     await page.locator('#ic-deck').hover();
-    const allowed = siteColours();
+    const channels = deckChannels();
     const used = await page.evaluate((props) => {
       const out = new Set();
       const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-head *, #ic-open, #ic-published, #ic-published *');
       for (const el of els) {
-        const cs = getComputedStyle(el);
-        for (const p of props) {
-          const v = cs.getPropertyValue(p);
-          for (const m of v.matchAll(/rgba?\([^)]*\)/g)) out.add(m[0]);
+        for (const pseudo of [null, '::before', '::after']) {
+          const cs = getComputedStyle(el, pseudo);
+          for (const p of props) for (const m of cs.getPropertyValue(p).matchAll(/rgba?\([^)]*\)/g)) out.add(m[0]);
         }
       }
       return [...out];
     }, PROPS);
-    // Fully transparent values and black drop shadows (as on the site's menu) are allowed.
-    const bad = used.filter((c) => !allowed.has(c) && !/rgba\(\d+, \d+, \d+, 0\)/.test(c) && !/^rgba\(0, 0, 0, 0?\.\d+\)$/.test(c));
-    expect(bad).toEqual([]);
+    expect(used.filter((c) => !inPalette(c, channels))).toEqual([]);
   });
 }
 
-test('deck CSS contains no colour literals outside the site token set, and no web fonts of its own', async () => {
+test('deck CSS contains no colour literals outside the site palette, and no web fonts of its own', async () => {
   const css = fs.readFileSync(path.join(ROOT, 'assets/css/insight-cards.css'), 'utf8');
-  const allowed = siteColours();
-  const toRgb = (h) => { if (h.length === 3) h = h.split('').map((c) => c + c).join(''); return `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4), 16)})`; };
-  // The situation card's edge (owner direction) uses the home page's green theme.
-  const green = /body\.green\{([^}]*)\}/.exec(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'))[1];
-  for (const m of green.matchAll(/#([0-9a-f]{6})\b/gi)) allowed.add(toRgb(m[1].toLowerCase()));
-  const greenRgb = new Set([...green.matchAll(/:\s*(\d+,\d+,\d+);/g)].map((m) => m[1]));
-  const hexes = [...css.matchAll(/#([0-9a-f]{3}|[0-9a-f]{6})\b/gi)].map((m) => m[1]);
-  expect(hexes.filter((h) => !allowed.has(toRgb(h.toLowerCase())))).toEqual([]);
-  const colourFns = [...css.matchAll(/(?:rgba?|hsla?)\([^)]*\)/g)].map((m) => m[0]);
-  const ok = (c) => /^rgba\(0,0,0,0?\.\d+\)$/.test(c) || greenRgb.has((/^rgba\((\d+,\d+,\d+),0?\.\d+\)$/.exec(c) || [])[1]);
-  expect(colourFns.filter((c) => !ok(c)), 'only black shadows and the green theme may use rgba()').toEqual([]);
+  const channels = deckChannels();
+  const hexes = [...css.matchAll(/#([0-9a-f]{3}|[0-9a-f]{6})\b/gi)].map((m) => {
+    let h = m[1].toLowerCase();
+    if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+    return `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4), 16)})`;
+  });
+  expect(hexes.filter((c) => !inPalette(c, channels))).toEqual([]);
+  const fns = [...css.matchAll(/(?:rgba?|hsla?)\([^)]*\)/g)].map((m) => m[0].replace(/\s/g, '').replace(/,/g, ', ').replace(/, 0?\./, ', 0.'));
+  expect(fns.filter((c) => !inPalette(c, channels)), 'rgba() only over site colours or black').toEqual([]);
   expect(css).not.toMatch(/@import|@font-face|fonts\.googleapis/);
   const fams = [...css.matchAll(/font-family:\s*([^;}]+)/g)].map((m) => m[1]);
-  for (const f of fams) expect(f).toMatch(/var\(--ic-(serif|sans)\)/);
+  for (const f of fams) expect(f).toMatch(/var\(--ic-(serif|sans|mono)\)/);
+});
+
+test('every animation and transition is off under reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(`${CARDED_URL}?path=pilot&card=1`);
+  await page.locator('.ic-opt').first().hover();
+  const moving = await page.evaluate(() => {
+    const out = [];
+    for (const el of document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-open')) {
+      for (const pseudo of [null, '::before', '::after']) {
+        const cs = getComputedStyle(el, pseudo);
+        if (cs.animationName !== 'none' || cs.transitionDuration.split(',').some((d) => parseFloat(d) > 0)) out.push(`${el.className}${pseudo || ''}`);
+      }
+    }
+    return out;
+  });
+  expect(moving).toEqual([]);
+});
+
+test('with motion allowed, only the current card flickers, at most one dip a second', async ({ page }) => {
+  await page.goto(`${CARDED_URL}?path=pilot&card=1`);
+  const anims = await page.locator('.ic-card').evaluateAll((els) => els.map((e) => [e.classList.contains('is-current'), getComputedStyle(e, '::before').animationName]));
+  for (const [current, name] of anims) expect(name).toBe(current ? 'ic-bezel-flicker' : 'none');
+  // Each dip in the keyframes is a separate drop below full brightness; the cycle must allow no more than one per second.
+  const css = fs.readFileSync(path.join(ROOT, 'assets/css/insight-cards.css'), 'utf8');
+  const secs = parseFloat(/ic-bezel-flicker\s+([\d.]+)s/.exec(css)[1]);
+  const frames = /@keyframes ic-bezel-flicker\{([\s\S]*?)\n\}/.exec(css)[1];
+  const dips = [...frames.matchAll(/([\d.]+)%\{opacity:([\d.]+)\}/g)].map((m) => [parseFloat(m[1]), parseFloat(m[2])]).sort((a, b) => a[0] - b[0]);
+  let n = 0, low = false;
+  for (const [, o] of dips) { if (o < 1 && !low) n++; low = o < 1; }
+  expect(n / secs).toBeLessThanOrEqual(1);
 });

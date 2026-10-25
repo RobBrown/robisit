@@ -27,6 +27,8 @@ exclude:
   - playwright-report/
   - _site-fixtures/
   - ops/
+  - docs/
+  - card-change/
 
 # Collections for articles
 collections:

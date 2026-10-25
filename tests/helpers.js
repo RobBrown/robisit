@@ -31,6 +31,22 @@ function siteColours() {
   return set;
 }
 
+// The deck's palette (docs/insight-cards-design.md): the article's hex colours
+// plus the home page's amber and green themes (index.html), as "r, g, b"
+// channel triples, so a colour at any alpha can be checked against it.
+function deckChannels() {
+  const set = new Set([...siteColours()].map((c) => /\((.*)\)/.exec(c)[1]));
+  const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  for (const theme of home.matchAll(/body(?:\.green)?\{([^}]*)\}/g)) {
+    for (const m of theme[1].matchAll(/#([0-9a-f]{6})\b/gi)) {
+      const h = m[1].toLowerCase();
+      set.add(`${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4), 16)}`);
+    }
+    for (const m of theme[1].matchAll(/:\s*(\d+),\s*(\d+),\s*(\d+);/g)) set.add(`${m[1]}, ${m[2]}, ${m[3]}`);
+  }
+  return set;
+}
+
 // Wait until the rail has stopped moving.
 async function settle(page) {
   await page.waitForFunction(() => new Promise((resolve) => {
@@ -77,4 +93,4 @@ async function captureEvents(page) {
   });
 }
 
-module.exports = { ROOT, CARDED_URL, CARDED_FILE, cards, insightById, defaultOrder, paths, N, siteColours, settle, currentIndex, captureEvents, atTopOrEnd };
+module.exports = { ROOT, CARDED_URL, CARDED_FILE, cards, insightById, defaultOrder, paths, N, siteColours, deckChannels, settle, currentIndex, captureEvents, atTopOrEnd };
