@@ -30,6 +30,12 @@ Read-aloud narration with a synchronized phrase underline on insight cards. Ever
 - **Writes are atomic per card.** All three files are written to temp names and renamed only after every validation passes, so a failing card leaves nothing behind.
 - **The cost table** shows plain-text characters and SSML characters, since Google bills on the SSML sent.
 
+- **Narration is generated in CI (owner request, 2026-10-24).** Running `npm run narrate` on a laptop broke the site rule "push markdown, site updates". `.github/workflows/narrate.yml` runs on every push to `main` that touches a post or the narration code (and on manual dispatch, with optional force). It runs `narrate --check`, then `narrate --all`. It commits only `assets/narration` and `_includes/narration`, as github-actions[bot], then requests a Pages build: pushes made with `GITHUB_TOKEN` don't start one.
+  - **Keyless auth.** Workload Identity Federation: pool `github`, OIDC provider `robisit` in `robisit-tts`, accepting only `assertion.repository == 'RobBrown/robisit' && assertion.ref == 'refs/heads/main'`. It maps to `narration-ci@robisit-tts.iam.gserviceaccount.com`, whose only project role is `roles/serviceusage.serviceUsageConsumer`. The provider and account names are repo variables, not secrets. No key exists anywhere.
+  - **Failures never block publishing.** Generation failures become a warning; the article is already live without Play buttons.
+  - **Verified end to end on 2026-10-24.** One card's files were removed. The dispatched run made 1 API call and committed the three files (732c924). The Pages build ran, and the live page showed all five buttons.
+  - **The cost of committing to `main`:** the owner must pull before their next push.
+
 ### Where the files live
 
 - **The phrase fragment lives at `_includes/narration/<slug>/<cardId>.html`, not under `assets/`.** Jekyll 3.10 can only include from `_includes/` (and `include_relative` rejects `..`). The MP3 and the metadata JSON live under `assets/narration/<slug>/` as specified. The fragment file is wrapped in `{% raw %}` so card text can never be read as Liquid.
