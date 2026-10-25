@@ -8,8 +8,9 @@
  *   assets/narration/<slug>/<cardId>.json   metadata: hash, voice, phrase timings
  *   _includes/narration/<slug>/<cardId>.html  title and body with phrase spans
  *
- * A card is skipped when its metadata hash matches and its audio and fragment
- * exist, so re-running on unchanged cards makes no API calls. Every phrase
+ * A card is skipped when its metadata hash matches and its audio exists, so
+ * re-running on unchanged cards makes no API calls. A missing or outdated
+ * fragment on a skipped card is rebuilt locally; it needs no audio. Every phrase
  * start comes from Google's timepoints and is validated against the measured
  * audio duration; on any violation nothing is written for that card.
  */
@@ -64,8 +65,11 @@ function prepare(card, opts) {
   return { phrases, ssml: seg.buildSsml(phrases), fragment, hash };
 }
 
+// Jekyll renders includes as Liquid, so the fragment is wrapped in raw tags.
+const fragmentFile = (fragment) => `{% raw %}${fragment}{% endraw %}`;
+
 function isCurrent(p, hash) {
-  if (!fs.existsSync(p.json) || !fs.existsSync(p.mp3) || !fs.existsSync(p.html)) return false;
+  if (!fs.existsSync(p.json) || !fs.existsSync(p.mp3)) return false;
   try { return JSON.parse(fs.readFileSync(p.json, 'utf8')).hash === hash; } catch (e) { return false; }
 }
 
@@ -133,7 +137,14 @@ async function narrate(slug, opts = {}) {
       row.chars = prep.phrases.reduce((s, x) => s + x.text.length, 0);
       row.ssmlChars = prep.ssml.length;
       row.phrases = prep.phrases.length;
-      if (!opts.force && isCurrent(p, prep.hash)) { row.status = 'skipped'; row.note = 'unchanged'; continue; }
+      if (!opts.force && isCurrent(p, prep.hash)) {
+        row.status = 'skipped';
+        row.note = 'unchanged';
+        // The fragment depends only on the text, so it can be rebuilt without a call.
+        const html = fragmentFile(prep.fragment);
+        if (!fs.existsSync(p.html) || fs.readFileSync(p.html, 'utf8') !== html) { writeAll([[p.html, html]]); row.note = 'unchanged; fragment rewritten'; }
+        continue;
+      }
       if (opts.dryRun) { row.status = 'would generate'; continue; }
       if (!checked) {
         const check = await provider.checkCredentials(voice);
@@ -153,7 +164,7 @@ async function narrate(slug, opts = {}) {
         cardId: card.id, hash: prep.hash, voice: voice.name, segmentation: seg.SEGMENTATION_VERSION,
         audio: p.url, duration: info.duration, phrases: timed,
       };
-      writeAll([[p.mp3, audioBuffer], [p.html, prep.fragment], [p.json, `${JSON.stringify(meta, null, 2)}\n`]]);
+      writeAll([[p.mp3, audioBuffer], [p.html, fragmentFile(prep.fragment)], [p.json, `${JSON.stringify(meta, null, 2)}\n`]]);
       row.status = 'processed';
       row.duration = info.duration;
     } catch (e) {
