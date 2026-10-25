@@ -65,7 +65,15 @@
 .ic-tab[aria-selected="false"]:hover{color:var(--ic-ink)}
 .ic-tab[aria-selected="false"]:hover::before{box-shadow:inset 0 0 0 1px var(--ic-accent)}
 .ic-tab:focus-visible{outline:2px solid var(--ic-accent);outline-offset:4px}
-.ic-open{display:block;margin-top:2px}
+/* The button under the deck: a text link in the switch's readout type,
+   amber like the lit TL;DR tab. */
+.ic-open{
+  display:block;margin:2px 0 0;padding:6px 0;cursor:pointer;white-space:nowrap;
+  font-family:var(--ic-mono);font-size:13px;letter-spacing:.18em;line-height:1.4;text-transform:uppercase;
+  color:var(--ic-accent);text-shadow:var(--ic-readout-glow);background:none;border:0;border-radius:2px;
+  text-decoration:underline;text-decoration-color:transparent;text-underline-offset:5px;text-decoration-thickness:1px;
+}
+.ic-open:hover{text-decoration-color:currentColor}
 .ic-open[hidden]{display:none}
 .ic-published{
   margin:12px 0 0;font-family:var(--ic-sans);font-size:14px;letter-spacing:.01em;line-height:1.4;
@@ -78,6 +86,7 @@
   .ic-page{padding-top:16px}
   .ic-page header{margin-bottom:20px}
   .ic-switch{gap:22px;margin-bottom:8px;letter-spacing:.14em}
+  .ic-open{letter-spacing:.14em}
 }
 
 /* Deck: a native scroller spanning the column plus its gutters. The current
@@ -213,14 +222,14 @@
   .ic-opt:hover::before{transform:scaleY(1)}
 }
 
-/* Terminal control and the button under the deck: amber, in the readout type. */
-.ic-go,.ic-open{
+/* Terminal control: amber, in the readout type. */
+.ic-go{
   align-self:flex-start;margin-top:4px;cursor:pointer;white-space:nowrap;
   padding:9px 20px;border:1px solid var(--ic-accent);border-radius:2px;
   font-family:var(--ic-mono);font-size:14px;letter-spacing:.14em;line-height:1.85;text-transform:uppercase;
   color:var(--ic-ink-on-accent);background:var(--ic-accent);
 }
-.ic-go:hover,.ic-open:hover{background:transparent;color:var(--ic-accent);text-shadow:var(--ic-readout-glow)}
+.ic-go:hover{background:transparent;color:var(--ic-accent);text-shadow:var(--ic-readout-glow)}
 .ic-open:focus-visible{outline:2px solid var(--ic-accent);outline-offset:3px}
 
 /* Chevrons: small square terminal keys, pointer devices only, hidden until
@@ -252,6 +261,7 @@
   .ic-card.is-current::before{animation:ic-bezel-flicker 7s step-end infinite}
   .ic-opt{transition:background .2s,border-color .2s,color .2s,transform .2s}
   .ic-tab,.ic-tab::before{transition:color .2s,text-shadow .2s,background .2s,box-shadow .2s}
+  .ic-open{transition:text-decoration-color .2s}
   .ic-opt::before{transition:transform .2s}
   @media(hover:hover){.ic-opt:hover{transform:translateX(3px)}}
 }
