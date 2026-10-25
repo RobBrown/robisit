@@ -149,6 +149,7 @@
   }
 
   function select(v) {
+    sw.setAttribute('data-view', v);
     for (var k in tabs) {
       tabs[k].setAttribute('aria-selected', k === v ? 'true' : 'false');
       tabs[k].tabIndex = k === v ? 0 : -1;

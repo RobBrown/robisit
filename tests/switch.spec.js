@@ -1,6 +1,6 @@
 // The TL;DR / Full article view switch (owner brief, 2026-10-25).
 const { test, expect } = require('@playwright/test');
-const { CARDED_URL, cards, N, settle, currentIndex, atTopOrEnd, captureEvents } = require('./helpers');
+const { CARDED_URL, settle, currentIndex, atTopOrEnd, captureEvents } = require('./helpers');
 
 const tldr = (page) => page.getByRole('tab', { name: /^TL;DR/ });
 const full = (page) => page.getByRole('tab', { name: 'Full article' });
@@ -20,12 +20,12 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
 });
 
-test('the heading is a two-tab switch; TL;DR, with the card count, is the default view', async ({ page }) => {
+test('the heading is a two-tab switch; TL;DR is the default view', async ({ page }) => {
   await page.goto(CARDED_URL);
   await expect(page.locator('#ic-switch')).toHaveAttribute('role', 'tablist');
   await expect(page.getByRole('tab')).toHaveCount(2);
-  await expect(tldr(page)).toHaveAccessibleName(`TL;DR ${N} cards`);
-  await expect(tldr(page)).toHaveText(`TL;DR · ${N} cards`);
+  await expect(page.getByRole('tab')).toHaveText(['TL;DR', 'Full article']);
+  await expect(page.locator('#ic-switch')).toHaveAttribute('data-view', 'tldr');
   await showing(page, 'tldr');
   await expect(page.getByRole('tabpanel', { name: /^TL;DR/ })).toHaveAttribute('id', 'ic-deck');
   expect(hash(page)).toBe('#tldr');
@@ -39,6 +39,7 @@ test('Full article shows the article, puts the switch at the top and focuses the
   await expect(page.locator('#ic-article')).toBeFocused();
   await atTopOrEnd(page, '#ic-switch');
   expect(hash(page)).toBe('#article');
+  await expect(page.locator('#ic-switch')).toHaveAttribute('data-view', 'article'); // the lit segment follows
 });
 
 test('switching back from deep in the article puts the switch at the top', async ({ page }) => {
