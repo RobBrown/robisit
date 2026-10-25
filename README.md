@@ -19,8 +19,9 @@ or editing a post's `cards` block, run:
 
     npm run narrate -- <post-slug>
 
-It calls Google Cloud Text-to-Speech (Application Default Credentials; see
-`SETUP.md` if the credentials check fails) and writes audio and timings to
+It calls Google Cloud Text-to-Speech with Application Default Credentials (if
+the credentials check fails, it stops and writes `SETUP.md` with the exact
+`gcloud` steps) and writes audio and timings to
 `assets/narration/<slug>/` and phrase markup to `_includes/narration/<slug>/`.
 Commit those files. Unchanged cards are skipped with no API call. A card whose
 text changed after generation simply shows no Play button until you re-run it.

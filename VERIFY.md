@@ -10,7 +10,7 @@ Safari on a real iPhone, at
 |---|-------|----------|
 | 1 | Autoplay policy after a user gesture. Tap Play on card 5. | Audio starts on the first tap, with no second tap needed. The button shows Pause and the first phrase is underlined. |
 | 2 | Autoplay policy on a cold load. Open the URL fresh and wait 10 s without touching anything. | Nothing plays. |
-| 3 | Silent switch on, ringer muted. Tap Play. | Record what happens. Web audio in iOS Safari plays through the mute switch in recent iOS versions, so audio is expected. If it's silent, the underline should still advance (it follows `currentTime`), or the button should return to Play with no stuck state. Neither result is a failure, but note which one happens. |
+| 3 | Silent switch on, ringer muted. Tap Play. | Record what happens. An HTML `<audio>` element in iOS Safari normally plays with the silent switch on (unlike the Web Audio API), so audio is expected. If it's silent, the underline should still advance (it follows `currentTime`), or the button should return to Play with no stuck state. Neither result is a failure, but note which one happens. |
 | 4 | Silent switch toggled during playback. | No stuck underline, and the button state matches what you hear. |
 | 5 | Background tab. Start narration, switch to another Safari tab for 10 s, then come back. | iOS may pause audio in the background. On return, the underline matches the audio position, and Play/Pause shows the true state (Play if iOS paused it). |
 | 6 | Lock the screen during playback, then unlock. | Same as 5. No second sound starts, and the underline matches `currentTime` after unlock. |
