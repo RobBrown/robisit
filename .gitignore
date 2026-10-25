@@ -12,3 +12,9 @@ test-results/
 playwright-report/
 .jekyll-cache/
 _site-fixtures/
+# Google Cloud credentials: narration uses Application Default Credentials only.
+application_default_credentials.json
+*service-account*.json
+*-credentials.json
+.gcloud/
+*.tmp-*
