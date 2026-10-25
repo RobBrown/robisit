@@ -1,11 +1,13 @@
 /* TL;DR card deck (Insight Cards, PRD v2.1). Loaded only on posts with a valid
-   cards block. Every colour is one of the site's own from _layouts/article.html;
-   the only others are black drop shadows. */
+   cards block. Every colour is one of the site's own from _layouts/article.html,
+   except the situation card's green, which is the home page's green theme; the
+   only others are black drop shadows. */
 :root{
   --ic-surface:#14100a;       /* .toc, .menu-dropdown */
   --ic-raised:#1e1a14;        /* subscribe button, menu hover */
   --ic-edge:#3d3529;          /* byline and footer dots */
   --ic-edge-on:#c06800;       /* nav brand (dark amber) */
+  --ic-edge-on-start:#00a800; /* index.html green theme --p-dim, amber's #c06800 counterpart */
   --ic-ink:#d4cfc6;           /* body text */
   --ic-ink-strong:#eae6df;    /* h1, h2 */
   --ic-ink-soft:#b8b09e;      /* .body pre code */
@@ -74,6 +76,8 @@
   color:var(--ic-ink);font-family:var(--ic-serif);font-size:15.5px;line-height:1.65;
 }
 .ic-card.is-current{border-color:var(--ic-edge-on)}
+/* The opening question card is green, so it reads as a different kind of card. */
+.ic-situation.is-current{border-color:var(--ic-edge-on-start)}
 /* .72 is the lowest that keeps the amber counter at AA contrast. The button
    is never dimmed. */
 .ic-card:not(.is-current)>:not(.ic-go){opacity:.72}
