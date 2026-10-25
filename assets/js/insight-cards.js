@@ -55,6 +55,7 @@
       c.querySelector('.ic-n').textContent = counter(i) + '/' + total;
     });
     radios.forEach(function (r) { r.setAttribute('aria-checked', r.getAttribute('data-path') === id ? 'true' : 'false'); });
+    changed();
     return true;
   }
 
@@ -97,7 +98,17 @@
     }
     if (isInsight(c)) trackEvent('cards_reached', { card: counter(i), path: path || 'default' });
     updateURL();
+    changed();
   }
+
+  /* Narration hooks (insight-cards-narration.js): 'ic:change' tells it the
+     current card may have changed; it sends 'ic:track' events, recorded here
+     with the card's position and the path. */
+  function changed() { deck.dispatchEvent(new CustomEvent('ic:change', { detail: { card: rail.children[idx] } })); }
+  deck.addEventListener('ic:track', function (e) {
+    var i = [].indexOf.call(rail.children, e.detail.card);
+    if (i >= 0) trackEvent(e.detail.name, { card: counter(i), path: path || 'default' });
+  });
 
   function updateURL() {
     var q = new URLSearchParams(location.search);
