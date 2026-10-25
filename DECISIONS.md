@@ -13,7 +13,11 @@ Read-aloud narration with a synchronized phrase underline on insight cards. Ever
 
 ### Provider and generation
 
-- **Neural2-D returns mark timepoints.** Google's v1beta1 reference documents `enableTimePointing: ["SSML_MARK"]` and `Timepoint {markName, timeSeconds}`, but no page says which voice families support marks. A probe call settled it: `en-US-Neural2-D` returned a timepoint for every mark. The voice stays `en-US-Neural2-D` and is set in one place, `scripts/narration/config.js`.
+- **Neural2-D returns mark timepoints.** Google's v1beta1 reference documents `enableTimePointing: ["SSML_MARK"]` and `Timepoint {markName, timeSeconds}`, but no page says which voice families support marks. A probe call settled it: `en-US-Neural2-D` returned a timepoint for every mark. The voice is set in one place, `scripts/narration/config.js`.
+- **The voice is now `en-US-Casual-K` (owner choice, 2026-10-24),** replacing `en-US-Neural2-D`. Every family was probed for mark timepoints on 2026-10-24.
+  - **Return them:** Neural2, Wavenet, News, Casual, Standard.
+  - **Don't:** Studio ("`<mark>` tags are not currently supported"), Chirp HD (rejects the request) and Chirp 3 HD (accepts SSML but returns no timepoints). None of those can drive the underline.
+  - **Regeneration:** the voice is part of the cache key, so `npm run narrate` regenerated all five cards (4,753 SSML characters).
 - **Google is called over REST with `google-auth-library`, not `@google-cloud/text-to-speech`.** It's one small dev dependency, and it reads ADC, including the quota project, automatically. Only `scripts/narration/synthesize.js` imports it.
 - **The credentials checkpoint** resolves an ADC token, then lists `en-US` voices on v1beta1. That proves the API is enabled and the voice exists, and it costs nothing. It passed on this machine (quota project `robisit-tts`), so no `SETUP.md` was needed. The script writes one with the exact `gcloud` commands if the check ever fails.
 - **Output format.** MP3 at 24 kHz. Google has no channel parameter, so the generator checks every frame header for single-channel mode and fails if it isn't.

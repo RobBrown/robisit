@@ -5,7 +5,7 @@
 'use strict';
 
 module.exports = {
-  voice: { name: 'en-US-Neural2-D', languageCode: 'en-US' },
+  voice: { name: 'en-US-Casual-K', languageCode: 'en-US' },
   // MP3 plays everywhere, including iOS Safari. Google returns mono for these voices.
   outputFormat: { audioEncoding: 'MP3', sampleRateHertz: 24000, channels: 1 },
 };
