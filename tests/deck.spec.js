@@ -70,7 +70,7 @@ test('terminal card shows counter, knows, resolves and one control', async ({ pa
   await expect(t.locator('.ic-n')).toHaveText(`${N}/${N}`);
   await expect(t.locator('.ic-knows')).toHaveText(cards.terminal.knows);
   await expect(t.locator('.ic-resolves')).toHaveText(cards.terminal.resolves);
-  await expect(t.getByRole('button')).toHaveText(['Read the article']);
+  await expect(t.getByRole('button')).toHaveText(['Read The Full Article']);
 });
 
 test('counter reads n/N at the top of each card, situation excluded from N', async ({ page }) => {

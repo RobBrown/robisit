@@ -6,7 +6,7 @@ const { ROOT, CARDED_URL, CARDED_FILE, cards } = require('./helpers');
 
 const SITE = path.join(ROOT, '_site');
 
-test('carded post renders the site header, the TL;DR deck, the Read the article button and the collapsed article', async ({ page }) => {
+test('carded post renders the site header, the TL;DR deck, the Read The Full Article button and the collapsed article', async ({ page }) => {
   await page.goto(CARDED_URL);
   const masthead = page.locator('article > header');
   await expect(masthead.locator('h1')).toHaveText(/Hello, World/);
@@ -19,7 +19,7 @@ test('carded post renders the site header, the TL;DR deck, the Read the article 
   // Owner direction (2026-10-25): the article starts collapsed behind a
   // button under the deck, styled like the terminal control.
   await expect(page.locator('#ic-open')).toBeVisible();
-  await expect(page.locator('#ic-open')).toHaveText('Read the article');
+  await expect(page.locator('#ic-open')).toHaveText('Read The Full Article');
   await expect(page.locator('#ic-open')).toHaveAttribute('aria-expanded', 'false');
   await expect(page.locator('#ic-article')).toBeHidden();
   await expect(page.locator('#ic-article')).toHaveAttribute('hidden', 'until-found');

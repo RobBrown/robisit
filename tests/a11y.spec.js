@@ -60,7 +60,7 @@ test('ACC-01: keyboard only — Tab reaches rail, options, chevrons and terminal
   }
   expect(focusNames).toContain('rail');
   for (const o of cards.situation.options) expect(focusNames).toContain(o.label);
-  expect(focusNames).toContain('Read the article');
+  expect(focusNames).toContain('Read The Full Article');
   expect(focusNames.some((n) => /^(Previous|Next) card$/.test(n))).toBe(true);
 
   // Enter on an option selects the path and advances.
