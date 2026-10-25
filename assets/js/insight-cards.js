@@ -107,7 +107,10 @@
   function changed() { deck.dispatchEvent(new CustomEvent('ic:change', { detail: { card: rail.children[idx] } })); }
   deck.addEventListener('ic:track', function (e) {
     var i = [].indexOf.call(rail.children, e.detail.card);
-    if (i >= 0) trackEvent(e.detail.name, { card: counter(i), path: path || 'default' });
+    if (i < 0) return;
+    var props = { card: counter(i), path: path || 'default' };
+    for (var k in e.detail.props) props[k] = e.detail.props[k];
+    trackEvent(e.detail.name, props);
   });
 
   function updateURL() {

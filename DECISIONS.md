@@ -49,10 +49,18 @@ Read-aloud narration with a synchronized phrase underline on insight cards. Ever
 - **The lead-in before the first mark (about 15 ms of silence) counts as p0.** Without this, the underline couldn't appear until audio was actually flowing. Every later phrase uses its exact `[start, end)`.
 - **The card's timing JSON (about 2 KB) is prefetched when a narrated card becomes current**, so p0 underlines as soon as Play is pressed (measured well under 250 ms). The MP3 still loads only on Play.
 - **A card change stops narration.** The deck's `ic:change` fires on every current-card change, including a path reorder. Narration stops whenever the playing card is no longer current.
+- **Autoplay on card change (owner direction, 2026-10-24).** This replaces the original spec's "audio only ever starts from the button" and "nothing plays until the reader presses Play on the new card". When the deck comes to rest on a narrated card, that card starts reading.
+  - **Pausing turns autoplay off.** Any pause the reader causes, on any card, whether from the button or the system's media controls, turns it off for the rest of the page view. Nothing then starts until a Play button is pressed, which turns it back on.
+  - **No auto-advance.** Playback ending doesn't move to the next card.
+  - **Nothing plays on page load or from a deep link.** A shared link shouldn't start talking, and browsers would block most of those starts anyway.
+  - **Autoplay waits 350 ms after the deck rests on a card**, so swiping through several cards doesn't start and stop each one.
+  - **A start the browser blocks is not an error.** Before any interaction with the page, browsers may refuse it with `NotAllowedError`. It rests silently: no warning, no announcement. On iOS, autoplay is expected to work only after the reader has pressed Play once, which unlocks the deck's single audio element.
+  - **A real failure (404, decode) also turns autoplay off**, so a broken file doesn't warn on every card.
+  - **`cards_play` gains `trigger: "button" | "auto"`.** The deck's `ic:track` handler merges extra props into its `{card, path}`. This isn't in PRD 7, but without it the play count can't separate choice from autoplay.
 - **Play on a card that isn't current** (its button can be clicked at the deck edge) plays that card. Any later card change stops it as usual.
 - **Errors** (MP3 404 or decode failure, metadata fetch failure, a rejected `play()`) log one `console.warn` and return to rest. Each failure warns once, and navigation is untouched.
 - **Pausing** sets `aria-pressed="false"` and the label back to "Read this card aloud", and the underline stays where it is. Resuming is not a new `cards_play`.
-- **Announcements go through the deck's existing polite live region (`#ic-live`).** It says "Reading card aloud." on start and "Finished reading." on completion, and nothing per phrase.
+- **Announcements go through the deck's existing polite live region (`#ic-live`).** It says "Reading card aloud." once audio actually starts, so a blocked autoplay says nothing, and "Finished reading." on completion. Nothing per phrase.
 - **Only the current card's button is in the Tab order** (`tabindex=-1` on the others). Without this, Tab walked into the other cards' buttons and scrolled the deck to them, and five extra stops broke the existing ACC-01 Tab test. The deck's own Tab order still runs through the situation options first (pre-existing behaviour).
 - **The button stays `hidden` until the script confirms `canPlayType('audio/mpeg')`.** Without the script, or in a browser that can't play MP3, no dead control is shown.
 
@@ -70,7 +78,7 @@ Read-aloud narration with a synchronized phrase underline on insight cards. Ever
 - **`tests/serve.js` now answers HTTP Range requests and serves `audio/mpeg`**, as GitHub Pages does. Chrome needs ranges to seek.
 - **One existing test was amended:** "insight cards show counter, title and body and nothing else". It encoded PRD 3.4's "cards carry no controls", which this spec explicitly amends with exactly one control. It now accepts exactly one `.ic-play` on a narrated card and nothing else. Every other existing test is unchanged.
 - **"Underlines p0 within 250 ms"** is timed in the page from `click()` to the first frame with p0 underlined.
-- **The rapid-switch test** presses Play and then changes card every 100 ms, 20 times. It checks that no more than one button is ever pressed, that there's never an underline on a card that isn't playing, and that afterwards there is one media element, it's paused, there's no underline, and Play still works.
+- **The rapid-switch test** presses Play and then changes card every 100 ms, 20 times. It checks that no more than one button is ever pressed and that there's never an underline on a card that isn't playing. Once the deck rests, it checks that there is one media element and that exactly the current card plays (autoplay).
 
 ---
 

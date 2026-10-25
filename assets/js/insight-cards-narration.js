@@ -2,8 +2,11 @@
    insight-cards.js on posts with generated narration (npm run narrate).
    One <audio> element serves the whole deck. The phrase being spoken is
    underlined, chosen from the audio's currentTime against the card's phrase
-   timings, never from a timer. Any card change stops it. Audio only starts
-   from a button click. If this never runs, the buttons stay hidden. */
+   timings, never from a timer. Any card change stops it, and moving to a
+   narrated card starts it, until the reader pauses: then nothing starts
+   again until a Play button is pressed. Browsers may block audio before the
+   reader has interacted with the page; a blocked start rests silently.
+   Nothing starts on page load. If this never runs, the buttons stay hidden. */
 (function () {
   var deck = document.getElementById('ic-deck');
   if (!deck || !window.fetch || !window.CustomEvent) return;
@@ -15,6 +18,10 @@
   var live = document.getElementById('ic-live');
 
   var card = null, btn = null, phrases = null, spoken = null, frame = 0, meta = {};
+  // auto: start narration when a card becomes current. A pause turns it off;
+  // pressing Play turns it back on.
+  var auto = true, current = null, autoTimer = 0, announce = false;
+  var AUTO_DELAY = 350; // ms the deck must rest on a card first, so a fast swipe through cards plays nothing
 
   function setButton(b, playing) {
     b.setAttribute('aria-pressed', playing ? 'true' : 'false');
@@ -55,11 +62,17 @@
   function fail(why) {
     if (!card) return;
     if (window.console) console.warn('[insight-cards] narration unavailable: ' + why);
+    auto = false; // don't keep retrying on every card; Play turns it back on
     stop();
   }
   function play() {
     var session = card, p = audio.play();
-    if (p && p.catch) p.catch(function (e) { if (card === session && e.name !== 'AbortError') fail(e.name + ': ' + e.message); });
+    if (!p || !p.catch) return;
+    p.catch(function (e) {
+      if (card !== session || e.name === 'AbortError') return;
+      if (e.name === 'NotAllowedError') stop(); // autoplay policy: not an error
+      else fail(e.name + ': ' + e.message);
+    });
   }
   function timings(url) {
     if (!meta[url]) {
@@ -72,7 +85,7 @@
     return meta[url];
   }
 
-  function start(b) {
+  function start(b, trigger) {
     stop();
     var session = card = b.closest('.ic-card');
     btn = b;
@@ -82,15 +95,15 @@
     timings(card.getAttribute('data-narration')).then(function (m) {
       if (card === session) { phrases = m.phrases; sync(); }
     }, function (e) { if (card === session) fail(e.message); });
-    say('Reading card aloud.');
-    deck.dispatchEvent(new CustomEvent('ic:track', { detail: { name: 'cards_play', card: card } }));
+    announce = true; // said once audio actually starts, so a blocked start says nothing
+    deck.dispatchEvent(new CustomEvent('ic:track', { detail: { name: 'cards_play', card: card, props: { trigger: trigger } } }));
   }
 
   buttons.forEach(function (b) {
     b.addEventListener('click', function () {
-      if (card !== b.closest('.ic-card')) start(b);
-      else if (audio.paused) { setButton(b, true); play(); }
-      else audio.pause();
+      if (card !== b.closest('.ic-card')) { auto = true; start(b, 'button'); }
+      else if (audio.paused) { auto = true; setButton(b, true); play(); }
+      else audio.pause(); // the pause handler turns auto off
     });
     b.hidden = false;
   });
@@ -100,21 +113,35 @@
   // A narrated card's timings (a few KB) are fetched when it becomes current,
   // so the underline is ready the moment Play is pressed.
   function arrive(c) {
+    current = c;
     tabbable(c);
     if (c && c.hasAttribute('data-narration')) timings(c.getAttribute('data-narration')).catch(function () {});
   }
   arrive(deck.querySelector('.ic-card.is-current'));
 
-  audio.addEventListener('playing', function () { if (card) { setButton(btn, true); stopLoop(); loop(); } });
-  audio.addEventListener('pause', function () { if (card && !audio.ended) { setButton(btn, false); stopLoop(); sync(); } });
+  audio.addEventListener('playing', function () {
+    if (!card) return;
+    if (announce) { announce = false; say('Reading card aloud.'); }
+    setButton(btn, true); stopLoop(); loop();
+  });
+  // Any pause the reader causes (the button, or the system's media controls)
+  // turns auto off. stop() clears `card` first, so its own pause doesn't count.
+  audio.addEventListener('pause', function () { if (card && !audio.ended) { auto = false; setButton(btn, false); stopLoop(); sync(); } });
   audio.addEventListener('timeupdate', sync);
   audio.addEventListener('seeked', sync);
   audio.addEventListener('ended', function () { if (card) { stop(); say('Finished reading.'); } });
   audio.addEventListener('error', function () { if (card && audio.error) fail('audio failed to load (' + audio.getAttribute('src') + ')'); });
 
-  // Moving to any other card (swipe, keys, chevrons, a path) stops narration.
+  // Moving to any other card (swipe, keys, chevrons, a path) stops narration,
+  // and, while auto is on, starts the new card once the deck rests on it.
   deck.addEventListener('ic:change', function (e) {
-    if (card && e.detail.card !== card) stop();
-    arrive(e.detail.card);
+    var c = e.detail.card;
+    if (card && c !== card) stop();
+    arrive(c);
+    clearTimeout(autoTimer);
+    var b = c && c.querySelector('.ic-play');
+    if (auto && b && card !== c) {
+      autoTimer = setTimeout(function () { if (auto && current === c && card !== c) start(b, 'auto'); }, AUTO_DELAY);
+    }
   });
 })();
