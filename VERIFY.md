@@ -10,7 +10,9 @@ Safari on a real iPhone, at
 |---|-------|----------|
 | 1 | Autoplay policy after a user gesture. Tap Play on card 5. | Audio starts on the first tap, with no second tap needed. The button shows Pause and the first phrase is underlined. |
 | 2 | Autoplay policy on a cold load. Open the URL fresh and wait 10 s without touching anything. | Nothing plays. |
-| 2a | Autoplay before any Play press. On a fresh load, swipe to the next card. | Either it starts reading, or iOS blocks it and the button rests at Play with no error. Record which. Once you've pressed Play once, every later card should start reading when you swipe to it. |
+| 2a | Autoplay with no Play press, by swipe. Load `?` with no parameters (the situation card), swipe once to card 1, and don't tap anything. | Card 1 starts reading about 0.35 s after the deck settles. If it doesn't, the swipe's touchend didn't count as a gesture on iOS: record that, then try 2a-ii. |
+| 2a-ii | Autoplay with no Play press, by tap. Fresh load, then tap a path option on the first card. | Card 1 of that path starts reading on its own, and so does every card you swipe to after it. |
+| 2a-iii | Music in another app is playing. Load the page and scroll the article without touching the deck. | Your music keeps playing. Only a gesture inside the deck takes over the audio. |
 | 2b | Pause latch. While a card is reading, press Pause, then swipe through three cards. | None of them plays. Press Play on any card: it reads, and swiping on starts the next card again. |
 | 2c | Lock-screen pause. While reading, pause from the lock screen or Control Center, then return and swipe. | Nothing plays, the same as a button pause. |
 | 3 | Silent switch on, ringer muted. Tap Play. | Record what happens. An HTML `<audio>` element in iOS Safari normally plays with the silent switch on (unlike the Web Audio API), so audio is expected. If it's silent, the underline should still advance (it follows `currentTime`), or the button should return to Play with no stuck state. Neither result is a failure, but note which one happens. |

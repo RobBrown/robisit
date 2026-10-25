@@ -56,6 +56,11 @@ Read-aloud narration with a synchronized phrase underline on insight cards. Ever
   - **Autoplay waits 350 ms after the deck rests on a card**, so swiping through several cards doesn't start and stop each one.
   - **A start the browser blocks is not an error.** Before any interaction with the page, browsers may refuse it with `NotAllowedError`. It rests silently: no warning, no announcement. On iOS, autoplay is expected to work only after the reader has pressed Play once, which unlocks the deck's single audio element.
   - **A real failure (404, decode) also turns autoplay off**, so a broken file doesn't warn on every card.
+  - **The first gesture in the deck primes the audio element (owner direction: autoplay without a first Play press).** The reader always has to move off the situation card to reach an insight card. On their first tap, click or key press in the deck (a path option, a chevron, an arrow key, the touch that ends a swipe), the deck's single audio element plays 0.17 s of embedded silent MP3, about 0.7 KB.
+    - **Why this works:** iOS Safari lets an element start from a timer only after it has played inside a gesture. Chrome and Firefox need any earlier page activation, which that same gesture provides.
+    - **Limited to the deck,** plus arrow keys anywhere, because playing even silence takes over the phone's audio session and pauses the reader's music. A tap elsewhere on the page never does that.
+    - **It runs once, and is silent:** no `cards_play`, no announcement.
+    - **Unresolved:** whether the touchend at the end of a pure swipe counts as a gesture on iOS can only be confirmed on a device (VERIFY.md 2a). Chrome on Android doesn't count a scroll as activation, so a reader there who only swipes gets autoplay once they've tapped anything in the deck.
   - **`cards_play` gains `trigger: "button" | "auto"`.** The deck's `ic:track` handler merges extra props into its `{card, path}`. This isn't in PRD 7, but without it the play count can't separate choice from autoplay.
 - **Play on a card that isn't current** (its button can be clicked at the deck edge) plays that card. Any later card change stops it as usual.
 - **Errors** (MP3 404 or decode failure, metadata fetch failure, a rejected `play()`) log one `console.warn` and return to rest. Each failure warns once, and navigation is untouched.
