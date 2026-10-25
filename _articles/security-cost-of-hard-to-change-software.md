@@ -1,6 +1,6 @@
 ---
 layout: article
-published: false
+unlisted: true
 title: "The Growing Security Cost of Software That's Hard to Change"
 date: 2026-10-25
 description: "AI is making vulnerabilities easier to exploit. The ability to update, isolate, and recover enterprise systems is becoming a critical security capability."
