@@ -1,0 +1,178 @@
+{
+  "cardId": "swipe",
+  "hash": "e9a85350e9b477af0162f3208872e59e867cfc251676fd829d98fcc08a6f50df",
+  "voice": "en-US-Neural2-D",
+  "segmentation": "v1",
+  "audio": "/assets/narration/hello-world-cards/swipe.mp3",
+  "duration": 28.152,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "Test card three",
+      "start": 0.015,
+      "end": 0.966
+    },
+    {
+      "id": "p1",
+      "text": "checks swiping and keys",
+      "start": 0.966,
+      "end": 2.901
+    },
+    {
+      "id": "p2",
+      "text": "Swipe sideways",
+      "start": 2.901,
+      "end": 3.876
+    },
+    {
+      "id": "p3",
+      "text": "to move between cards.",
+      "start": 3.876,
+      "end": 5.765
+    },
+    {
+      "id": "p4",
+      "text": "On a laptop,",
+      "start": 5.765,
+      "end": 6.766
+    },
+    {
+      "id": "p5",
+      "text": "use the arrow",
+      "start": 6.766,
+      "end": 7.446
+    },
+    {
+      "id": "p6",
+      "text": "keys or hover",
+      "start": 7.446,
+      "end": 8.289
+    },
+    {
+      "id": "p7",
+      "text": "over the deck",
+      "start": 8.289,
+      "end": 8.899
+    },
+    {
+      "id": "p8",
+      "text": "to show the chevrons.",
+      "start": 8.899,
+      "end": 10.729
+    },
+    {
+      "id": "p9",
+      "text": "Scrolling up",
+      "start": 10.729,
+      "end": 11.469
+    },
+    {
+      "id": "p10",
+      "text": "and down over",
+      "start": 11.469,
+      "end": 12.059
+    },
+    {
+      "id": "p11",
+      "text": "the deck should",
+      "start": 12.059,
+      "end": 12.614
+    },
+    {
+      "id": "p12",
+      "text": "move the page,",
+      "start": 12.614,
+      "end": 13.517
+    },
+    {
+      "id": "p13",
+      "text": "never the cards.",
+      "start": 13.517,
+      "end": 15.135
+    },
+    {
+      "id": "p14",
+      "text": "Navigation stops",
+      "start": 15.135,
+      "end": 16.224
+    },
+    {
+      "id": "p15",
+      "text": "at the first",
+      "start": 16.224,
+      "end": 16.825
+    },
+    {
+      "id": "p16",
+      "text": "and last card",
+      "start": 16.825,
+      "end": 17.534
+    },
+    {
+      "id": "p17",
+      "text": "without wrapping around.",
+      "start": 17.534,
+      "end": 18.952
+    },
+    {
+      "id": "p18",
+      "text": "The address",
+      "start": 18.952,
+      "end": 19.502
+    },
+    {
+      "id": "p19",
+      "text": "bar should change",
+      "start": 19.502,
+      "end": 20.388
+    },
+    {
+      "id": "p20",
+      "text": "as you move,",
+      "start": 20.388,
+      "end": 21.234
+    },
+    {
+      "id": "p21",
+      "text": "so copying it",
+      "start": 21.234,
+      "end": 21.996
+    },
+    {
+      "id": "p22",
+      "text": "shares the card",
+      "start": 21.996,
+      "end": 22.737
+    },
+    {
+      "id": "p23",
+      "text": "you are on.",
+      "start": 22.737,
+      "end": 24.024
+    },
+    {
+      "id": "p24",
+      "text": "This sentence is",
+      "start": 24.024,
+      "end": 24.864
+    },
+    {
+      "id": "p25",
+      "text": "filler to bring",
+      "start": 24.864,
+      "end": 25.605
+    },
+    {
+      "id": "p26",
+      "text": "the body close",
+      "start": 25.605,
+      "end": 26.4
+    },
+    {
+      "id": "p27",
+      "text": "to the word ceiling.",
+      "start": 26.4,
+      "end": 28.152
+    }
+  ]
+}

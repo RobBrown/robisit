@@ -1,0 +1,166 @@
+{
+  "cardId": "counter",
+  "hash": "81b54341b47904fb761780192a4c611b3bcbf64e166cad29d2b5425248030125",
+  "voice": "en-US-Neural2-D",
+  "segmentation": "v1",
+  "audio": "/assets/narration/hello-world-cards/counter.mp3",
+  "duration": 25.488,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "Test card two",
+      "start": 0.015,
+      "end": 0.937
+    },
+    {
+      "id": "p1",
+      "text": "checks the counter",
+      "start": 0.937,
+      "end": 2.312
+    },
+    {
+      "id": "p2",
+      "text": "The small number",
+      "start": 2.312,
+      "end": 3.19
+    },
+    {
+      "id": "p3",
+      "text": "in the top",
+      "start": 3.19,
+      "end": 3.665
+    },
+    {
+      "id": "p4",
+      "text": "corner of this",
+      "start": 3.665,
+      "end": 4.336
+    },
+    {
+      "id": "p5",
+      "text": "card should read",
+      "start": 4.336,
+      "end": 5.149
+    },
+    {
+      "id": "p6",
+      "text": "two of six",
+      "start": 5.149,
+      "end": 5.989
+    },
+    {
+      "id": "p7",
+      "text": "when you arrive",
+      "start": 5.989,
+      "end": 6.549
+    },
+    {
+      "id": "p8",
+      "text": "in the default order.",
+      "start": 6.549,
+      "end": 8.306
+    },
+    {
+      "id": "p9",
+      "text": "The situation card",
+      "start": 8.306,
+      "end": 9.347
+    },
+    {
+      "id": "p10",
+      "text": "is not counted,",
+      "start": 9.347,
+      "end": 10.333
+    },
+    {
+      "id": "p11",
+      "text": "and the last card is.",
+      "start": 10.333,
+      "end": 12.194
+    },
+    {
+      "id": "p12",
+      "text": "Pick a different path",
+      "start": 12.194,
+      "end": 13.219
+    },
+    {
+      "id": "p13",
+      "text": "on the first card",
+      "start": 13.219,
+      "end": 14.08
+    },
+    {
+      "id": "p14",
+      "text": "and this card moves,",
+      "start": 14.08,
+      "end": 15.22
+    },
+    {
+      "id": "p15",
+      "text": "but the counter stays positional,",
+      "start": 15.22,
+      "end": 17.057
+    },
+    {
+      "id": "p16",
+      "text": "so it always",
+      "start": 17.057,
+      "end": 17.683
+    },
+    {
+      "id": "p17",
+      "text": "tells you where",
+      "start": 17.683,
+      "end": 18.299
+    },
+    {
+      "id": "p18",
+      "text": "you are in",
+      "start": 18.299,
+      "end": 18.675
+    },
+    {
+      "id": "p19",
+      "text": "the deck rather",
+      "start": 18.675,
+      "end": 19.37
+    },
+    {
+      "id": "p20",
+      "text": "than which card",
+      "start": 19.37,
+      "end": 20.061
+    },
+    {
+      "id": "p21",
+      "text": "this is.",
+      "start": 20.061,
+      "end": 21.358
+    },
+    {
+      "id": "p22",
+      "text": "This sentence is",
+      "start": 21.358,
+      "end": 22.198
+    },
+    {
+      "id": "p23",
+      "text": "filler to bring",
+      "start": 22.198,
+      "end": 22.938
+    },
+    {
+      "id": "p24",
+      "text": "the body close",
+      "start": 22.938,
+      "end": 23.733
+    },
+    {
+      "id": "p25",
+      "text": "to the word ceiling.",
+      "start": 23.733,
+      "end": 25.488
+    }
+  ]
+}
