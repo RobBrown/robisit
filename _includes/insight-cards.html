@@ -1,11 +1,13 @@
 {%- comment -%}
   TL;DR card deck (Insight Cards, PRD v2.1). Rendered by _layouts/article.html
   between the article header and the body, only when insight-cards-valid.html
-  has set ic_valid. The heading and deck ship `hidden`; assets/js/insight-cards.js
-  shows them, so without the script the page is the plain article. The script
-  also collapses the article and shows the "Read The Full Article" button under
-  the deck, which opens it. Insight
-  cards render in the default order and the script reorders them for a path.
+  has set ic_valid. The view switch and the deck ship `hidden`;
+  assets/js/insight-cards.js shows them, so without the script the page is the
+  plain article. The switch has two tabs, TL;DR (the deck) and Full article
+  (#ic-article), and one view is on the page at a time. The terminal control
+  and the "Read The Full Article" button under the deck switch to the article
+  the same way. Insight cards render in the default order and the script
+  reorders them for a path.
   A card with generated narration (see insight-cards-narration.html) renders
   its phrase-wrapped fragment and one read-aloud button, shown by
   assets/js/insight-cards-narration.js.
@@ -14,8 +16,11 @@
 {%- assign ic_ids = ic.insights | map: "id" -%}
 {%- assign ic_order = ic.default_order | default: ic_ids -%}
 {%- assign ic_total = ic.insights | size | plus: 1 -%}
-  <h2 class="ic-label ic-head" id="ic-head" hidden>TL;DR <span class="ic-count">in {{ ic_total }} cards</span></h2>
-  <section class="ic-deck" id="ic-deck" role="region" aria-labelledby="ic-head" hidden>
+  <div class="ic-label ic-switch" id="ic-switch" role="tablist" aria-label="View" hidden>
+    <button type="button" class="ic-tab" id="ic-tab-tldr" role="tab" aria-controls="ic-deck" aria-selected="true">TL;DR <span class="ic-count"><span aria-hidden="true">· </span>{{ ic_total }} cards</span></button>
+    <button type="button" class="ic-tab" id="ic-tab-article" role="tab" aria-controls="ic-article" aria-selected="false" tabindex="-1">Full article</button>
+  </div>
+  <section class="ic-deck" id="ic-deck" role="tabpanel" aria-labelledby="ic-tab-tldr" tabindex="-1" hidden>
     <div class="ic-rail" tabindex="0">
       {%- if ic.situation %}
       <div class="ic-card ic-situation" role="group" aria-roledescription="card" aria-label="Start">
@@ -56,6 +61,6 @@
     <button type="button" class="ic-chev ic-next" aria-label="Next card">›</button>
     <div class="ic-sr" id="ic-live" aria-live="polite"></div>
   </section>
-  <button type="button" class="ic-open" id="ic-open" aria-controls="ic-article" aria-expanded="true" hidden>Read The Full Article</button>
+  <button type="button" class="ic-open" id="ic-open" hidden>Read The Full Article</button>
   <p class="ic-published" id="ic-published">Published on {{ page.date | date: "%B %-d, %Y" }}</p>
   <script type="application/json" id="ic-data">{"default_anchor":{{ ic.default_anchor | jsonify }},"options":{{ ic.situation.options | default: "" | jsonify | replace: "</", "<\/" }}}</script>

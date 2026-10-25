@@ -1,13 +1,13 @@
 /* TL;DR card deck behaviour (Insight Cards, PRD v2.1). No dependencies.
    The markup is rendered by _includes/insight-cards.html. This script shows
-   the deck above the article, collapses the article behind the "Read the
-   article" button, and handles paths, navigation, deep links, the jump into
-   the article and analytics. If it never runs, the page is the plain article. */
+   the TL;DR / Full article switch, keeps exactly one of the two views on the
+   page, and handles paths, navigation, deep links, the switch between views
+   and analytics. If it never runs, the page is the plain article. */
 (function () {
   var deck = document.getElementById('ic-deck');
   var article = document.getElementById('ic-article');
   var dataEl = document.getElementById('ic-data');
-  if (!deck || !article || !dataEl || !window.URLSearchParams || !history.replaceState) return;
+  if (!deck || !article || !dataEl || !window.URLSearchParams || !history.pushState) return;
   var data;
   try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
 
@@ -26,7 +26,9 @@
   var prev = deck.querySelector('.ic-prev');
   var next = deck.querySelector('.ic-next');
   var live = document.getElementById('ic-live');
-  var head = document.getElementById('ic-head');
+  var sw = document.getElementById('ic-switch');
+  var tabs = { tldr: document.getElementById('ic-tab-tldr'), article: document.getElementById('ic-tab-article') };
+  var panels = { tldr: deck, article: article };
   var openBtn = document.getElementById('ic-open');
   var situation = rail.querySelector('.ic-situation');
   var terminal = rail.querySelector('.ic-terminal');
@@ -106,7 +108,7 @@
      current card may have changed; it sends 'ic:track' events, recorded here
      with the card's position and the path, and 'ic:next' when a card has
      finished reading and the deck should move on. */
-  function changed() { deck.dispatchEvent(new CustomEvent('ic:change', { detail: { card: rail.children[idx] } })); }
+  function changed() { deck.dispatchEvent(new CustomEvent('ic:change', { detail: { card: deck.hidden ? null : rail.children[idx] } })); }
   deck.addEventListener('ic:track', function (e) {
     var i = [].indexOf.call(rail.children, e.detail.card);
     if (i < 0) return;
@@ -124,34 +126,123 @@
     history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
   }
 
-  /* The article starts collapsed. hidden="until-found" keeps it findable:
-     find in page opens it (beforematch). Browsers without until-found treat it
-     as plain hidden, so the button and the terminal control still open it. */
-  function isOpen() { return !article.hasAttribute('hidden'); }
-  function setOpen(open) {
-    if (open) article.removeAttribute('hidden'); else article.setAttribute('hidden', 'until-found');
-    openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  }
+  /* Views. The tabs, both article buttons, find in page, links and
+     back/forward all go through setView. The hidden article is
+     hidden="until-found", so find in page reaches it. The hash names the
+     view: #tldr, #article, or a section of the article. */
+  var view = null, want = null, anim = null;
+  function isOpen() { return view === 'article'; }
   // The element a #fragment in the URL points at, when it is inside the article.
   function hashTarget() {
     var id = location.hash.slice(1), t = null;
     try { t = id && document.getElementById(decodeURIComponent(id)); } catch (e) { /* malformed escape */ }
     return t && article.contains(t) ? t : null;
   }
+  function viewFromHash() {
+    if (location.hash === '#tldr') return 'tldr';
+    return location.hash === '#article' || hashTarget() ? 'article' : 'tldr';
+  }
+  // mode 'push' for a deliberate switch (one history entry), 'replace' otherwise.
+  function writeHash(v, mode) {
+    if (viewFromHash() === v && location.hash) return;
+    history[mode + 'State'](null, '', location.pathname + location.search + '#' + v);
+  }
 
-  /* Handoff (PRD 5.6). Both controls open the article. The button under the
-     deck jumps to the article's top, the terminal control to the path's
-     anchor. It's recorded once per page view, with the route used first. */
-  function handoff(how) {
-    setOpen(true);
-    var target = how === 'button' ? article : anchor ? document.getElementById(anchor.slice(1)) || article : article;
-    if (!route) {
-      route = how;
-      trackEvent('cards_handoff', { route: route, card: counter(Math.max(idx, 0)), path: path || 'default', anchor: target === article ? '#ic-article' : anchor });
+  function select(v) {
+    for (var k in tabs) {
+      tabs[k].setAttribute('aria-selected', k === v ? 'true' : 'false');
+      tabs[k].tabIndex = k === v ? 0 : -1;
     }
-    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-    target.focus({ preventScroll: true });
-    target.scrollIntoView({ behavior: reduced.matches ? 'auto' : 'smooth', block: 'start' });
+  }
+  function show(v) {
+    view = v;
+    deck.hidden = v !== 'tldr';
+    openBtn.hidden = v !== 'tldr';
+    // until-found hides the text; aria-hidden drops the empty panel from the tree too.
+    if (v === 'article') { article.removeAttribute('hidden'); article.removeAttribute('aria-hidden'); }
+    else { article.setAttribute('hidden', 'until-found'); article.setAttribute('aria-hidden', 'true'); }
+    if (v === 'tldr') go(idx, true); // the rail loses its scroll position while hidden
+    changed();
+  }
+
+  // Switch (or the terminal's anchor) to the top, then focus the view's start.
+  function land(v, o) {
+    if (o.scroll !== false) {
+      if (o.land) o.land.scrollIntoView({ block: 'start', behavior: 'instant' });
+      else window.scrollTo({ top: Math.max(0, sw.getBoundingClientRect().top + window.pageYOffset - 12), behavior: 'instant' });
+    }
+    if (o.focus === false) return;
+    var f = o.focus || o.land || panels[v];
+    if (!f.hasAttribute('tabindex')) f.setAttribute('tabindex', '-1');
+    f.focus({ preventScroll: true });
+  }
+
+  /* CRT transition (index.html crt-off, quicker): the old view collapses to a
+     bright line mid-screen, the page scrolls while the screen is dark, and
+     the new view opens from the line. Instant under reduced motion; a new
+     switch cuts it short. */
+  var OFF = [
+    { transform: 'scaleY(1)', filter: 'brightness(1)', opacity: 1 },
+    { transform: 'scaleY(1)', filter: 'brightness(1.3)', opacity: 0.5, offset: 0.12 },
+    { transform: 'scaleY(1)', filter: 'brightness(1)', opacity: 0.9, offset: 0.22 },
+    { transform: 'scaleY(.012)', filter: 'brightness(3)', opacity: 1, offset: 0.62 },
+    { transform: 'scale(0, .004)', filter: 'brightness(6)', opacity: 0 }
+  ];
+  var ON = [
+    { transform: 'scale(.4, .004)', filter: 'brightness(6)', opacity: 0 },
+    { transform: 'scale(1, .004)', filter: 'brightness(4)', opacity: 1, offset: 0.25 },
+    { transform: 'scale(1, 1)', filter: 'brightness(1.6)', opacity: 1, offset: 0.62 },
+    { transform: 'none', filter: 'brightness(1)', opacity: 1 }
+  ];
+  // Scale about the middle of the viewport, wherever the view starts and ends.
+  function centre(el) {
+    var r = el.getBoundingClientRect();
+    var y = Math.max(0, Math.min(r.height, window.innerHeight / 2 - r.top));
+    el.style.transformOrigin = '50% ' + y + 'px';
+  }
+  function settled(a, el) { if (anim === a) anim = null; el.style.transformOrigin = ''; }
+  function stopAnim() {
+    if (!anim) return;
+    var a = anim;
+    anim = null;
+    a.cancel();
+    deck.style.transformOrigin = article.style.transformOrigin = '';
+  }
+
+  function setView(v, o) {
+    o = o || {};
+    if (o.history) writeHash(v, o.history);
+    if (v === 'article' && o.route && !route) {
+      route = o.route;
+      trackEvent('cards_handoff', { route: route, card: counter(Math.max(idx, 0)), path: path || 'default', anchor: o.land ? '#' + o.land.id : '#ic-article' });
+    }
+    if (v === want && !anim) return land(v, o); // already showing it
+    if (v === want) return;                     // already on its way
+    want = v;
+    select(v);
+    stopAnim();
+    if (v === view || o.instant || reduced.matches || !deck.animate) { if (v !== view) show(v); return land(v, o); }
+    var from = panels[view], to = panels[v];
+    centre(from);
+    var off = anim = from.animate(OFF, { duration: 260, easing: 'ease-in', fill: 'forwards' });
+    off.onfinish = function () {
+      if (anim !== off) return;
+      show(v);
+      off.cancel();
+      from.style.transformOrigin = '';
+      land(v, o);
+      centre(to);
+      var on = anim = to.animate(ON, { duration: 340, easing: 'ease-out' });
+      on.onfinish = function () { settled(on, to); };
+      on.oncancel = function () { settled(on, to); };
+    };
+  }
+
+  // Back and forward, and links to #tldr, #article or a section.
+  function sync() {
+    var t = hashTarget(), v = viewFromHash();
+    if (t && want === 'article') return; // a link within the article: the browser scrolls
+    setView(v, t ? { land: t, focus: false } : {});
   }
 
   /* Depth (PRD 7): how far through the article the reader has scrolled, from
@@ -179,14 +270,27 @@
       if (applyPath(id)) { trackEvent('cards_path', { path: id }); go(1); }
     });
   });
-  terminal.querySelector('.ic-go').addEventListener('click', function () { handoff('terminal'); });
-  openBtn.addEventListener('click', function () { handoff('button'); });
-  article.addEventListener('beforematch', function () { openBtn.setAttribute('aria-expanded', 'true'); });
-  // A link to a section of the article (#id) opens it, then scrolls there.
-  window.addEventListener('hashchange', function () {
-    var t = hashTarget();
-    if (t && !isOpen()) { setOpen(true); t.scrollIntoView(); }
+  for (var k in tabs) (function (v) {
+    tabs[v].addEventListener('click', function () { setView(v, { route: 'switch', history: 'push' }); });
+  })(k);
+  // Arrow keys, Home and End move between the two tabs and switch the view.
+  sw.addEventListener('keydown', function (e) {
+    var v = { ArrowLeft: 'other', ArrowRight: 'other', Home: 'tldr', End: 'article' }[e.key];
+    if (!v || e.altKey || e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+    if (v === 'other') v = want === 'tldr' ? 'article' : 'tldr';
+    tabs[v].focus();
+    setView(v, { route: 'switch', history: 'push', focus: tabs[v] });
   });
+  // The end of the deck: the terminal control lands on the path's anchor.
+  terminal.querySelector('.ic-go').addEventListener('click', function () {
+    setView('article', { route: 'terminal', history: 'push', land: anchor && document.getElementById(anchor.slice(1)) || null });
+  });
+  openBtn.addEventListener('click', function () { setView('article', { route: 'button', history: 'push' }); });
+  // Find in page reveals the article itself and scrolls to the match.
+  article.addEventListener('beforematch', function () { setView('article', { history: 'replace', instant: true, scroll: false, focus: false }); });
+  window.addEventListener('popstate', sync);
+  window.addEventListener('hashchange', sync);
   function step(d) { go((aim !== null ? aim : idx) + d); }
   prev.addEventListener('click', function () { step(-1); });
   next.addEventListener('click', function () { step(1); });
@@ -205,6 +309,7 @@
 
   var queued = false;
   rail.addEventListener('scroll', function () {
+    if (deck.hidden) return;
     clearTimeout(aimTimer);
     aimTimer = setTimeout(function () { aim = null; }, 150);
     if (queued) return;
@@ -212,19 +317,24 @@
     requestAnimationFrame(function () { queued = false; setIdx(nearest()); });
   }, { passive: true });
 
-  window.addEventListener('resize', function () { go(idx, true); });
+  window.addEventListener('resize', function () { if (!deck.hidden) go(idx, true); });
   window.addEventListener('scroll', queueDepth, { passive: true });
 
-  /* Boot: show the deck and apply any deep link (PRD 5.7). */
+  /* Boot: show the switch and the deck, apply any deep link (PRD 5.7), then
+     open the view the hash names, TL;DR by default. */
   var q = new URLSearchParams(location.search);
   if (q.get('path')) applyPath(q.get('path'));
   var card = parseInt(q.get('card'), 10);
   var start = Math.max(0, Math.min(isNaN(card) ? 0 : card - offset, last()));
+  sw.hidden = false;
   deck.hidden = false;
-  head.hidden = false;
-  openBtn.hidden = false;
-  setOpen(!!hashTarget()); // collapsed, unless the URL points into the article
+  article.setAttribute('role', 'tabpanel');
+  article.setAttribute('aria-labelledby', 'ic-tab-article');
   go(start, true);
   aim = null;
   setIdx(start, true);
+  want = viewFromHash();
+  select(want);
+  show(want);
+  if (!location.hash) writeHash(want, 'replace');
 })();

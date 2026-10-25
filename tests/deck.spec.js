@@ -114,12 +114,15 @@ test('arrow keys move one card; navigation stops at both ends', async ({ page })
   expect(await currentIndex(page)).toBe(N - 1);
 });
 
-test('arrow keys do nothing once the deck is scrolled off screen', async ({ page }) => {
+test('arrow keys do nothing while the article is showing', async ({ page }) => {
   await page.goto(CARDED_URL);
-  await page.locator('#ic-open').click(); // the article starts collapsed; open it so the page can scroll
+  await page.locator('#ic-open').click();
+  await expect(page.locator('#ic-deck')).toBeHidden();
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(400);
+  await page.locator('#ic-tab-tldr').click();
+  await expect(page.locator('#ic-deck')).toBeVisible();
   expect(await currentIndex(page)).toBe(0);
 });
 
@@ -171,33 +174,28 @@ test('vertical scroll over the deck scrolls the page, not the deck', async ({ pa
   expect(await scrollLeft(page)).toBe(0);
 });
 
-test('terminal control opens the article and jumps to the path anchor', async ({ page }) => {
+test('terminal control switches to the article and lands on the path anchor', async ({ page }) => {
   await page.goto(`${CARDED_URL}?card=${N}`);
   await expect(page.locator('#ic-article')).toBeHidden();
   await page.locator('.ic-go').click();
   await expect(page.locator('#ic-article')).toBeVisible();
-  await expect(page.locator('#ic-open')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#ic-deck')).toBeHidden(); // one view at a time
+  await expect(page.locator('#ic-tab-article')).toHaveAttribute('aria-selected', 'true');
   const target = page.locator(cards.default_anchor);
   await expect(target).toBeFocused();
   await atTopOrEnd(page, cards.default_anchor);
-  await expect(page.locator('#ic-deck')).toBeAttached(); // deck stays above
+  expect(new URL(page.url()).hash).toBe('#article');
 });
 
-test('the article starts collapsed; the button under the deck opens it and jumps to its top', async ({ page }) => {
+test('the button under the deck switches to the article with the switch at the top', async ({ page }) => {
   await page.goto(`${CARDED_URL}?card=2`);
   const open = page.locator('#ic-open');
   await expect(page.locator('#ic-article')).toBeHidden();
-  await expect(open).toHaveAttribute('aria-controls', 'ic-article');
   await open.click();
   await expect(page.locator('#ic-article')).toBeVisible();
-  await expect(open).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('#ic-article')).toBeFocused();
-  await atTopOrEnd(page, '#ic-article');
-  await expect(open).toBeVisible(); // stays, and jumps back to the top when pressed again
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await open.click();
-  await atTopOrEnd(page, '#ic-article');
+  await atTopOrEnd(page, '#ic-switch');
+  await expect(open).toBeHidden(); // part of the TL;DR view
 });
 
 test('the button under the deck works from the keyboard', async ({ page }) => {
@@ -211,7 +209,7 @@ test('the button under the deck works from the keyboard', async ({ page }) => {
 test('a link to a section of the article opens it', async ({ page }) => {
   await page.goto(`${CARDED_URL}${cards.default_anchor}`);
   await expect(page.locator('#ic-article')).toBeVisible();
-  await expect(page.locator('#ic-open')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#ic-tab-article')).toHaveAttribute('aria-selected', 'true');
   await page.goto(CARDED_URL);
   await expect(page.locator('#ic-article')).toBeHidden();
   await page.evaluate((h) => { location.hash = h; }, cards.default_anchor);

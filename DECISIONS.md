@@ -195,3 +195,15 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 - **The home page changed.** Its running text left the monospace and no text is below 10px. This intentionally overrides the "index.html must not change" constraint, by owner direction (the review covered the home page).
 - **Baselines regenerated.** The byte-identical baseline fixtures for non-carded pages (`tests/fixtures/baseline/`) were rebuilt from this change, which touches every page. The perf test no longer allows Google Fonts hosts.
 
+
+## View switch (owner brief, 2026-10-25)
+
+Supersedes "The article starts collapsed" and the TL;DR label in "Section labels" above.
+
+- **The TL;DR heading is now a two-tab switch**, "TL;DR · N cards" and "Full article" (`#ic-switch`, `role="tablist"`). The deck and the article are its tab panels, and exactly one is on the page: the other is `hidden` (the article `hidden="until-found"` plus `aria-hidden`, so Chrome drops even the empty panel from the accessibility tree and find in page still reaches it). TL;DR is the default. It keeps the eyebrow look: mono, uppercase, after the 22px amber rule; the selected tab is amber with an amber rule under it, the other muted. Arrow keys, Home and End move between tabs and switch (automatic activation); only the selected tab is in the Tab order.
+- **One code path.** The tabs, the terminal control, "Read The Full Article" under the deck, find in page, links into the article and back/forward all call `setView`. The separate reveal logic is gone. The button under the deck belongs to the TL;DR view and hides with it; it no longer carries `aria-expanded`.
+- **Hash and history.** `#tldr` or `#article` (a section id also means the article). Load sets `#tldr` with `replaceState` when there is no hash; each deliberate switch is one `pushState` entry; `popstate`/`hashchange` re-sync the view. Deck navigation still only `replaceState`s `?path`/`?card`.
+- **Scroll and focus.** After a switch the switch sits 12px from the top of the viewport and focus moves to the new panel with `preventScroll`. Two exceptions: arrow keys on the tabs keep focus on the tab, and **the terminal control still lands on the path's anchor** (PRD 5.6), scrolled to the top and focused, since that anchor is the point of choosing a path.
+- **CRT transition.** The old view collapses to a bright line across the middle of the viewport and goes dark (index.html `crt-off`, 260ms), the page scrolls while the screen is dark, and the new view opens out of the same line (340ms). Web Animations, scaled about the viewport's middle so it reads the same on a long article. Instant under reduced motion; a second switch mid-transition cuts it short.
+- **Analytics.** `cards_handoff` gains `route: 'switch'` for the Full article tab. Still once per page view.
+- **Budget.** CSS + JS is about 10.0 KB gzipped against the 10 KB budget (PRD 10), with little headroom left.

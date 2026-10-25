@@ -109,7 +109,7 @@ for (const scheme of ['light', 'dark']) {
     const channels = deckChannels();
     const used = await page.evaluate((props) => {
       const out = new Set();
-      const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-head *, #ic-open, #ic-published, #ic-published *');
+      const els = document.querySelectorAll('#ic-deck, #ic-deck *, #ic-switch, #ic-switch *, #ic-open, #ic-published, #ic-published *');
       for (const el of els) {
         for (const pseudo of [null, '::before', '::after']) {
           const cs = getComputedStyle(el, pseudo);
@@ -144,7 +144,7 @@ test('every animation and transition is off under reduced motion', async ({ page
   await page.locator('.ic-opt').first().hover();
   const moving = await page.evaluate(() => {
     const out = [];
-    for (const el of document.querySelectorAll('#ic-deck, #ic-deck *, #ic-head, #ic-open')) {
+    for (const el of document.querySelectorAll('#ic-deck, #ic-deck *, #ic-switch, #ic-switch *, #ic-open')) {
       for (const pseudo of [null, '::before', '::after']) {
         const cs = getComputedStyle(el, pseudo);
         if (cs.animationName !== 'none' || cs.transitionDuration.split(',').some((d) => parseFloat(d) > 0)) out.push(`${el.className}${pseudo || ''}`);

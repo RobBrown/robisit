@@ -14,18 +14,17 @@ test('carded post renders the site header, the TL;DR deck, the Read The Full Art
   await expect(masthead.locator('.date')).toHaveCount(0);
   await expect(masthead.locator('.byline')).toHaveCount(0);
   await expect(page.locator('#ic-published')).toHaveText(/^Published on [A-Z][a-z]+ \d{1,2}, \d{4}$/);
-  await expect(page.getByRole('region', { name: /^TL;DR/ })).toBeVisible();
+  await expect(page.getByRole('tabpanel', { name: /^TL;DR/ })).toBeVisible();
   await expect(page.locator('.ic-card')).toHaveCount(1 + cards.insights.length + 1);
   // Owner direction (2026-10-25): the article starts collapsed behind a
   // button under the deck, styled like the terminal control.
   await expect(page.locator('#ic-open')).toBeVisible();
   await expect(page.locator('#ic-open')).toHaveText('Read The Full Article');
-  await expect(page.locator('#ic-open')).toHaveAttribute('aria-expanded', 'false');
   await expect(page.locator('#ic-article')).toBeHidden();
   await expect(page.locator('#ic-article')).toHaveAttribute('hidden', 'until-found');
 
-  // Order on the page: masthead, TL;DR heading, deck, button, published line, article.
-  const order = await page.evaluate(() => ['article > header', '#ic-head', '#ic-deck', '#ic-open', '#ic-published', '#ic-article']
+  // Order on the page: masthead, view switch, deck, button, published line, article.
+  const order = await page.evaluate(() => ['article > header', '#ic-switch', '#ic-deck', '#ic-open', '#ic-published', '#ic-article']
     .map((s) => document.querySelector(s)).every((el, i, a) => i === 0 || (a[i - 1].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)));
   expect(order).toBe(true);
 });
@@ -82,7 +81,7 @@ test.describe('JavaScript disabled', () => {
   test('deck does not render and the article shows as a normal post', async ({ page }) => {
     await page.goto(CARDED_URL);
     await expect(page.locator('#ic-deck')).toBeHidden();
-    await expect(page.locator('#ic-head')).toBeHidden();
+    await expect(page.locator('#ic-switch')).toBeHidden();
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('#ic-article')).toBeVisible();
     await expect(page.locator('#hello-world')).toBeVisible();
