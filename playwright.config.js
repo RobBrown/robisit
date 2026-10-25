@@ -5,14 +5,18 @@ const PORT = 4100;
 
 module.exports = defineConfig({
   testDir: 'tests',
+  testIgnore: /unit\//, // node:test unit tests: npm run test:unit
   fullyParallel: true,
   reporter: [['list'], ['html', { open: 'never' }], ['json', { outputFile: 'test-results/results.json' }]],
   use: { baseURL: `http://localhost:${PORT}` },
   // Serves the Jekyll build in _site/ (run `npm run build` first).
   webServer: { command: `PORT=${PORT} node tests/serve.js`, port: PORT, reuseExistingServer: true },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: [/unit\//, /narration\.spec\.js/] },
     // iPhone SE (375x667) on WebKit: the closest local stand-in for iOS Safari.
     { name: 'iphone-se', use: { ...devices['iPhone SE (3rd gen)'] }, testMatch: /layout\.spec\.js/ },
+    // Narration playback needs MP3 decoding, which Playwright's bundled
+    // Chromium lacks. Google Chrome has it.
+    { name: 'chrome', use: { ...devices['Desktop Chrome'], channel: 'chrome' }, testMatch: /narration\.spec\.js/ },
   ],
 });

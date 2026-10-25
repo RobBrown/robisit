@@ -1,0 +1,166 @@
+{
+  "cardId": "jump",
+  "hash": "059064032277acbc20ca52bfb581654847040daba00e5e4e99ad4beaa62ff1e2",
+  "voice": "en-US-Neural2-D",
+  "segmentation": "v1",
+  "audio": "/assets/narration/hello-world-cards/jump.mp3",
+  "duration": 27.408,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "Test card four",
+      "start": 0.015,
+      "end": 0.989
+    },
+    {
+      "id": "p1",
+      "text": "checks the jump",
+      "start": 0.989,
+      "end": 1.774
+    },
+    {
+      "id": "p2",
+      "text": "into the article",
+      "start": 1.774,
+      "end": 3.114
+    },
+    {
+      "id": "p3",
+      "text": "The full article",
+      "start": 3.114,
+      "end": 4
+    },
+    {
+      "id": "p4",
+      "text": "is already open",
+      "start": 4,
+      "end": 4.838
+    },
+    {
+      "id": "p5",
+      "text": "below the deck,",
+      "start": 4.838,
+      "end": 5.724
+    },
+    {
+      "id": "p6",
+      "text": "under the Full Article line.",
+      "start": 5.724,
+      "end": 7.653
+    },
+    {
+      "id": "p7",
+      "text": "The last card has",
+      "start": 7.653,
+      "end": 8.592
+    },
+    {
+      "id": "p8",
+      "text": "a button that jumps",
+      "start": 8.592,
+      "end": 9.549
+    },
+    {
+      "id": "p9",
+      "text": "to the section matching",
+      "start": 9.549,
+      "end": 10.614
+    },
+    {
+      "id": "p10",
+      "text": "the path you picked",
+      "start": 10.614,
+      "end": 11.429
+    },
+    {
+      "id": "p11",
+      "text": "on the first card.",
+      "start": 11.429,
+      "end": 13.015
+    },
+    {
+      "id": "p12",
+      "text": "The page scrolls",
+      "start": 13.015,
+      "end": 13.906
+    },
+    {
+      "id": "p13",
+      "text": "to that heading",
+      "start": 13.906,
+      "end": 14.632
+    },
+    {
+      "id": "p14",
+      "text": "and keyboard focus",
+      "start": 14.632,
+      "end": 15.747
+    },
+    {
+      "id": "p15",
+      "text": "moves there too.",
+      "start": 15.747,
+      "end": 17.306
+    },
+    {
+      "id": "p16",
+      "text": "Scrolling down past",
+      "start": 17.306,
+      "end": 18.488
+    },
+    {
+      "id": "p17",
+      "text": "the deck works",
+      "start": 18.488,
+      "end": 19.209
+    },
+    {
+      "id": "p18",
+      "text": "just as well.",
+      "start": 19.209,
+      "end": 20.319
+    },
+    {
+      "id": "p19",
+      "text": "The cards stay",
+      "start": 20.319,
+      "end": 21.04
+    },
+    {
+      "id": "p20",
+      "text": "above the article",
+      "start": 21.04,
+      "end": 21.899
+    },
+    {
+      "id": "p21",
+      "text": "the whole time.",
+      "start": 21.899,
+      "end": 22.982
+    },
+    {
+      "id": "p22",
+      "text": "This sentence is",
+      "start": 22.982,
+      "end": 23.828
+    },
+    {
+      "id": "p23",
+      "text": "filler to bring",
+      "start": 23.828,
+      "end": 24.568
+    },
+    {
+      "id": "p24",
+      "text": "the body close",
+      "start": 24.568,
+      "end": 25.387
+    },
+    {
+      "id": "p25",
+      "text": "to the ninety-word ceiling.",
+      "start": 25.387,
+      "end": 27.408
+    }
+  ]
+}

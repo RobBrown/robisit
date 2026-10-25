@@ -1,0 +1,23 @@
+/* Read-aloud narration on insight cards: one button and the spoken-phrase
+   underline. Loaded only on posts with generated narration. Colours are the
+   deck's own tokens from insight-cards.css. Nothing animates. */
+
+/* The button sits in the counter's row, just inside it, on the right. */
+.ic-play[hidden]{display:none}
+.ic-play{
+  position:absolute;top:calc(var(--ic-pad-top) - 1px);right:calc(var(--ic-pad-x) + 34px);
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;padding:0;cursor:pointer;
+  color:var(--ic-ink);background:transparent;
+  border:1px solid var(--ic-edge);border-radius:50%;
+}
+.ic-play svg{width:14px;height:14px;fill:currentColor}
+.ic-play[aria-pressed="true"] .ic-i-play,.ic-play:not([aria-pressed="true"]) .ic-i-pause{display:none}
+@media(hover:hover){.ic-play:hover{border-color:var(--ic-rule-strong)}}
+.ic-play + .ic-title{padding-right:76px}
+
+/* The phrase being spoken, in the text's own ink. */
+.ic-card [data-phrase].is-spoken{
+  text-decoration:underline;text-decoration-color:currentColor;
+  text-decoration-thickness:.08em;text-underline-offset:.22em;text-decoration-skip-ink:auto;
+}

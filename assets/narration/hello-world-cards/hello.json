@@ -1,0 +1,178 @@
+{
+  "cardId": "hello",
+  "hash": "b34726b83da452bca3e7554bc531d5aece062078b211a4bafa67f4e967f6dd22",
+  "voice": "en-US-Neural2-D",
+  "segmentation": "v1",
+  "audio": "/assets/narration/hello-world-cards/hello.mp3",
+  "duration": 28.296,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "Hello, world:",
+      "start": 0.015,
+      "end": 1.764
+    },
+    {
+      "id": "p1",
+      "text": "this is a test card",
+      "start": 1.764,
+      "end": 3.277
+    },
+    {
+      "id": "p2",
+      "text": "This page exists",
+      "start": 3.277,
+      "end": 4.278
+    },
+    {
+      "id": "p3",
+      "text": "to test",
+      "start": 4.278,
+      "end": 4.749
+    },
+    {
+      "id": "p4",
+      "text": "the Insight Cards",
+      "start": 4.749,
+      "end": 5.667
+    },
+    {
+      "id": "p5",
+      "text": "feature on robisit.com.",
+      "start": 5.667,
+      "end": 8.139
+    },
+    {
+      "id": "p6",
+      "text": "It is not",
+      "start": 8.139,
+      "end": 8.555
+    },
+    {
+      "id": "p7",
+      "text": "a real article,",
+      "start": 8.555,
+      "end": 9.507
+    },
+    {
+      "id": "p8",
+      "text": "and nothing on",
+      "start": 9.507,
+      "end": 10.112
+    },
+    {
+      "id": "p9",
+      "text": "it is advice.",
+      "start": 10.112,
+      "end": 11.677
+    },
+    {
+      "id": "p10",
+      "text": "If you found",
+      "start": 11.677,
+      "end": 12.192
+    },
+    {
+      "id": "p11",
+      "text": "it by accident,",
+      "start": 12.192,
+      "end": 13.195
+    },
+    {
+      "id": "p12",
+      "text": "hello, and sorry",
+      "start": 13.195,
+      "end": 14.348
+    },
+    {
+      "id": "p13",
+      "text": "for the detour.",
+      "start": 14.348,
+      "end": 15.843
+    },
+    {
+      "id": "p14",
+      "text": "Each card",
+      "start": 15.843,
+      "end": 16.368
+    },
+    {
+      "id": "p15",
+      "text": "on this page",
+      "start": 16.368,
+      "end": 17.073
+    },
+    {
+      "id": "p16",
+      "text": "is written close",
+      "start": 17.073,
+      "end": 17.803
+    },
+    {
+      "id": "p17",
+      "text": "to the ninety-word ceiling",
+      "start": 17.803,
+      "end": 19.132
+    },
+    {
+      "id": "p18",
+      "text": "so the deck",
+      "start": 19.132,
+      "end": 19.632
+    },
+    {
+      "id": "p19",
+      "text": "can be checked",
+      "start": 19.632,
+      "end": 20.213
+    },
+    {
+      "id": "p20",
+      "text": "on small phones.",
+      "start": 20.213,
+      "end": 21.925
+    },
+    {
+      "id": "p21",
+      "text": "A real card",
+      "start": 21.925,
+      "end": 22.57
+    },
+    {
+      "id": "p22",
+      "text": "would teach one",
+      "start": 22.57,
+      "end": 23.267
+    },
+    {
+      "id": "p23",
+      "text": "complete idea here:",
+      "start": 23.267,
+      "end": 24.892
+    },
+    {
+      "id": "p24",
+      "text": "the claim,",
+      "start": 24.892,
+      "end": 25.675
+    },
+    {
+      "id": "p25",
+      "text": "why it holds,",
+      "start": 25.675,
+      "end": 26.535
+    },
+    {
+      "id": "p26",
+      "text": "and what",
+      "start": 26.535,
+      "end": 26.786
+    },
+    {
+      "id": "p27",
+      "text": "to do about it.",
+      "start": 26.786,
+      "end": 28.296
+    }
+  ]
+}

@@ -20,7 +20,8 @@ posthog.init('phc_2kfjmGaj5A7KtH79AFffVClaAxl0upvAxb7mmtXrbKr',{api_host:'https:
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">{% if ic_valid %}
-<link rel="stylesheet" href="{{ '/assets/css/insight-cards.css' | relative_url }}">{% endif %}
+<link rel="stylesheet" href="{{ '/assets/css/insight-cards.css' | relative_url }}">{% assign ic_narr_dir = '/assets/narration/' | append: page.slug | append: '/' %}{% assign ic_narr_any = site.static_files | where_exp: 'f', 'f.path contains ic_narr_dir' | size %}{% if ic_narr_any > 0 %}
+<link rel="stylesheet" href="{{ '/assets/css/insight-cards-narration.css' | relative_url }}">{% endif %}{% endif %}
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -411,7 +412,8 @@ footer .copy{
     {{ content }}
   </div>{% if ic_valid %}
   </div>
-  <script src="{{ '/assets/js/insight-cards.js' | relative_url }}"></script>{% endif %}
+  <script src="{{ '/assets/js/insight-cards.js' | relative_url }}"></script>{% if ic_narr_any > 0 %}
+  <script src="{{ '/assets/js/insight-cards-narration.js' | relative_url }}"></script>{% endif %}{% endif %}
 </article>
 
 <footer>
