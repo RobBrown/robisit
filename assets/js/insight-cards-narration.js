@@ -19,25 +19,6 @@
   deck.appendChild(audio);
   var live = document.getElementById('ic-live');
 
-  /* Temporary diagnostics: with ?narration-debug in the address, a small
-     on-screen log of gestures, unlock attempts and play() results, for
-     checking autoplay on a phone without a debugger. */
-  var log = function () {};
-  if (/[?&]narration-debug\b/.test(location.search)) {
-    var box = document.createElement('pre'), lines = [], t0 = Date.now();
-    // Pinned to the top: Safari's toolbar can cover the bottom of the screen.
-    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:2147483647;margin:0;padding:calc(env(safe-area-inset-top) + 6px) 10px 8px;'
-      + 'min-height:5.5em;max-height:45vh;overflow:auto;font:12px/1.4 ui-monospace,monospace;white-space:pre-wrap;pointer-events:none;'
-      + 'background:#0a0600;color:#ffa000;border-bottom:2px solid #ffa000';
-    document.body.appendChild(box);
-    log = function (m) { lines.push(((Date.now() - t0) / 1000).toFixed(2) + ' ' + m); box.textContent = lines.slice(-24).join('\n'); };
-    ['touchstart', 'touchend', 'touchcancel', 'pointercancel'].forEach(function (type) {
-      document.addEventListener(type, function (e) { if (e.target.closest && e.target.closest('#ic-deck')) log(type); }, true);
-    });
-    log('NARRATION DEBUG (v7b). Swipe once to card 1.');
-    log('canPlayType mp3 = ' + audio.canPlayType('audio/mpeg'));
-  }
-
   var card = null, btn = null, phrases = null, spoken = null, frame = 0, meta = {};
   // auto: start narration when a card becomes current. A pause turns it off;
   // pressing Play turns it back on.
@@ -91,7 +72,6 @@
     if (!p || !p.catch) return;
     p.catch(function (e) {
       if (card !== session || e.name === 'AbortError') return;
-      log('play refused: ' + e.name);
       if (e.name === 'NotAllowedError') stop(); // autoplay policy: not an error
       else fail(e.name + ': ' + e.message);
     });
@@ -108,7 +88,6 @@
   }
 
   function start(b, trigger) {
-    log('start ' + trigger + ' ' + b.closest('.ic-card').getAttribute('data-id'));
     stop();
     var session = card = b.closest('.ic-card');
     btn = b;
@@ -144,7 +123,6 @@
 
   audio.addEventListener('playing', function () {
     if (!card) return;
-    log('playing ' + card.getAttribute('data-id'));
     if (announce) { announce = false; say('Reading card aloud.'); }
     setButton(btn, true); stopLoop(); loop();
   });
@@ -180,7 +158,6 @@
     if (e.type === 'keydown' ? !(inDeck || e.key === 'ArrowLeft' || e.key === 'ArrowRight') : !inDeck) return;
     if (inDeck && t.closest('.ic-play')) return; // the button starts real audio itself
     priming = true;
-    log('unlock try on ' + e.type);
     audio.src = SILENCE;
     var p = audio.play();
     var done = function (ok) {
@@ -194,7 +171,7 @@
       afterPrime = null;
       if (fn) fn();
     };
-    if (p && p.then) p.then(function () { log('unlocked'); done(true); }, function (err) { log('unlock refused: ' + err.name); done(false); });
+    if (p && p.then) p.then(function () { done(true); }, function () { done(false); });
     else done(true);
   }
   var GESTURES = ['touchstart', 'touchend', 'pointerup', 'click', 'keydown'];
@@ -211,7 +188,6 @@
     var b = c && c.querySelector('.ic-play');
     if (auto && b && card !== c) {
       autoTimer = setTimeout(function () {
-        log('autoplay due' + (priming ? ', waiting for unlock' : ''));
         whenPrimed(function () { if (auto && current === c && card !== c) start(b, 'auto'); });
       }, AUTO_DELAY);
     }

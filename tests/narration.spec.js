@@ -402,22 +402,6 @@ test.describe('playback', () => {
     expect((await page.evaluate(() => window.__srcs))[0]).toMatch(/^data:audio\/mpeg/);
   });
 
-  test('?narration-debug shows an on-screen log; without it there is none', async ({ page }) => {
-    await page.goto(`${CARDED_URL}?narration-debug`);
-    await settle(page);
-    await page.locator('.ic-rail').focus();
-    await page.keyboard.press('ArrowRight');
-    await settle(page);
-    await playing(page);
-    const text = await page.locator('body > pre').last().textContent();
-    expect(text).toMatch(/unlock try on keydown/);
-    expect(text).toMatch(/unlocked/);
-    expect(text).toMatch(/start auto/);
-    expect(text).toMatch(/playing/);
-    await page.goto(CARDED_URL);
-    await expect(page.locator('body > pre')).toHaveCount(0);
-  });
-
   test('a tap outside the deck does not prime or play anything', async ({ page }) => {
     await page.addInitScript(() => {
       window.__plays = 0;
