@@ -25,14 +25,17 @@
   var log = function () {};
   if (/[?&]narration-debug\b/.test(location.search)) {
     var box = document.createElement('pre'), lines = [], t0 = Date.now();
-    box.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99;margin:0;padding:6px 8px;max-height:40vh;overflow:auto;'
-      + 'font:11px/1.35 ui-monospace,monospace;white-space:pre-wrap;pointer-events:none;background:#0a0600;color:#d4cfc6;border-top:1px solid #ffa000';
+    // Pinned to the top: Safari's toolbar can cover the bottom of the screen.
+    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:2147483647;margin:0;padding:calc(env(safe-area-inset-top) + 6px) 10px 8px;'
+      + 'min-height:5.5em;max-height:45vh;overflow:auto;font:12px/1.4 ui-monospace,monospace;white-space:pre-wrap;pointer-events:none;'
+      + 'background:#0a0600;color:#ffa000;border-bottom:2px solid #ffa000';
     document.body.appendChild(box);
     log = function (m) { lines.push(((Date.now() - t0) / 1000).toFixed(2) + ' ' + m); box.textContent = lines.slice(-24).join('\n'); };
     ['touchstart', 'touchend', 'touchcancel', 'pointercancel'].forEach(function (type) {
       document.addEventListener(type, function (e) { if (e.target.closest && e.target.closest('#ic-deck')) log(type); }, true);
     });
-    log('narration ready; canPlayType mp3 = ' + audio.canPlayType('audio/mpeg'));
+    log('NARRATION DEBUG (v7b). Swipe once to card 1.');
+    log('canPlayType mp3 = ' + audio.canPlayType('audio/mpeg'));
   }
 
   var card = null, btn = null, phrases = null, spoken = null, frame = 0, meta = {};
