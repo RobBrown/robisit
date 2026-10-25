@@ -78,15 +78,17 @@
 .ic-card.is-current{border-color:var(--ic-edge-on)}
 /* The opening question card is green, so it reads as a different kind of card.
    Its edge is a thin, softly lit line, like a trace on a green CRT: the border
-   itself goes clear and a slightly blurred 1px copy sits on top with a faint
+   itself goes clear and a slightly blurred 1px line sits in its place with a faint
    phosphor glow (index.html green theme). An accent, not a focal point. */
 .ic-situation.is-current{border-color:transparent}
 .ic-situation.is-current::after{
-  content:"";position:absolute;inset:-2px;pointer-events:none;
-  border:1px solid rgba(0,200,0,.8);border-radius:14px;
+  /* Kept inside the card's padding box (inset 0) and drawn with shadows, which
+     never count as overflow, so the card's height and fit are unchanged. */
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:12px;
   filter:blur(.8px);
   box-shadow:
-    0 0 3px rgba(0,200,0,.25),
+    0 0 0 1px rgba(0,200,0,.8),
+    0 0 3px 1px rgba(0,200,0,.25),
     inset 0 0 4px rgba(0,200,0,.12);
 }
 /* .72 is the lowest that keeps the amber counter at AA contrast. The button

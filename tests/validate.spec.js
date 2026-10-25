@@ -38,7 +38,7 @@ test('the site\'s own posts validate cleanly against the real build', async () =
   const r = run('--site', '_site');
   expect(r.status).toBe(0);
   expect(r.stdout).not.toContain('::warning');
-  expect(r.stdout).toMatch(/1 carded post.*valid/);
+  expect(r.stdout).toMatch(/(\d+) carded posts?, \1 valid, 0 with warnings/);
 });
 
 test('emulated GFM ids agree with the ids Jekyll generated for every post', async () => {

@@ -120,10 +120,15 @@ test('deck CSS contains no colour literals outside the site token set, and no we
   const css = fs.readFileSync(path.join(ROOT, 'assets/css/insight-cards.css'), 'utf8');
   const allowed = siteColours();
   const toRgb = (h) => { if (h.length === 3) h = h.split('').map((c) => c + c).join(''); return `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4), 16)})`; };
+  // The situation card's edge (owner direction) uses the home page's green theme.
+  const green = /body\.green\{([^}]*)\}/.exec(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'))[1];
+  for (const m of green.matchAll(/#([0-9a-f]{6})\b/gi)) allowed.add(toRgb(m[1].toLowerCase()));
+  const greenRgb = new Set([...green.matchAll(/:\s*(\d+,\d+,\d+);/g)].map((m) => m[1]));
   const hexes = [...css.matchAll(/#([0-9a-f]{3}|[0-9a-f]{6})\b/gi)].map((m) => m[1]);
   expect(hexes.filter((h) => !allowed.has(toRgb(h.toLowerCase())))).toEqual([]);
   const colourFns = [...css.matchAll(/(?:rgba?|hsla?)\([^)]*\)/g)].map((m) => m[0]);
-  expect(colourFns.filter((c) => !/^rgba\(0,0,0,0?\.\d+\)$/.test(c)), 'only black shadows may use rgba()').toEqual([]);
+  const ok = (c) => /^rgba\(0,0,0,0?\.\d+\)$/.test(c) || greenRgb.has((/^rgba\((\d+,\d+,\d+),0?\.\d+\)$/.exec(c) || [])[1]);
+  expect(colourFns.filter((c) => !ok(c)), 'only black shadows and the green theme may use rgba()').toEqual([]);
   expect(css).not.toMatch(/@import|@font-face|fonts\.googleapis/);
   const fams = [...css.matchAll(/font-family:\s*([^;}]+)/g)].map((m) => m[1]);
   for (const f of fams) expect(f).toMatch(/var\(--ic-(serif|sans)\)/);

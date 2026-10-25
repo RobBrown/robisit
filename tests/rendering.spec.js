@@ -116,9 +116,11 @@ test('the test page is unlisted: absent from /content and marked noindex', async
   await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
 });
 
-test('no existing article has a cards block, so none shows a deck', async ({ page }) => {
+test('articles without a cards block show no deck', async ({ page }) => {
   for (const f of fs.readdirSync(path.join(ROOT, '_articles'))) {
     if (path.join('_articles', f) === CARDED_FILE) continue;
+    const src = fs.readFileSync(path.join(ROOT, '_articles', f), 'utf8');
+    if (/^cards:/m.test(/^---\n([\s\S]*?)\n---/.exec(src)[1])) continue; // new carded posts are allowed
     const html = fs.readFileSync(path.join(SITE, 'thoughts', f.replace(/\.md$/, ''), 'index.html'), 'utf8');
     expect(html, f).not.toContain('ic-deck');
     expect(html, f).not.toContain('insight-cards');
