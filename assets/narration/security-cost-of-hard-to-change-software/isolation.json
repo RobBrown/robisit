@@ -1,0 +1,118 @@
+{
+  "cardId": "isolation",
+  "hash": "1bbb7694d184cad9a55697ca685c790b644df1449da645313023503754f3cde4",
+  "voice": "en-US-Casual-K",
+  "segmentation": "v1",
+  "audio": "/assets/narration/security-cost-of-hard-to-change-software/isolation.mp3",
+  "duration": 30.72,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "Architecture determines the consequences",
+      "start": 0.086,
+      "end": 2.007
+    },
+    {
+      "id": "p1",
+      "text": "of a successful attack",
+      "start": 2.007,
+      "end": 3.696
+    },
+    {
+      "id": "p2",
+      "text": "Two organizations can run",
+      "start": 3.696,
+      "end": 5.015
+    },
+    {
+      "id": "p3",
+      "text": "the same vulnerable software",
+      "start": 5.015,
+      "end": 6.401
+    },
+    {
+      "id": "p4",
+      "text": "and face very different consequences.",
+      "start": 6.401,
+      "end": 8.918
+    },
+    {
+      "id": "p5",
+      "text": "One isolates the affected service,",
+      "start": 8.918,
+      "end": 11.056
+    },
+    {
+      "id": "p6",
+      "text": "limits its permissions,",
+      "start": 11.056,
+      "end": 12.412
+    },
+    {
+      "id": "p7",
+      "text": "and deploys a fix independently.",
+      "start": 12.412,
+      "end": 14.818
+    },
+    {
+      "id": "p8",
+      "text": "The other depends",
+      "start": 14.818,
+      "end": 15.528
+    },
+    {
+      "id": "p9",
+      "text": "on tightly coupled applications",
+      "start": 15.528,
+      "end": 17.037
+    },
+    {
+      "id": "p10",
+      "text": "and shared infrastructure.",
+      "start": 17.037,
+      "end": 18.488
+    },
+    {
+      "id": "p11",
+      "text": "The vulnerability is identical.",
+      "start": 18.488,
+      "end": 20.26
+    },
+    {
+      "id": "p12",
+      "text": "The exposure and recovery",
+      "start": 20.26,
+      "end": 21.499
+    },
+    {
+      "id": "p13",
+      "text": "options are not.",
+      "start": 21.499,
+      "end": 22.684
+    },
+    {
+      "id": "p14",
+      "text": "Isolation, deployment independence,",
+      "start": 22.684,
+      "end": 25.529
+    },
+    {
+      "id": "p15",
+      "text": "and recoverability are",
+      "start": 25.529,
+      "end": 26.82
+    },
+    {
+      "id": "p16",
+      "text": "security capabilities established long",
+      "start": 26.82,
+      "end": 28.78
+    },
+    {
+      "id": "p17",
+      "text": "before an attack begins.",
+      "start": 28.78,
+      "end": 30.72
+    }
+  ]
+}

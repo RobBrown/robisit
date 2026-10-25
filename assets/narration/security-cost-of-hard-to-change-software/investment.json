@@ -1,0 +1,130 @@
+{
+  "cardId": "investment",
+  "hash": "d461a2c2064a184eb9fe1ceecccb43d2e62a0344453d636e1ff9aaca4bc2a79f",
+  "voice": "en-US-Casual-K",
+  "segmentation": "v1",
+  "audio": "/assets/narration/security-cost-of-hard-to-change-software/investment.mp3",
+  "duration": 26.784,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "Architecture investment is",
+      "start": 0.08,
+      "end": 1.293
+    },
+    {
+      "id": "p1",
+      "text": "becoming security investment",
+      "start": 1.293,
+      "end": 3.265
+    },
+    {
+      "id": "p2",
+      "text": "Security budgets address immediate threats.",
+      "start": 3.265,
+      "end": 6.282
+    },
+    {
+      "id": "p3",
+      "text": "Modernization budgets compete",
+      "start": 6.282,
+      "end": 7.694
+    },
+    {
+      "id": "p4",
+      "text": "on efficiency",
+      "start": 7.694,
+      "end": 8.493
+    },
+    {
+      "id": "p5",
+      "text": "and long-term business value.",
+      "start": 8.493,
+      "end": 10.38
+    },
+    {
+      "id": "p6",
+      "text": "That separation misses",
+      "start": 10.38,
+      "end": 11.505
+    },
+    {
+      "id": "p7",
+      "text": "an important cost.",
+      "start": 11.505,
+      "end": 12.789
+    },
+    {
+      "id": "p8",
+      "text": "A system",
+      "start": 12.789,
+      "end": 13.237
+    },
+    {
+      "id": "p9",
+      "text": "that can be updated",
+      "start": 13.237,
+      "end": 14.04
+    },
+    {
+      "id": "p10",
+      "text": "in hours instead",
+      "start": 14.04,
+      "end": 14.842
+    },
+    {
+      "id": "p11",
+      "text": "of weeks reduces",
+      "start": 14.842,
+      "end": 15.795
+    },
+    {
+      "id": "p12",
+      "text": "the time",
+      "start": 15.795,
+      "end": 16.115
+    },
+    {
+      "id": "p13",
+      "text": "it remains exposed.",
+      "start": 16.115,
+      "end": 17.849
+    },
+    {
+      "id": "p14",
+      "text": "A service that can",
+      "start": 17.849,
+      "end": 18.592
+    },
+    {
+      "id": "p15",
+      "text": "be isolated limits",
+      "start": 18.592,
+      "end": 19.707
+    },
+    {
+      "id": "p16",
+      "text": "the consequences of compromise.",
+      "start": 19.707,
+      "end": 21.682
+    },
+    {
+      "id": "p17",
+      "text": "The ability to change",
+      "start": 21.682,
+      "end": 22.728
+    },
+    {
+      "id": "p18",
+      "text": "and recover safely belongs",
+      "start": 22.728,
+      "end": 24.259
+    },
+    {
+      "id": "p19",
+      "text": "in the security investment discussion.",
+      "start": 24.259,
+      "end": 26.784
+    }
+  ]
+}

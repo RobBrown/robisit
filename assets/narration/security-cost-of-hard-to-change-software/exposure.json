@@ -1,0 +1,118 @@
+{
+  "cardId": "exposure",
+  "hash": "bc0094e6a987ead18ba201eded8115c18ce60c8f9e1cbc57fea72f3ad30c9d3c",
+  "voice": "en-US-Casual-K",
+  "segmentation": "v1",
+  "audio": "/assets/narration/security-cost-of-hard-to-change-software/exposure.mp3",
+  "duration": 25.728,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "AI is changing the economics",
+      "start": 0.075,
+      "end": 1.622
+    },
+    {
+      "id": "p1",
+      "text": "of exploiting old weaknesses",
+      "start": 1.622,
+      "end": 3.663
+    },
+    {
+      "id": "p2",
+      "text": "The PHP vulnerabilities disclosed",
+      "start": 3.663,
+      "end": 5.696
+    },
+    {
+      "id": "p3",
+      "text": "in October 2026",
+      "start": 5.696,
+      "end": 7.143
+    },
+    {
+      "id": "p4",
+      "text": "illustrate the shift.",
+      "start": 7.143,
+      "end": 8.794
+    },
+    {
+      "id": "p5",
+      "text": "An underlying weakness",
+      "start": 8.794,
+      "end": 9.894
+    },
+    {
+      "id": "p6",
+      "text": "reportedly known since",
+      "start": 9.894,
+      "end": 10.921
+    },
+    {
+      "id": "p7",
+      "text": "2020 became part",
+      "start": 10.921,
+      "end": 12.11
+    },
+    {
+      "id": "p8",
+      "text": "of a practical",
+      "start": 12.11,
+      "end": 12.754
+    },
+    {
+      "id": "p9",
+      "text": "exploit chain developed",
+      "start": 12.754,
+      "end": 13.861
+    },
+    {
+      "id": "p10",
+      "text": "with AI-assisted research.",
+      "start": 13.861,
+      "end": 15.893
+    },
+    {
+      "id": "p11",
+      "text": "The code had",
+      "start": 15.893,
+      "end": 16.402
+    },
+    {
+      "id": "p12",
+      "text": "not suddenly become vulnerable.",
+      "start": 16.402,
+      "end": 18.39
+    },
+    {
+      "id": "p13",
+      "text": "The ability to exploit",
+      "start": 18.39,
+      "end": 19.433
+    },
+    {
+      "id": "p14",
+      "text": "it had changed.",
+      "start": 19.433,
+      "end": 20.691
+    },
+    {
+      "id": "p15",
+      "text": "Organizations can no longer",
+      "start": 20.691,
+      "end": 22.017
+    },
+    {
+      "id": "p16",
+      "text": "assume that yesterday's difficulty",
+      "start": 22.017,
+      "end": 23.513
+    },
+    {
+      "id": "p17",
+      "text": "will protect tomorrow's systems.",
+      "start": 23.513,
+      "end": 25.728
+    }
+  ]
+}

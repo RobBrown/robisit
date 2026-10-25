@@ -1,0 +1,118 @@
+{
+  "cardId": "ai",
+  "hash": "95bb93c438b4559fce86b882c59c177eed18c50cba68c17f51f772d19d19cc27",
+  "voice": "en-US-Casual-K",
+  "segmentation": "v1",
+  "audio": "/assets/narration/security-cost-of-hard-to-change-software/ai.mp3",
+  "duration": 26.976,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "AI helps defenders most",
+      "start": 0.07,
+      "end": 1.435
+    },
+    {
+      "id": "p1",
+      "text": "when their systems can change",
+      "start": 1.435,
+      "end": 3.285
+    },
+    {
+      "id": "p2",
+      "text": "AI can identify defects,",
+      "start": 3.285,
+      "end": 5.182
+    },
+    {
+      "id": "p3",
+      "text": "propose corrections,",
+      "start": 5.182,
+      "end": 6.564
+    },
+    {
+      "id": "p4",
+      "text": "and improve testing.",
+      "start": 6.564,
+      "end": 8.335
+    },
+    {
+      "id": "p5",
+      "text": "It cannot automatically",
+      "start": 8.335,
+      "end": 9.439
+    },
+    {
+      "id": "p6",
+      "text": "eliminate undocumented dependencies",
+      "start": 9.439,
+      "end": 11.381
+    },
+    {
+      "id": "p7",
+      "text": "or make a tightly",
+      "start": 11.381,
+      "end": 12.023
+    },
+    {
+      "id": "p8",
+      "text": "coupled application safe",
+      "start": 12.023,
+      "end": 13.148
+    },
+    {
+      "id": "p9",
+      "text": "to update.",
+      "start": 13.148,
+      "end": 14.389
+    },
+    {
+      "id": "p10",
+      "text": "Organizations with strong testing,",
+      "start": 14.389,
+      "end": 16.611
+    },
+    {
+      "id": "p11",
+      "text": "deployment, and recovery practices",
+      "start": 16.611,
+      "end": 18.813
+    },
+    {
+      "id": "p12",
+      "text": "can turn AI-assisted fixes",
+      "start": 18.813,
+      "end": 20.537
+    },
+    {
+      "id": "p13",
+      "text": "into production changes faster.",
+      "start": 20.537,
+      "end": 22.938
+    },
+    {
+      "id": "p14",
+      "text": "Those without them",
+      "start": 22.938,
+      "end": 23.604
+    },
+    {
+      "id": "p15",
+      "text": "risk discovering problems",
+      "start": 23.604,
+      "end": 24.713
+    },
+    {
+      "id": "p16",
+      "text": "faster than they",
+      "start": 24.713,
+      "end": 25.405
+    },
+    {
+      "id": "p17",
+      "text": "can resolve them.",
+      "start": 25.405,
+      "end": 26.976
+    }
+  ]
+}

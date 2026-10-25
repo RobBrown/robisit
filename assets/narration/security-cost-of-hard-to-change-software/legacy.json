@@ -1,0 +1,142 @@
+{
+  "cardId": "legacy",
+  "hash": "0605fd1320fbe3ca6c6be181679afc5033a9ae78a12756fe1640c9be5b931883",
+  "voice": "en-US-Casual-K",
+  "segmentation": "v1",
+  "audio": "/assets/narration/security-cost-of-hard-to-change-software/legacy.mp3",
+  "duration": 28.584,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "Legacy systems can",
+      "start": 0.122,
+      "end": 1.157
+    },
+    {
+      "id": "p1",
+      "text": "become expensive overnight",
+      "start": 1.157,
+      "end": 2.931
+    },
+    {
+      "id": "p2",
+      "text": "A fifteen-year-old system",
+      "start": 2.931,
+      "end": 4.026
+    },
+    {
+      "id": "p3",
+      "text": "can look economical",
+      "start": 4.026,
+      "end": 5.047
+    },
+    {
+      "id": "p4",
+      "text": "until a critical",
+      "start": 5.047,
+      "end": 5.706
+    },
+    {
+      "id": "p5",
+      "text": "vulnerability appears in",
+      "start": 5.706,
+      "end": 7.006
+    },
+    {
+      "id": "p6",
+      "text": "a dependency it",
+      "start": 7.006,
+      "end": 7.804
+    },
+    {
+      "id": "p7",
+      "text": "cannot easily update.",
+      "start": 7.804,
+      "end": 9.712
+    },
+    {
+      "id": "p8",
+      "text": "Suddenly, the choices",
+      "start": 9.712,
+      "end": 11.374
+    },
+    {
+      "id": "p9",
+      "text": "are continued exposure,",
+      "start": 11.374,
+      "end": 13.048
+    },
+    {
+      "id": "p10",
+      "text": "restricted service,",
+      "start": 13.048,
+      "end": 14.351
+    },
+    {
+      "id": "p11",
+      "text": "or emergency modernization.",
+      "start": 14.351,
+      "end": 16.553
+    },
+    {
+      "id": "p12",
+      "text": "The technical debt",
+      "start": 16.553,
+      "end": 17.191
+    },
+    {
+      "id": "p13",
+      "text": "was already there.",
+      "start": 17.191,
+      "end": 18.375
+    },
+    {
+      "id": "p14",
+      "text": "The financial consequences",
+      "start": 18.375,
+      "end": 19.565
+    },
+    {
+      "id": "p15",
+      "text": "arrived without warning.",
+      "start": 19.565,
+      "end": 21.156
+    },
+    {
+      "id": "p16",
+      "text": "Modernization business cases",
+      "start": 21.156,
+      "end": 22.688
+    },
+    {
+      "id": "p17",
+      "text": "need to account",
+      "start": 22.688,
+      "end": 23.244
+    },
+    {
+      "id": "p18",
+      "text": "for the cost",
+      "start": 23.244,
+      "end": 23.82
+    },
+    {
+      "id": "p19",
+      "text": "of systems",
+      "start": 23.82,
+      "end": 24.381
+    },
+    {
+      "id": "p20",
+      "text": "that cannot be patched,",
+      "start": 24.381,
+      "end": 25.772
+    },
+    {
+      "id": "p21",
+      "text": "isolated, or replaced quickly.",
+      "start": 25.772,
+      "end": 28.584
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "cardId": "risk",
+  "hash": "eda1ccff1c6b560be50e979d8d58062c8afcbd1e88dd2115dc8017701268c200",
+  "voice": "en-US-Casual-K",
+  "segmentation": "v1",
+  "audio": "/assets/narration/security-cost-of-hard-to-change-software/risk.mp3",
+  "duration": 24.528,
+  "phrases": [
+    {
+      "id": "p0",
+      "text": "A security decision",
+      "start": 0.097,
+      "end": 1.131
+    },
+    {
+      "id": "p1",
+      "text": "can expire without",
+      "start": 1.131,
+      "end": 2.067
+    },
+    {
+      "id": "p2",
+      "text": "the software changing",
+      "start": 2.067,
+      "end": 3.606
+    },
+    {
+      "id": "p3",
+      "text": "A vulnerability considered too",
+      "start": 3.606,
+      "end": 5.097
+    },
+    {
+      "id": "p4",
+      "text": "difficult to exploit two",
+      "start": 5.097,
+      "end": 6.132
+    },
+    {
+      "id": "p5",
+      "text": "years ago can become",
+      "start": 6.132,
+      "end": 7.03
+    },
+    {
+      "id": "p6",
+      "text": "a practical attack today.",
+      "start": 7.03,
+      "end": 8.897
+    },
+    {
+      "id": "p7",
+      "text": "AI is reducing",
+      "start": 8.897,
+      "end": 9.776
+    },
+    {
+      "id": "p8",
+      "text": "the effort required",
+      "start": 9.776,
+      "end": 10.696
+    },
+    {
+      "id": "p9",
+      "text": "to investigate weaknesses",
+      "start": 10.696,
+      "end": 11.969
+    },
+    {
+      "id": "p10",
+      "text": "and develop exploits.",
+      "start": 11.969,
+      "end": 13.767
+    },
+    {
+      "id": "p11",
+      "text": "The software stays the same.",
+      "start": 13.767,
+      "end": 15.477
+    },
+    {
+      "id": "p12",
+      "text": "The risk does not.",
+      "start": 15.477,
+      "end": 16.561
+    },
+    {
+      "id": "p13",
+      "text": "Every accepted vulnerability",
+      "start": 16.561,
+      "end": 18.025
+    },
+    {
+      "id": "p14",
+      "text": "rests on assumptions",
+      "start": 18.025,
+      "end": 19.06
+    },
+    {
+      "id": "p15",
+      "text": "about what",
+      "start": 19.06,
+      "end": 19.415
+    },
+    {
+      "id": "p16",
+      "text": "attackers can do.",
+      "start": 19.415,
+      "end": 20.814
+    },
+    {
+      "id": "p17",
+      "text": "Those assumptions need",
+      "start": 20.814,
+      "end": 21.787
+    },
+    {
+      "id": "p18",
+      "text": "to be revisited",
+      "start": 21.787,
+      "end": 22.598
+    },
+    {
+      "id": "p19",
+      "text": "as their capabilities improve.",
+      "start": 22.598,
+      "end": 24.528
+    }
+  ]
+}
