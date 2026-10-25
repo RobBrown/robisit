@@ -4,6 +4,9 @@
   has set ic_valid. The heading and deck ship `hidden`; assets/js/insight-cards.js
   shows them, so without the script the page is the plain article. Insight
   cards render in the default order and the script reorders them for a path.
+  A card with generated narration (see insight-cards-narration.html) renders
+  its phrase-wrapped fragment and one read-aloud button, shown by
+  assets/js/insight-cards-narration.js.
 {%- endcomment -%}
 {%- assign ic = page.cards -%}
 {%- assign ic_ids = ic.insights | map: "id" -%}
@@ -24,11 +27,21 @@
       {%- endif %}
       {%- for id in ic_order %}
       {%- assign i = ic.insights | where: "id", id | first %}
+      {%- include insight-cards-narration.html id=id title=i.title body=i.body %}
+      {%- if ic_narr %}
+      <div class="ic-card ic-insight" role="group" aria-roledescription="card" aria-label="{{ forloop.index }} of {{ ic_total }}" data-id="{{ id | escape }}" data-narration="{{ ic_narr_json | relative_url }}" data-audio="{{ ic_narr_mp3 | relative_url }}">
+        <div class="ic-n" aria-hidden="true">{{ forloop.index }}/{{ ic_total }}</div>
+        <button type="button" class="ic-play" aria-pressed="false" aria-label="Read this card aloud" hidden><svg class="ic-i-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 5.8v12.4L18.2 12z"/></svg><svg class="ic-i-pause" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 5.5h3.4v13H7zM13.6 5.5H17v13h-3.4z"/></svg></button>
+        <h2 class="ic-title">{{ ic_narr_title }}</h2>
+        <p class="ic-body">{{ ic_narr_body }}</p>
+      </div>
+      {%- else %}
       <div class="ic-card ic-insight" role="group" aria-roledescription="card" aria-label="{{ forloop.index }} of {{ ic_total }}" data-id="{{ id | escape }}">
         <div class="ic-n" aria-hidden="true">{{ forloop.index }}/{{ ic_total }}</div>
         <h2 class="ic-title">{{ i.title | escape }}</h2>
         <p class="ic-body">{{ i.body | strip | escape }}</p>
       </div>
+      {%- endif %}
       {%- endfor %}
       <div class="ic-card ic-terminal" role="group" aria-roledescription="card" aria-label="{{ ic_total }} of {{ ic_total }}">
         <div class="ic-n" aria-hidden="true">{{ ic_total }}/{{ ic_total }}</div>

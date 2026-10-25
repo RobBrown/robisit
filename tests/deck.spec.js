@@ -46,14 +46,18 @@ test('swiping past the situation card uses the default order', async ({ page }) 
   expect(new URL(page.url()).searchParams.get('path')).toBeNull();
 });
 
+// Narration adds exactly one control to a narrated insight card: its
+// read-aloud button. Nothing else.
 test('insight cards show counter, title and body and nothing else', async ({ page }) => {
   await page.goto(CARDED_URL);
   const ins = page.locator('.ic-insight');
   await expect(ins).toHaveCount(cards.insights.length);
   for (let i = 0; i < cards.insights.length; i++) {
+    const narrated = await ins.nth(i).evaluate((el) => el.hasAttribute('data-narration'));
     const kids = await ins.nth(i).evaluate((el) => [...el.children].map((c) => c.className));
-    expect(kids).toEqual(['ic-n', 'ic-title', 'ic-body']);
-    await expect(ins.nth(i).locator('a, button, input')).toHaveCount(0);
+    expect(kids).toEqual(narrated ? ['ic-n', 'ic-play', 'ic-title', 'ic-body'] : ['ic-n', 'ic-title', 'ic-body']);
+    await expect(ins.nth(i).locator('a, button, input')).toHaveCount(narrated ? 1 : 0);
+    if (narrated) await expect(ins.nth(i).locator('button')).toHaveClass('ic-play');
   }
 });
 

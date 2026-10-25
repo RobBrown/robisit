@@ -1,0 +1,27 @@
+{%- comment -%}
+  Narration check for one insight card: include.id, include.title, include.body.
+  Sets ic_narr when `npm run narrate` has generated this card's metadata
+  (assets/narration/<slug>/<id>.json) and its phrase fragment
+  (_includes/narration/<slug>/<id>.html) still shows exactly the text the plain
+  render would. If either is missing or the card's text has changed since,
+  the card renders as before, with no button. Outputs nothing.
+{%- endcomment -%}
+{%- assign ic_narr = false -%}
+{%- assign ic_narr_base = "/assets/narration/" | append: page.slug | append: "/" | append: include.id -%}
+{%- assign ic_narr_json = ic_narr_base | append: ".json" -%}
+{%- assign ic_narr_mp3 = ic_narr_base | append: ".mp3" -%}
+{%- assign ic_narr_hit = site.static_files | where: "path", ic_narr_json | size -%}
+{%- if ic_narr_hit > 0 -%}
+  {%- assign ic_narr_inc = "narration/" | append: page.slug | append: "/" | append: include.id | append: ".html" -%}
+  {%- capture ic_frag -%}{%- include {{ ic_narr_inc }} -%}{%- endcapture -%}
+  {%- assign ic_parts = ic_frag | split: "<!--ic-body-->" -%}
+  {%- assign ic_t = ic_parts[0] | strip_html -%}
+  {%- assign ic_b = ic_parts[1] | strip_html -%}
+  {%- assign ic_t_plain = include.title | escape -%}
+  {%- assign ic_b_plain = include.body | strip | escape -%}
+  {%- if ic_parts.size == 2 and ic_t == ic_t_plain and ic_b == ic_b_plain -%}
+    {%- assign ic_narr = true -%}
+    {%- assign ic_narr_title = ic_parts[0] -%}
+    {%- assign ic_narr_body = ic_parts[1] -%}
+  {%- endif -%}
+{%- endif -%}
