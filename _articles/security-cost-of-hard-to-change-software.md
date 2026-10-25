@@ -114,6 +114,8 @@ AI is changing cybersecurity faster than most organizations can adapt.
 
 Attackers are using AI to automate reconnaissance, investigate vulnerabilities, and develop exploits. Security researchers are using the same technology to uncover weaknesses that might otherwise have remained hidden for years.
 
+[subscribe]
+
 On October 21, PHP shipped emergency patches for two critical vulnerabilities after details leaked ahead of their planned disclosure. Attackers were already probing exposed systems before the fixes became available.
 
 The PHP incident is particularly revealing. The underlying weakness had reportedly been known since 2020, but AI-assisted research helped demonstrate a practical exploit chain.
@@ -185,6 +187,8 @@ A compromised application with narrowly scoped permissions and limited network a
 These decisions were made long before the vulnerability was discovered.
 
 For years, we've justified architectural improvements through engineering productivity, reliability, and operating costs. Those benefits remain important. But the ability to make changes safely, without disrupting the business, is increasingly a cybersecurity capability in its own right.
+
+[subscribe]
 
 ## The hidden security cost of legacy technology
 
