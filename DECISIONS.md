@@ -60,7 +60,7 @@ Read-aloud narration with a synchronized phrase underline on insight cards. Ever
     - **Why this works:** iOS Safari lets an element start from a timer only after it has played inside a gesture. Chrome and Firefox need any earlier page activation, which that same gesture provides.
     - **Limited to the deck,** plus arrow keys anywhere, because playing even silence takes over the phone's audio session and pauses the reader's music. A tap elsewhere on the page never does that.
     - **It runs once, and is silent:** no `cards_play`, no announcement.
-    - **Unresolved:** whether the touchend at the end of a pure swipe counts as a gesture on iOS can only be confirmed on a device (VERIFY.md 2a). Chrome on Android doesn't count a scroll as activation, so a reader there who only swipes gets autoplay once they've tapped anything in the deck.
+    - **Checked on iPhone (2026-10-24): a swipe does not unlock audio; tapping a path option does.** iOS treats the touchend that ends a scroll as scrolling, not as a gesture, and Chrome on Android doesn't count a scroll either. So a reader who only swipes gets autoplay after their first tap in the deck (a ▶ press, an option or a chevron). No script can get around this.
   - **`cards_play` gains `trigger: "button" | "auto"`.** The deck's `ic:track` handler merges extra props into its `{card, path}`. This isn't in PRD 7, but without it the play count can't separate choice from autoplay.
 - **Play on a card that isn't current** (its button can be clicked at the deck edge) plays that card. Any later card change stops it as usual.
 - **Errors** (MP3 404 or decode failure, metadata fetch failure, a rejected `play()`) log one `console.warn` and return to rest. Each failure warns once, and navigation is untouched.
