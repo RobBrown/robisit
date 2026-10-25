@@ -143,7 +143,12 @@
      It is limited to the deck so a tap elsewhere on the page never takes over
      the phone's audio (other apps pause when a page plays sound). */
   var SILENCE = 'data:audio/mpeg;base64,//NExAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExFMAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKYAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
-  var primed = false, priming = false;
+  var primed = false, priming = false, afterPrime = null;
+  // Runs fn now, or once an unlock in progress has settled. Starting real
+  // audio sooner would swap the element's src and cancel the unlock: on a
+  // phone the silent clip can take longer to start than the deck takes to
+  // settle, so the first swipe's autoplay would be refused.
+  function whenPrimed(fn) { if (priming) afterPrime = fn; else fn(); }
   function prime(e) {
     if (primed || priming || card) return;
     var t = e.target;
@@ -160,6 +165,9 @@
         ['touchend', 'pointerup', 'click', 'keydown'].forEach(function (type) { document.removeEventListener(type, prime, true); });
       }
       if (!card && audio.getAttribute('src') === SILENCE) { audio.pause(); audio.removeAttribute('src'); audio.load(); }
+      var fn = afterPrime;
+      afterPrime = null;
+      if (fn) fn();
     };
     if (p && p.then) p.then(function () { done(true); }, function () { done(false); });
     else done(true);
@@ -173,9 +181,12 @@
     if (card && c !== card) stop();
     arrive(c);
     clearTimeout(autoTimer);
+    afterPrime = null;
     var b = c && c.querySelector('.ic-play');
     if (auto && b && card !== c) {
-      autoTimer = setTimeout(function () { if (auto && current === c && card !== c) start(b, 'auto'); }, AUTO_DELAY);
+      autoTimer = setTimeout(function () {
+        whenPrimed(function () { if (auto && current === c && card !== c) start(b, 'auto'); });
+      }, AUTO_DELAY);
     }
   });
 })();
