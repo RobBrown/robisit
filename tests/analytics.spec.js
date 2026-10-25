@@ -25,12 +25,11 @@ test('cards_reached reports the default path when no situation is chosen', async
   expect(reached.map((e) => e.props)).toEqual([{ card: 1, path: 'default' }, { card: 2, path: 'default' }]);
 });
 
-test('cards_handoff via terminal carries route, card, path, anchor', async ({ page }) => {
+test('cards_handoff via terminal carries route, card, path and the article anchor', async ({ page }) => {
   await page.goto(`${CARDED_URL}?path=pilot&card=${N}`);
   await page.locator('.ic-go').click();
   const h = (await events(page)).find((e) => e.name === 'cards_handoff');
-  const pilot = cards.situation.options.find((o) => o.id === 'pilot');
-  expect(h.props).toEqual({ route: 'terminal', card: N, path: 'pilot', anchor: pilot.anchor });
+  expect(h.props).toEqual({ route: 'terminal', card: N, path: 'pilot', anchor: '#ic-article' });
 });
 
 test('cards_handoff fires once per page view', async ({ page }) => {

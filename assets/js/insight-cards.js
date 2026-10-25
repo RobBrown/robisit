@@ -38,7 +38,7 @@
   var total = rail.children.length - 1 + offset;
   var reduced = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
 
-  var path = null, anchor = data.default_anchor, idx = -1, aim = null, aimTimer, route = null;
+  var path = null, idx = -1, aim = null, aimTimer, route = null;
 
   function last() { return rail.children.length - 1; }
   function counter(i) { return i + offset; }
@@ -47,7 +47,7 @@
   function applyPath(id) {
     var o = options.filter(function (x) { return x.id === id; })[0];
     if (!o || !situation) return false;
-    path = o.id; anchor = o.anchor;
+    path = o.id;
     var cards = [].slice.call(rail.children);
     o.order.forEach(function (key) {
       for (var i = 0; i < cards.length; i++) if (cards[i].getAttribute('data-id') === key) rail.insertBefore(cards[i], terminal);
@@ -165,10 +165,12 @@
     changed();
   }
 
-  // The page stays where it is: only a landing target (the terminal's path
-  // anchor, a section link) scrolls. Focus moves to the view's start.
+  // The page stays where it is. A section link scrolls to its section, and the
+  // article buttons bring the article's start back into view if it is above
+  // the screen. Focus moves to the view's start.
   function land(v, o) {
-    if (o.land) o.land.scrollIntoView({ block: 'start', behavior: 'instant' });
+    var t = o.land || o.top && sw.getBoundingClientRect().top < 0 && sw;
+    if (t) t.scrollIntoView({ block: 'start', behavior: 'instant' });
     if (o.focus === false) return;
     var f = o.focus || o.land || panels[v];
     if (!f.hasAttribute('tabindex')) f.setAttribute('tabindex', '-1');
@@ -211,7 +213,7 @@
     if (o.history) writeHash(v, o.history);
     if (v === 'article' && o.route && !route) {
       route = o.route;
-      trackEvent('cards_handoff', { route: route, card: counter(Math.max(idx, 0)), path: path || 'default', anchor: o.land ? '#' + o.land.id : '#ic-article' });
+      trackEvent('cards_handoff', { route: route, card: counter(Math.max(idx, 0)), path: path || 'default', anchor: '#ic-article' });
     }
     if (v === want && !anim) return land(v, o); // already showing it
     if (v === want) return;                     // already on its way
@@ -279,11 +281,11 @@
     tabs[v].focus();
     setView(v, { route: 'switch', history: 'push', focus: tabs[v] });
   });
-  // The end of the deck: the terminal control lands on the path's anchor.
+  // Both "Read The Full Article" buttons open the article at its start.
   terminal.querySelector('.ic-go').addEventListener('click', function () {
-    setView('article', { route: 'terminal', history: 'push', land: anchor && document.getElementById(anchor.slice(1)) || null });
+    setView('article', { route: 'terminal', history: 'push', top: true });
   });
-  openBtn.addEventListener('click', function () { setView('article', { route: 'button', history: 'push' }); });
+  openBtn.addEventListener('click', function () { setView('article', { route: 'button', history: 'push', top: true }); });
   // Find in page reveals the article itself and scrolls to the match.
   article.addEventListener('beforematch', function () { setView('article', { history: 'replace', instant: true, focus: false }); });
   window.addEventListener('popstate', sync);

@@ -1,9 +1,9 @@
 // Review package (not assertions): carded post at 375 and 1280, light and
 // dark, on the situation card, an insight card, the terminal card, and
 // after the terminal control. Written to test-results/screenshots/.
-const { test } = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 const path = require('path');
-const { CARDED_URL, N, settle, atTopOrEnd } = require('./helpers');
+const { CARDED_URL, N, settle } = require('./helpers');
 
 const OUT = path.join(__dirname, '..', 'test-results', 'screenshots');
 
@@ -25,7 +25,8 @@ for (const width of [375, 1280]) {
       await page.goto(`${CARDED_URL}?path=pilot&card=${N}`);
       await shot('3-terminal');
       await page.locator('.ic-go').click();
-      await atTopOrEnd(page, null);
+      await expect(page.locator('#ic-article')).toBeVisible();
+      await page.waitForTimeout(700); // past the transition
       await shot('4-in-article');
     });
   }

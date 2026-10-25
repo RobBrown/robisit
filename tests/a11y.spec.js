@@ -82,7 +82,7 @@ test('ACC-01: keyboard only — Tab reaches rail, options, chevrons and terminal
   // Enter on the terminal control.
   await page.locator('.ic-go').focus();
   await page.keyboard.press('Enter');
-  await expect(page.locator(cards.situation.options[0].anchor)).toBeFocused();
+  await expect(page.locator('#ic-article')).toBeFocused();
 });
 
 test('ACC-05: live region announces card changes', async ({ page }) => {
@@ -118,11 +118,10 @@ test.describe('ACC-10: reduced motion', () => {
       res(document.querySelector('.ic-rail').scrollLeft); // same task: no animation frames elapsed
     }));
     expect(Math.abs(after - target)).toBeLessThanOrEqual(1);
-    // The jump into the article is instant too.
+    // The switch into the article is instant too.
     await page.goto(`${CARDED_URL}?card=${N}`);
-    await page.locator('.ic-go').click();
-    const y = await page.evaluate((a) => document.querySelector(a).getBoundingClientRect().top, cards.default_anchor);
-    expect(Math.abs(y)).toBeLessThan(40);
+    const shown = await page.evaluate(() => { document.querySelector('.ic-go').click(); return !document.getElementById('ic-article').hidden; });
+    expect(shown).toBe(true);
   });
 });
 

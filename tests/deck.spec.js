@@ -23,16 +23,13 @@ test('situation card shows the question and the options, with no counter', async
 });
 
 for (const opt of cards.situation.options) {
-  test(`selecting "${opt.id}" reorders insights, sets the anchor and advances to card 1`, async ({ page }) => {
+  test(`selecting "${opt.id}" reorders insights and advances to card 1`, async ({ page }) => {
     await page.goto(CARDED_URL);
     await page.getByRole('radio', { name: opt.label }).click();
     await settle(page);
     expect(await currentIndex(page)).toBe(1);
     expect(await titlesInRail(page)).toEqual(opt.order.map((id) => insightById[id].title));
     await expect(page.getByRole('radio', { name: opt.label })).toHaveAttribute('aria-checked', 'true');
-    // Anchor: the terminal control jumps to this option's anchor.
-    await page.locator('.ic-go').click();
-    await expect(page.locator(opt.anchor)).toBeFocused();
     expect(new URL(page.url()).searchParams.get('path')).toBe(opt.id);
   });
 }
@@ -174,16 +171,17 @@ test('vertical scroll over the deck scrolls the page, not the deck', async ({ pa
   expect(await scrollLeft(page)).toBe(0);
 });
 
-test('terminal control switches to the article and lands on the path anchor', async ({ page }) => {
+// Owner direction (2026-10-25): both "Read The Full Article" buttons open the
+// article at its start, never at a section further down (the path anchor).
+test('terminal control switches to the article at its start', async ({ page }) => {
   await page.goto(`${CARDED_URL}?card=${N}`);
   await expect(page.locator('#ic-article')).toBeHidden();
   await page.locator('.ic-go').click();
   await expect(page.locator('#ic-article')).toBeVisible();
   await expect(page.locator('#ic-deck')).toBeHidden(); // one view at a time
   await expect(page.locator('#ic-tab-article')).toHaveAttribute('aria-selected', 'true');
-  const target = page.locator(cards.default_anchor);
-  await expect(target).toBeFocused();
-  await atTopOrEnd(page, cards.default_anchor);
+  await expect(page.locator('#ic-article')).toBeFocused();
+  await expect(page.locator('#ic-switch')).toBeInViewport();
   expect(new URL(page.url()).hash).toBe('#article');
 });
 
@@ -200,6 +198,20 @@ test('the button under the deck switches to the article in place', async ({ page
   expect(await page.evaluate(() => window.scrollY)).toBe(y); // the page does not move
   await expect(open).toBeHidden(); // part of the TL;DR view
 });
+
+for (const [name, sel] of [['button under the deck', '#ic-open'], ['terminal control', '.ic-go']]) {
+  test(`on a phone, the ${name} brings the article's start back into view`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto(`${CARDED_URL}?path=pilot&card=${N}`);
+    await page.locator(sel).scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.scrollBy(0, 200)); // the switch is above the screen
+    expect(await page.locator('#ic-switch').evaluate((el) => el.getBoundingClientRect().bottom)).toBeLessThan(0);
+    await page.locator(sel).click();
+    await expect(page.locator('#ic-article')).toBeFocused();
+    await atTopOrEnd(page, '#ic-switch');
+    await expect(page.locator('#ic-article .body > :first-child')).toBeInViewport();
+  });
+}
 
 test('the button under the deck works from the keyboard', async ({ page }) => {
   await page.goto(CARDED_URL);
