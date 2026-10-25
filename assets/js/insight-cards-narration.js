@@ -19,6 +19,22 @@
   deck.appendChild(audio);
   var live = document.getElementById('ic-live');
 
+  /* Temporary diagnostics: with ?narration-debug in the address, a small
+     on-screen log of gestures, unlock attempts and play() results, for
+     checking autoplay on a phone without a debugger. */
+  var log = function () {};
+  if (/[?&]narration-debug\b/.test(location.search)) {
+    var box = document.createElement('pre'), lines = [], t0 = Date.now();
+    box.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99;margin:0;padding:6px 8px;max-height:40vh;overflow:auto;'
+      + 'font:11px/1.35 ui-monospace,monospace;white-space:pre-wrap;pointer-events:none;background:#0a0600;color:#d4cfc6;border-top:1px solid #ffa000';
+    document.body.appendChild(box);
+    log = function (m) { lines.push(((Date.now() - t0) / 1000).toFixed(2) + ' ' + m); box.textContent = lines.slice(-24).join('\n'); };
+    ['touchstart', 'touchend', 'touchcancel', 'pointercancel'].forEach(function (type) {
+      document.addEventListener(type, function (e) { if (e.target.closest && e.target.closest('#ic-deck')) log(type); }, true);
+    });
+    log('narration ready; canPlayType mp3 = ' + audio.canPlayType('audio/mpeg'));
+  }
+
   var card = null, btn = null, phrases = null, spoken = null, frame = 0, meta = {};
   // auto: start narration when a card becomes current. A pause turns it off;
   // pressing Play turns it back on.
@@ -72,6 +88,7 @@
     if (!p || !p.catch) return;
     p.catch(function (e) {
       if (card !== session || e.name === 'AbortError') return;
+      log('play refused: ' + e.name);
       if (e.name === 'NotAllowedError') stop(); // autoplay policy: not an error
       else fail(e.name + ': ' + e.message);
     });
@@ -88,6 +105,7 @@
   }
 
   function start(b, trigger) {
+    log('start ' + trigger + ' ' + b.closest('.ic-card').getAttribute('data-id'));
     stop();
     var session = card = b.closest('.ic-card');
     btn = b;
@@ -123,6 +141,7 @@
 
   audio.addEventListener('playing', function () {
     if (!card) return;
+    log('playing ' + card.getAttribute('data-id'));
     if (announce) { announce = false; say('Reading card aloud.'); }
     setButton(btn, true); stopLoop(); loop();
   });
@@ -138,7 +157,9 @@
      it has played inside one; other browsers ask for any earlier tap, click
      or key press on the page. So the reader's first such gesture in the deck
      (choosing a path, a chevron, an arrow key, the touch that ends a swipe)
-     plays a tenth of a second of silence on the deck's one element. Later
+     plays a tenth of a second of silence on the deck's one element. A swipe
+     is tried at touchstart as well as touchend: by touchend iOS may have
+     classed the touch as a scroll, which is not a gesture. Later
      autoplay, which runs from a timer rather than a gesture, is then allowed.
      It is limited to the deck so a tap elsewhere on the page never takes over
      the phone's audio (other apps pause when a page plays sound). */
@@ -156,23 +177,25 @@
     if (e.type === 'keydown' ? !(inDeck || e.key === 'ArrowLeft' || e.key === 'ArrowRight') : !inDeck) return;
     if (inDeck && t.closest('.ic-play')) return; // the button starts real audio itself
     priming = true;
+    log('unlock try on ' + e.type);
     audio.src = SILENCE;
     var p = audio.play();
     var done = function (ok) {
       priming = false;
       if (ok) {
         primed = true;
-        ['touchend', 'pointerup', 'click', 'keydown'].forEach(function (type) { document.removeEventListener(type, prime, true); });
+        GESTURES.forEach(function (type) { document.removeEventListener(type, prime, true); });
       }
       if (!card && audio.getAttribute('src') === SILENCE) { audio.pause(); audio.removeAttribute('src'); audio.load(); }
       var fn = afterPrime;
       afterPrime = null;
       if (fn) fn();
     };
-    if (p && p.then) p.then(function () { done(true); }, function () { done(false); });
+    if (p && p.then) p.then(function () { log('unlocked'); done(true); }, function (err) { log('unlock refused: ' + err.name); done(false); });
     else done(true);
   }
-  ['touchend', 'pointerup', 'click', 'keydown'].forEach(function (type) { document.addEventListener(type, prime, true); });
+  var GESTURES = ['touchstart', 'touchend', 'pointerup', 'click', 'keydown'];
+  GESTURES.forEach(function (type) { document.addEventListener(type, prime, true); });
 
   // Moving to any other card (swipe, keys, chevrons, a path) stops narration,
   // and, while auto is on, starts the new card once the deck rests on it.
@@ -185,6 +208,7 @@
     var b = c && c.querySelector('.ic-play');
     if (auto && b && card !== c) {
       autoTimer = setTimeout(function () {
+        log('autoplay due' + (priming ? ', waiting for unlock' : ''));
         whenPrimed(function () { if (auto && current === c && card !== c) start(b, 'auto'); });
       }, AUTO_DELAY);
     }
