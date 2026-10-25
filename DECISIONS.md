@@ -209,3 +209,10 @@ Supersedes "The article starts collapsed" and the TL;DR label in "Section labels
 - **CRT transition.** The old view collapses to a bright line across the middle of the viewport and goes dark (index.html `crt-off`, 260ms), and the new view opens out of the same line (340ms). Web Animations, scaled about the viewport's middle so it reads the same on a long article. Instant under reduced motion; a second switch mid-transition cuts it short.
 - **Analytics.** `cards_handoff` gains `route: 'switch'` for the Full article tab. Still once per page view.
 - **Budget.** CSS + JS is about 10.0 KB gzipped against the 10 KB budget (PRD 10), with little headroom left.
+
+## Card art (owner request, 2026-10-25)
+
+- **Optional `art` on an insight.** A path to a 960×320 transparent WebP; the include renders it as a decorative `<img alt="">` (fixed width/height, lazy) after the body. The validator ignores the key, so a post without art is unchanged.
+- **It only uses room the rail already leaves.** `margin-top:auto` pins it to the foot of the glass, and it goes only on cards shorter than the tallest one, so no card grows. On the security backlog post, `risk` (dice and a robot hand) and `exposure` (coin stacks dissolving into circuitry) had 130–160px free at 375 and 1280; the tallest card (`isolation`) still sets the height, unchanged at 518/506px.
+- **Part of the screen, not a picture on it.** 78% opacity, dimmed with the rest of the card when it isn't current, reaching into the side padding and fading out at both edges with a mask. It is a background-like ornament, so the card stays one text block for screen readers and narration.
+- **Source art.** The owner's two PNGs, trimmed to their content, fitted to 960×320, encoded at WebP q82 (76 KB and 86 KB). The red and yellow fringes visible in some previews were alpha 1/255 matte pixels, invisible on the card; they were zeroed before encoding.

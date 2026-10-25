@@ -29,6 +29,7 @@ cards:
   insights:
     - id: risk
       title: "Nothing changed but the odds."
+      art: /assets/cards/security-cost-of-hard-to-change-software/risk.webp
       body: |
         A vulnerability considered too difficult to exploit two years ago
         can become a practical attack today. AI is reducing the effort
@@ -62,6 +63,7 @@ cards:
 
     - id: exposure
       title: "The price of finding security exploits fell."
+      art: /assets/cards/security-cost-of-hard-to-change-software/exposure.webp
       body: |
         The PHP vulnerabilities disclosed in October 2026 illustrate
         the shift. An underlying weakness reportedly known since 2020

@@ -11,6 +11,8 @@
   A card with generated narration (see insight-cards-narration.html) renders
   its phrase-wrapped fragment and one read-aloud button, shown by
   assets/js/insight-cards-narration.js.
+  An insight with `art` (a 960x320 transparent image, see
+  docs/insight-cards-design.md) shows it at the foot of its card, decorative.
 {%- endcomment -%}
 {%- assign ic = page.cards -%}
 {%- assign ic_ids = ic.insights | map: "id" -%}
@@ -41,12 +43,18 @@
         <button type="button" class="ic-play" aria-pressed="false" aria-label="Read this card aloud" hidden><svg class="ic-i-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 5.8v12.4L18.2 12z"/></svg><svg class="ic-i-pause" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 5.5h3.4v13H7zM13.6 5.5H17v13h-3.4z"/></svg></button>
         <h2 class="ic-title">{{ ic_narr_title }}</h2>
         <p class="ic-body">{{ ic_narr_body }}</p>
+        {%- if i.art %}
+        <img class="ic-art" src="{{ i.art | relative_url }}" alt="" width="960" height="320" loading="lazy" decoding="async">
+        {%- endif %}
       </div>
       {%- else %}
       <div class="ic-card ic-insight" role="group" aria-roledescription="card" aria-label="{{ forloop.index }} of {{ ic_total }}" data-id="{{ id | escape }}">
         <div class="ic-n" aria-hidden="true">{{ forloop.index }}/{{ ic_total }}</div>
         <h2 class="ic-title">{{ i.title | escape }}</h2>
         <p class="ic-body">{{ i.body | strip | escape }}</p>
+        {%- if i.art %}
+        <img class="ic-art" src="{{ i.art | relative_url }}" alt="" width="960" height="320" loading="lazy" decoding="async">
+        {%- endif %}
       </div>
       {%- endif %}
       {%- endfor %}
