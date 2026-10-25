@@ -61,7 +61,7 @@ cards:
         cannot be patched, isolated, or replaced quickly.
 
     - id: exposure
-      title: "AI is changing the economics of exploiting old weaknesses"
+      title: "The price of finding security exploits fell."
       body: |
         The PHP vulnerabilities disclosed in October 2026 illustrate
         the shift. An underlying weakness reportedly known since 2020
