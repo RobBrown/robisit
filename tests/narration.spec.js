@@ -205,40 +205,142 @@ test.describe('playback', () => {
     expect((await audio(page)).paused).toBe(true);
   });
 
-  for (const [how, act] of [
-    ['arrow key', async (page) => { await page.keyboard.press('ArrowLeft'); }],
-    ['chevron', async (page) => { await page.locator('#ic-deck').hover(); await page.locator('.ic-next').click(); }],
-    ['swipe', async (page) => { await page.locator('.ic-rail').evaluate((el) => el.scrollBy({ left: -el.clientWidth * 0.7, behavior: 'instant' })); }],
+  // Each route lands on a different card: card 4 (narrated) or the terminal card (not narrated).
+  for (const [how, act, narrated] of [
+    ['arrow key', async (page) => { await page.keyboard.press('ArrowLeft'); }, true],
+    ['chevron', async (page) => { await page.locator('#ic-deck').hover(); await page.locator('.ic-next').click(); }, false],
+    ['swipe', async (page) => { await page.locator('.ic-rail').evaluate((el) => el.scrollBy({ left: -el.clientWidth * 0.7, behavior: 'instant' })); }, true],
   ]) {
-    test(`card change by ${how} while playing stops audio, clears the underline and resets the button`, async ({ page }) => {
+    test(`card change by ${how} while playing stops audio, clears the underline and resets the button; ${narrated ? 'the new card then plays' : 'the terminal card stays silent'}`, async ({ page }) => {
       await page.goto(URL_PILOT5);
       await settle(page);
       const was = page.locator(`.ic-insight[data-id="${idAt5}"] .ic-play`);
       await was.click();
       await playing(page, 0.5);
       await act(page);
-      await settle(page);
-      const a = await audio(page);
-      expect(a.paused).toBe(true);
-      expect(a.src).toBeNull();
-      expect(await spoken(page)).toEqual([]);
       await expect(was).toHaveAttribute('aria-pressed', 'false');
       await expect(was).toHaveAttribute('aria-label', 'Read this card aloud');
-      await page.waitForTimeout(400);
-      expect((await audio(page)).paused).toBe(true); // nothing plays until Play on the new card
+      expect(await page.locator(`.ic-insight[data-id="${idAt5}"] .is-spoken`).count()).toBe(0);
+      await settle(page);
+      if (narrated) {
+        const now = await page.locator('.ic-card.is-current').getAttribute('data-id');
+        expect(now).not.toBe(idAt5);
+        await playing(page);
+        expect((await audio(page)).src).toBe(`/assets/narration/${SLUG}/${now}.mp3`);
+        await expect(playButton(page)).toHaveAttribute('aria-pressed', 'true');
+        await expect.poll(() => page.locator('.is-spoken').evaluateAll((els) => els.every((e) => e.closest('.ic-card').classList.contains('is-current')))).toBe(true);
+      } else {
+        await page.waitForTimeout(600);
+        const a = await audio(page);
+        expect(a.paused).toBe(true);
+        expect(a.src).toBeNull();
+        expect(await spoken(page)).toEqual([]);
+      }
     });
   }
 
-  test('choosing a path while a card plays stops it', async ({ page }) => {
+  test('choosing a path while a card plays stops it, and the new first card plays', async ({ page }) => {
     await page.goto(`${CARDED_URL}?card=1`);
+    await settle(page);
+    const first = await page.locator('.ic-card.is-current').getAttribute('data-id');
+    await playButton(page).click();
+    await playing(page);
+    const opt = cards.situation.options.find((o) => o.order[0] !== first);
+    await page.getByRole('radio', { name: opt.label }).click(); // visible at the deck's left edge
+    await expect(page.locator(`.ic-insight[data-id="${first}"] .ic-play`)).toHaveAttribute('aria-pressed', 'false');
+    await settle(page);
+    await playing(page);
+    expect((await audio(page)).src).toBe(`/assets/narration/${SLUG}/${opt.order[0]}.mp3`);
+    await expect(page.locator('.ic-play[aria-pressed="true"]')).toHaveCount(1);
+  });
+
+  test('moving to a narrated card plays it without pressing Play', async ({ page }) => {
+    await captureEvents(page);
+    await page.goto(URL_PILOT5);
+    await settle(page);
+    await page.locator('.ic-rail').focus();
+    await page.keyboard.press('ArrowLeft');
+    await settle(page);
+    await playing(page);
+    const id = await page.locator('.ic-card.is-current').getAttribute('data-id');
+    expect((await audio(page)).src).toBe(`/assets/narration/${SLUG}/${id}.mp3`);
+    await expect(playButton(page)).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(() => spoken(page)).toHaveLength(1);
+    const ev = (await page.evaluate(() => window.__events)).filter((e) => e.name === 'cards_play');
+    expect(ev).toEqual([{ name: 'cards_play', props: { card: 4, path: 'pilot', trigger: 'auto' } }]);
+  });
+
+  test('after a pause nothing plays on any card until Play is pressed; then moving on plays again', async ({ page }) => {
+    await page.goto(URL_PILOT5);
     await settle(page);
     await playButton(page).click();
     await playing(page);
-    await page.locator('.ic-situation .ic-opt').nth(1).click(); // visible at the deck's left edge
+    await playButton(page).click(); // pause
+    await page.locator('.ic-rail').focus();
+    for (const key of ['ArrowLeft', 'ArrowLeft', 'ArrowRight']) {
+      await page.keyboard.press(key);
+      await settle(page);
+      await page.waitForTimeout(600);
+      expect((await audio(page)).paused, key).toBe(true);
+      expect(await spoken(page)).toEqual([]);
+      await expect(page.locator('.ic-play[aria-pressed="true"]')).toHaveCount(0);
+    }
+    // Play on this card turns it back on: it plays, and so does the next card.
+    await playButton(page).click();
+    await playing(page);
+    await page.locator('.ic-rail').focus();
+    await page.keyboard.press('ArrowLeft');
     await settle(page);
+    await playing(page);
+    expect((await audio(page)).src).toBe(`/assets/narration/${SLUG}/${await page.locator('.ic-card.is-current').getAttribute('data-id')}.mp3`);
+  });
+
+  test('a pause on an autoplayed card also keeps every later card silent', async ({ page }) => {
+    await page.goto(`${CARDED_URL}?path=pilot&card=2`);
+    await settle(page);
+    await page.locator('.ic-rail').focus();
+    await page.keyboard.press('ArrowRight'); // card 3 autoplays
+    await settle(page);
+    await playing(page);
+    await playButton(page).click(); // pause
+    await expect(playButton(page)).toHaveAttribute('aria-pressed', 'false');
+    await page.locator('.ic-rail').focus();
+    for (let i = 0; i < 2; i++) { await page.keyboard.press('ArrowRight'); await settle(page); }
+    await page.waitForTimeout(600);
     expect((await audio(page)).paused).toBe(true);
-    expect(await spoken(page)).toEqual([]);
     await expect(page.locator('.ic-play[aria-pressed="true"]')).toHaveCount(0);
+  });
+
+  test('moving quickly through cards plays only the card the deck rests on', async ({ page }) => {
+    await captureEvents(page);
+    await page.goto(`${CARDED_URL}?path=pilot&card=1`);
+    await settle(page);
+    await page.locator('.ic-rail').focus();
+    // Three quick moves, faster than the deck rests on any card.
+    for (let i = 0; i < 3; i++) { await page.keyboard.press('ArrowRight'); await page.waitForTimeout(80); }
+    await settle(page);
+    await playing(page);
+    const plays = (await page.evaluate(() => window.__events)).filter((e) => e.name === 'cards_play');
+    expect(plays).toHaveLength(1);
+    expect(plays[0].props.card).toBe(await page.locator('.ic-card.is-current .ic-n').evaluate((n) => parseInt(n.textContent, 10)));
+  });
+
+  test('a start the browser blocks (autoplay policy) rests silently, with no warning', async ({ page }) => {
+    const warnings = [];
+    page.on('console', (m) => { if (m.type() === 'warning') warnings.push(m.text()); });
+    await page.addInitScript(() => {
+      HTMLMediaElement.prototype.play = function () { return Promise.reject(new DOMException('blocked', 'NotAllowedError')); };
+    });
+    await page.goto(URL_PILOT5);
+    await settle(page);
+    await page.locator('.ic-rail').focus();
+    await page.keyboard.press('ArrowLeft');
+    await settle(page);
+    await page.waitForTimeout(700);
+    await expect(page.locator('.ic-play[aria-pressed="true"]')).toHaveCount(0);
+    expect(await spoken(page)).toEqual([]);
+    expect(warnings).toEqual([]);
+    await expect(page.locator('#ic-live')).not.toHaveText('Reading card aloud.');
   });
 
   test('rapid switching: 20 card changes in 2 s never leave two sounds or a stale underline', async ({ page }) => {
@@ -272,16 +374,15 @@ test.describe('playback', () => {
     expect(log.maxPressed).toBeLessThanOrEqual(1);
     expect(log.staleUnderline).toBe(false);
     await settle(page);
-    await page.waitForTimeout(300);
+    // Once the deck rests, exactly the current card plays (autoplay), and nothing else.
+    await playing(page);
     const a = await audio(page);
     expect(a.count).toBe(1); // one media element, so two sounds are impossible
-    // The last action was a card change, so nothing is playing or underlined.
-    expect(a.paused).toBe(true);
-    expect(await spoken(page)).toEqual([]);
-    await expect(page.locator('.ic-play[aria-pressed="true"]')).toHaveCount(0);
-    // And Play still works afterwards.
-    const b = playButton(page);
-    if (await b.count()) { await b.click(); await playing(page); expect((await spoken(page)).length).toBe(1); }
+    const id = await page.locator('.ic-card.is-current').getAttribute('data-id');
+    expect(a.src).toBe(`/assets/narration/${SLUG}/${id}.mp3`);
+    await expect(page.locator('.ic-play[aria-pressed="true"]')).toHaveCount(1);
+    await expect(playButton(page)).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(() => page.locator('.is-spoken').evaluateAll((els) => els.length > 0 && els.every((e) => e.closest('.ic-card').classList.contains('is-current')))).toBe(true);
   });
 
   test('missing audio file: button returns to Play, one console warning, navigation still works', async ({ page }) => {
@@ -313,19 +414,19 @@ test.describe('playback', () => {
     expect(warnings.filter((w) => w.includes('[insight-cards] narration'))).toHaveLength(1);
   });
 
-  test('audio starts only from the button: nothing plays on load, deep link or card change', async ({ page }) => {
+  test('nothing plays on page load or from a deep link', async ({ page }) => {
     await page.addInitScript(() => {
       window.__plays = 0;
       const orig = HTMLMediaElement.prototype.play;
       HTMLMediaElement.prototype.play = function () { window.__plays++; return orig.apply(this, arguments); };
     });
-    await page.goto(URL_PILOT5);
-    await settle(page);
-    await page.locator('.ic-rail').focus();
-    await page.keyboard.press('ArrowLeft');
-    await settle(page);
-    expect(await page.evaluate(() => window.__plays)).toBe(0);
-    expect(await page.evaluate(() => [...document.querySelectorAll('audio')].every((a) => !a.hasAttribute('src')))).toBe(true);
+    for (const u of [CARDED_URL, URL_PILOT5, `${CARDED_URL}?card=2`]) {
+      await page.goto(u);
+      await settle(page);
+      await page.waitForTimeout(700);
+      expect(await page.evaluate(() => window.__plays), u).toBe(0);
+      expect(await page.evaluate(() => [...document.querySelectorAll('audio')].every((a) => !a.hasAttribute('src')))).toBe(true);
+    }
   });
 
   test('cards_play fires once with card and path through trackEvent', async ({ page }) => {
@@ -337,7 +438,7 @@ test.describe('playback', () => {
     await playButton(page).click(); // pause
     await playButton(page).click(); // resume: not a new play
     const ev = (await page.evaluate(() => window.__events)).filter((e) => e.name === 'cards_play');
-    expect(ev).toEqual([{ name: 'cards_play', props: { card: 5, path: 'pilot' } }]);
+    expect(ev).toEqual([{ name: 'cards_play', props: { card: 5, path: 'pilot', trigger: 'button' } }]);
   });
 });
 
