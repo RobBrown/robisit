@@ -6,7 +6,7 @@ const os = require('os');
 const path = require('path');
 const timing = require('../../scripts/narration/timing');
 const config = require('../../scripts/narration/config');
-const { narrate } = require('../../scripts/narrate');
+const { narrate, carded } = require('../../scripts/narrate');
 const { CARDED_FILE, cards } = require('../helpers');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -173,4 +173,12 @@ test('narrate stops at the credentials checkpoint, writes SETUP.md, and calls no
     assert.ok(setup.includes(cmd), cmd);
   }
   assert.ok(!fs.existsSync(path.join(dir, 'assets/narration')));
+});
+
+test('carded lists every post with an insights block, and nothing else', () => {
+  const dir = sandbox();
+  fs.writeFileSync(path.join(dir, '_articles/plain.md'), '---\ntitle: Plain\n---\n\nNo cards.\n');
+  fs.mkdirSync(path.join(dir, '_posts'));
+  fs.copyFileSync(path.join(ROOT, CARDED_FILE), path.join(dir, '_posts/2026-10-25-dated-cards.md'));
+  assert.deepEqual(carded(dir), ['hello-world-cards', 'dated-cards']);
 });
