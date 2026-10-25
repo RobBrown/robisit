@@ -19,7 +19,7 @@ Safari on a real iPhone, at
 | 4 | Silent switch toggled during playback. | No stuck underline, and the button state matches what you hear. |
 | 5 | Background tab. Start narration, switch to another Safari tab for 10 s, then come back. | iOS may pause audio in the background. On return, the underline matches the audio position, and Play/Pause shows the true state (Play if iOS paused it). |
 | 6 | Lock the screen during playback, then unlock. | Same as 5. No second sound starts, and the underline matches `currentTime` after unlock. |
-| 7 | Underline rendering with Lora at the site's sizes (16.5 px body on desktop, 15.5 px on phones; titles 20 to 22 px bold). | The underline is a thin line under the spoken phrase, clear of descenders (g, p, y) and never touching the next line. It doesn't jump between lines or flash as phrases change. |
+| 7 | Underline rendering with Atkinson Hyperlegible Next at the site's sizes (16.5 px body on desktop, 15.5 px on phones; titles 20 to 22 px bold). | The underline is a thin line under the spoken phrase, clear of descenders (g, p, y) and never touching the next line. It doesn't jump between lines or flash as phrases change. |
 | 8 | Underline across a line break. Find a phrase that wraps onto the next line. | Both line fragments are underlined. The space between phrases isn't. |
 | 9 | Swipe to the next card while playing. | The old card's audio stops at once, its underline clears and its button shows Play. When the deck settles, the new card starts reading by itself. |
 | 10 | Swipe back and forth quickly while playing (about 10 swipes in 2 s). | One sound at most, never two. No underline is left on a card that isn't playing. Only the card you stop on plays. |

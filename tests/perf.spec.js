@@ -20,6 +20,6 @@ test('the include and its Liquid add no external requests', async ({ page }) => 
   page.on('request', (r) => hosts.add(new URL(r.url()).host));
   await page.route(/^(?!http:\/\/localhost)/, (r) => r.abort());
   await page.goto(CARDED_URL);
-  const own = [...hosts].filter((h) => !/localhost|googleapis|gstatic|posthog/.test(h));
+  const own = [...hosts].filter((h) => !/localhost|posthog/.test(h));
   expect(own).toEqual([]);
 });

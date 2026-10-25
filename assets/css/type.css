@@ -1,0 +1,13 @@
+/* The site's type system (docs/typography.md). Self-hosted, latin subset.
+   Atkinson Hyperlegible Next sets every word people read; its Mono is the
+   machine voice (labels, counters, code); Bebas Neue is only the name. */
+@font-face{font-family:'Atkinson Hyperlegible Next';font-style:normal;font-weight:200 800;font-display:swap;src:url(/assets/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2) format('woff2')}
+@font-face{font-family:'Atkinson Hyperlegible Next';font-style:italic;font-weight:200 800;font-display:swap;src:url(/assets/fonts/atkinson-hyperlegible-next-latin-wght-italic.woff2) format('woff2')}
+@font-face{font-family:'Atkinson Hyperlegible Mono';font-style:normal;font-weight:200 800;font-display:swap;src:url(/assets/fonts/atkinson-hyperlegible-mono-latin-wght-normal.woff2) format('woff2')}
+@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/bebas-neue-latin-400-normal.woff2) format('woff2')}
+
+:root{
+  --font-text:'Atkinson Hyperlegible Next',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'Atkinson Hyperlegible Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  --font-brand:'Bebas Neue',Impact,sans-serif;
+}

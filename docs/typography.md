@@ -1,6 +1,6 @@
 # Typography for robisit.com
 
-Status: comparing three pairings on the `typography-review` branch. Nothing is chosen yet.
+Status: **decided 2026-10-25: pairing C, Hyperlegible.** See §5 for what shipped. §1–4 are the review that led there.
 
 ## 1. Audit (main @ 2be3f69)
 
@@ -70,7 +70,7 @@ Rejected outright: Berkeley Mono and Söhne (commercial licences, no free self-h
 
 All three are self-hosted, use the latin subset and the variable weight axis, and are OFL-licensed. Bebas Neue stays as the wordmark in all three. Payloads are for an article page; a face downloads only when a page uses it.
 
-### A. Reading Room (recommended)
+### A. Reading Room (my recommendation at review time)
 
 Literata body and headings · IBM Plex Sans UI · IBM Plex Mono labels and code.
 
@@ -100,6 +100,23 @@ Atkinson Hyperlegible Next for everything · Atkinson Hyperlegible Mono.
 - The TL;DR label uses the mono, like the card deck's labels.
 - Home page: the bio and contact rows move from Space Mono to the UI face at ≈14px; labels use the pairing's mono and nothing is set below 10px.
 - No faux italics: where the chosen UI face ships no italic, those lines are set upright.
+
+## 5. Decision and what shipped
+
+Rob compared all three on the reference article, the cards, the home page and the listing, and chose **C**. A was the recommendation. C wins on character distinction and payload, and it gives one family to maintain. The trade-off is less period warmth in the running text. The atmosphere now comes from the colour, the glow, the CRT cards and the Bebas Neue wordmark rather than from the text face.
+
+| Role | Face | File (latin, woff2) |
+|---|---|---|
+| Body, headings, UI, card prose and titles | Atkinson Hyperlegible Next, variable 200–800, roman + italic | 34 KB + 38 KB |
+| Labels, counters, buttons, TL;DR label, code | Atkinson Hyperlegible Mono, variable 200–800, roman | 18 KB |
+| Wordmark "ROB BROWN" and home stat numerals only | Bebas Neue 400 | 14 KB |
+
+- **Loading.** `assets/css/type.css` holds the four `@font-face` rules and three tokens: `--font-text`, `--font-mono` and `--font-brand`. Every page links it and preloads the roman text face. Nothing comes from a font CDN, and `tests/type.spec.js` checks this. The italic, the mono and Bebas load only on pages that use them.
+- **Article settings.** Body 18.5px / 1.65 (phones 17px / 1.6), measure unchanged at about 65 characters. Headings 700, h1 tracked −0.01em. Code is set at 0.88em in the mono. The TL;DR label is mono, matching the deck.
+- **Cards.** `insight-cards.css` keeps its `--ic-serif/sans/mono` names (the layout test keys on them), but they now point at the site tokens. Card sizes are unchanged and the fit tests pass.
+- **Home page.** The bio and contact rows moved from Space Mono at about 12px to the text face at 14.4px and 13px. Labels use the mono, and no text is below 10px (a test checks this). This changes `index.html`, which the project brief otherwise freezes. The change was made because this review covered the home page.
+- **Removed.** Lora, Inter, Share Tech Mono, Space Mono and all Google Fonts requests.
+- **Not changed.** The `meet-tab-mute/` product pages use system fonts and no web fonts, so they are out of scope. The secondary-text colours that fail contrast (§1) are a separate change.
 
 ## Sources
 

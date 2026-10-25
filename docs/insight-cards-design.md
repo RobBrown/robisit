@@ -1,5 +1,7 @@
 # Insight Cards: design brief
 
+> **Type has changed since this brief (2026-10-25).** Card prose and titles are now Atkinson Hyperlegible Next and the readouts are Atkinson Hyperlegible Mono; Lora, Inter, Share Tech Mono and Space Mono are gone. See `docs/typography.md`. The rest of this brief stands.
+
 Restyling the TL;DR card deck so it belongs to robisit.com. Appearance only:
 behaviour, navigation, the YAML schema and the article reveal are unchanged.
 

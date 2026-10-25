@@ -187,3 +187,11 @@ Every judgement call made while building Insight Cards (PRD v2.1), with one line
 - **"iPhone SE emulation" uses Playwright's `iPhone SE (3rd gen)`** (375×667, WebKit). Playwright's plain `iPhone SE` is the 320px first-generation model.
 - **axe scope.** The deck and both TL;DR labels must have zero WCAG 2.2 AA violations. The whole page may show only the site's pre-existing contrast failures in the nav brand, TOC subtitle and footer (`.brand`, `.toc-sub`, `.copy`). Those are on every post today and are flagged rather than restyled, since restyling them would change every post.
 - **Screenshots for the review package** come from `tests/screenshots.spec.js` and are written to `test-results/screenshots/`.
+
+## Typography (2026-10-25)
+
+- **One reading family: Atkinson Hyperlegible Next** for body, headings, UI and card text; **Atkinson Hyperlegible Mono** for labels, counters, buttons and code; **Bebas Neue** only for the wordmark and home stat numerals (owner choice of pairing C from three compared live; see `docs/typography.md`). This replaces Lora, Inter, Share Tech Mono and Space Mono, including the deck's Lora prose and Share Tech Mono readouts described above.
+- **Self-hosted, no font CDN.** Latin-subset variable woff2 in `assets/fonts/`, `@font-face` and tokens in `assets/css/type.css`. The roman text face is preloaded.
+- **The home page changed.** Its running text left the monospace and no text is below 10px. This intentionally overrides the "index.html must not change" constraint, by owner direction (the review covered the home page).
+- **Baselines regenerated.** The byte-identical baseline fixtures for non-carded pages (`tests/fixtures/baseline/`) were rebuilt from this change, which touches every page. The perf test no longer allows Google Fonts hosts.
+

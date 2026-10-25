@@ -1,7 +1,7 @@
 /* TL;DR card deck (Insight Cards, PRD v2.1). Loaded only on posts with a valid
    cards block. Each card is a small CRT screen: rounded tube glass in a dark
-   bezel, with the home page's phosphor glow, tinted borders and Share Tech
-   Mono readouts. Prose stays in the article's Lora. Colours are the site's
+   bezel, with the home page's phosphor glow, tinted borders and mono
+   readouts. Prose is the article's text face (docs/typography.md). Colours are the site's
    own, from _layouts/article.html or index.html (amber and green themes); see
    docs/insight-cards-design.md. */
 :root{
@@ -11,9 +11,9 @@
   --ic-accent:#ffa000;        /* amber, index.html --p */
   --ic-ink-on-accent:#0a0600; /* body background, as text on amber */
   --ic-phosphor:#ffe4a0;      /* index.html --p-text */
-  --ic-serif:'Lora',Georgia,'Times New Roman',serif;
-  --ic-sans:'Inter',system-ui,sans-serif;
-  --ic-mono:'Share Tech Mono',ui-monospace,'SF Mono',monospace; /* index.html labels */
+  --ic-serif:var(--font-text);   /* card prose and titles; assets/css/type.css */
+  --ic-sans:var(--font-text);
+  --ic-mono:var(--font-mono);    /* the machine voice: counter, labels, buttons */
   --ic-gutter:24px;           /* article side padding */
   --ic-card:min(80vw,400px);
 
