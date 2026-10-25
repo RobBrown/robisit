@@ -1,3 +1,79 @@
+# Narration: decisions log
+
+Read-aloud narration with a synchronized phrase underline on insight cards. Every judgement call, with one line of reasoning each. The Insight Cards log follows below.
+
+## What the repo looks like (found before writing code)
+
+- **Build mode.** The legacy GitHub Pages builder (`build_type: legacy`, `main` `/`): github-pages 232, Jekyll 3.10, Liquid 4. No plugins run in production. Locally, `scripts/build-site.sh` builds in Docker.
+- **Markdown converter.** kramdown with GFM input. **Card text never goes through it, though.** The include renders `{{ i.title | escape }}` and `{{ i.body | strip | escape }}`, so a card's "rendered Markdown" is plain HTML-escaped text. Narration takes exactly that rendered HTML as input.
+- **Asset conventions.** Static files live under `assets/` (`assets/css`, `assets/js`) and are linked with `relative_url`. Collection documents live in `_articles/` (there is no `_posts/`), and `page.slug` is the file name. Static files show up to Liquid in `site.static_files`, with `path` like `/assets/...`. Jekyll can only `include` from `_includes/`.
+- **Insight Cards code.** `_includes/insight-cards-valid.html` is the Liquid gate. `_includes/insight-cards.html` renders the cards in default order, hidden until the script runs. `assets/js/insight-cards.js` is one IIFE: paths, navigation, deep links, the `trackEvent` adapter, and an `is-current` class on the current card. `assets/css/insight-cards.css` holds the `--ic-*` tokens. `scripts/validate-cards.js` is the CI validator. Playwright specs in `tests/` run against a static `_site` served by `tests/serve.js`, on Chromium plus iPhone SE WebKit. There was no unit runner.
+
+## Decisions
+
+### Provider and generation
+
+- **Neural2-D returns mark timepoints.** Google's v1beta1 reference documents `enableTimePointing: ["SSML_MARK"]` and `Timepoint {markName, timeSeconds}`, but no page says which voice families support marks. A probe call settled it: `en-US-Neural2-D` returned a timepoint for every mark. The voice stays `en-US-Neural2-D` and is set in one place, `scripts/narration/config.js`.
+- **Google is called over REST with `google-auth-library`, not `@google-cloud/text-to-speech`.** It's one small dev dependency, and it reads ADC, including the quota project, automatically. Only `scripts/narration/synthesize.js` imports it.
+- **The credentials checkpoint** resolves an ADC token, then lists `en-US` voices on v1beta1. That proves the API is enabled and the voice exists, and it costs nothing. It passed on this machine (quota project `robisit-tts`), so no `SETUP.md` was needed. The script writes one with the exact `gcloud` commands if the check ever fails.
+- **Output format.** MP3 at 24 kHz. Google has no channel parameter, so the generator checks every frame header for single-channel mode and fails if it isn't.
+- **Duration is measured by walking the MP3 frame headers** (samples ÷ sample rate, skipping ID3 and the Xing/Info frame). That's the decoded length, with no metadata and no ffmpeg dependency. It matched `ffprobe` exactly on the probe and on every generated card, and a unit test cross-checks it when ffprobe is installed.
+- **"Last end within 0.5 s of the measured duration" is enforced but tautological.** The spec defines the last end as that duration, so the check can't fail on generated data. It stays as a guard, alongside checks that the last phrase starts before the audio ends and that mark names match phrase ids in order.
+- **A timepoint with no `timeSeconds` is read as 0.** proto3 JSON omits zero values. That's Google's encoding of zero, not an estimate.
+- **Times are rounded to the millisecond.** Strict increase is checked after rounding.
+- **The cache key** is SHA-256 of `{title, body, voice, outputFormat, segmentation}` from the raw front matter.
+- **The skip test is a matching metadata hash plus an existing MP3** (spec 5.3). A missing or outdated fragment on a skipped card is rebuilt locally, because it depends only on the text and needs no API call.
+- **Writes are atomic per card.** All three files are written to temp names and renamed only after every validation passes, so a failing card leaves nothing behind.
+- **The cost table** shows plain-text characters and SSML characters, since Google bills on the SSML sent.
+
+### Where the files live
+
+- **The phrase fragment lives at `_includes/narration/<slug>/<cardId>.html`, not under `assets/`.** Jekyll 3.10 can only include from `_includes/` (and `include_relative` rejects `..`). The MP3 and the metadata JSON live under `assets/narration/<slug>/` as specified. The fragment file is wrapped in `{% raw %}` so card text can never be read as Liquid.
+- **A fragment is used only when it's still true.** `_includes/insight-cards-narration.html` checks that the card's JSON is in `site.static_files`. It then checks that the fragment, with its tags stripped, equals the plain render (`title | escape`, `body | strip | escape`). If either check fails, the card renders exactly as before, with no button. So editing a card without re-running `npm run narrate` can never show stale text or play audio that doesn't match. A fixture (`tests/fixtures/cards-site/_articles/hello-world-cards.md`, one title edited) proves the fallback.
+- **The title and body of one card share one fragment file,** split by `<!--ic-body-->`. The include keeps its own `<h2>` and `<p>` markup, so the fragment carries only phrase spans.
+- **Narration CSS and JS are separate files**, loaded only on posts that have narration assets. That gives them their own 6 KB budget and leaves the deck's 10 KB budget meaningful. The deck script gained two hooks and nothing else: it dispatches `ic:change` with the current card element, and it records `ic:track` events through its existing `trackEvent`. No globals, and `trackEvent` stays the single analytics path.
+
+### Segmentation (`scripts/narration/segment.js`, version `v1`)
+
+- **The input is the include's rendered HTML.** The tokenizer keeps tags, decodes entities, drops `href` (so URLs go) and keeps link text. Phrases are character ranges over the decoded text, so the fragment is the original markup with spans inserted. It's byte-identical with the spans removed, by construction and by test.
+- **The spec's example ("AI is changing | the relationship between | users and software.") breaks *after* a preposition.** A literal "break before prepositions" rule would give "AI is changing the relationship | between users and software." The example is treated as normative. Long runs are split by scoring every 2-to-5-word split: the chunk count is pulled toward words ÷ 3, sizes are kept even, a break before a conjunction or preposition is free, one before a determiner costs 0.5, any other costs 1, and ending a chunk on "the", "to", "and" (and similar) costs 1.5. Those weights reproduce the example and avoid dangling articles.
+- **Protected spans are atoms the splitter can't enter.** These are a whitespace word (which covers hyphenated terms and abbreviations), a number plus a unit from a fixed list, and consecutive capitalised words. A sentence-opening function word ("The", "This") never starts a name.
+- **A one-word clause** ("Hello,") joins the next clause, and the result is re-split if needed, so every phrase has 2 to 5 words. The exception is a protected atom that is itself longer than five words, which is never split.
+- **No end mark.** The last phrase ends at the measured audio duration, per spec.
+- **Phrase spans exclude the spaces between phrases**, so the underline never runs across a gap.
+
+### Playback (`assets/js/insight-cards-narration.js`)
+
+- **One `<audio preload="none">`, created by the script and appended to the deck.** `src` is set on Play. On stop, the script pauses, removes `src` and calls `load()`, so nothing stale can resume. One media element makes two sounds at once impossible.
+- **The underline follows `audio.currentTime`.** It updates on `timeupdate` and `seeked`, plus a `requestAnimationFrame` loop while playing. Only the spans entering or leaving `.is-spoken` are touched.
+- **The lead-in before the first mark (about 15 ms of silence) counts as p0.** Without this, the underline couldn't appear until audio was actually flowing. Every later phrase uses its exact `[start, end)`.
+- **The card's timing JSON (about 2 KB) is prefetched when a narrated card becomes current**, so p0 underlines as soon as Play is pressed (measured well under 250 ms). The MP3 still loads only on Play.
+- **A card change stops narration.** The deck's `ic:change` fires on every current-card change, including a path reorder. Narration stops whenever the playing card is no longer current.
+- **Play on a card that isn't current** (its button can be clicked at the deck edge) plays that card. Any later card change stops it as usual.
+- **Errors** (MP3 404 or decode failure, metadata fetch failure, a rejected `play()`) log one `console.warn` and return to rest. Each failure warns once, and navigation is untouched.
+- **Pausing** sets `aria-pressed="false"` and the label back to "Read this card aloud", and the underline stays where it is. Resuming is not a new `cards_play`.
+- **Announcements go through the deck's existing polite live region (`#ic-live`).** It says "Reading card aloud." on start and "Finished reading." on completion, and nothing per phrase.
+- **Only the current card's button is in the Tab order** (`tabindex=-1` on the others). Without this, Tab walked into the other cards' buttons and scrolled the deck to them, and five extra stops broke the existing ACC-01 Tab test. The deck's own Tab order still runs through the situation options first (pre-existing behaviour).
+- **The button stays `hidden` until the script confirms `canPlayType('audio/mpeg')`.** Without the script, or in a browser that can't play MP3, no dead control is shown.
+
+### Visual
+
+- **The button sits in the counter row, just left of the counter, both right-aligned.** The spec says "right-aligned opposite the counter", which assumes a left-aligned counter. Here the counter is top-right (owner direction), so "right-aligned" wins and the counter keeps its exact position on every card. The terminal card has no button, and its counter doesn't move either.
+- **A 30 px round outline button** (above WCAG 2.2's 24 px target minimum) with a 14 px play or pause glyph in ink, a `--ic-edge` border and the deck's existing amber focus ring. Narrated titles reserve 76 px on the right so text never runs under it. Cards still fit 375×667 with no internal scroll, in every path.
+- **The underline** is `text-decoration: underline` in `currentColor` (each line's own ink: `#eae6df` for titles, `#d4cfc6` for bodies), `0.08em` thick and offset `0.22em` for Lora. No transitions or animation.
+- **"Both themes".** The site is dark-only, so the light-scheme runs check that nothing changes under `prefers-color-scheme: light`, as for the deck.
+
+### Testing
+
+- **Unit tests use Node's built-in runner** (`npm run test:unit`, `tests/unit/*.test.js`), since the repo had none. Playwright ignores `tests/unit/`.
+- **The narration Playwright suite runs on Google Chrome** (project `chrome`, `channel: "chrome"`). Every narration test first checks `canPlayType('audio/mpeg')` and skips with a message if it's empty. The bundled Chromium project ignores `narration.spec.js`.
+- **`tests/serve.js` now answers HTTP Range requests and serves `audio/mpeg`**, as GitHub Pages does. Chrome needs ranges to seek.
+- **One existing test was amended:** "insight cards show counter, title and body and nothing else". It encoded PRD 3.4's "cards carry no controls", which this spec explicitly amends with exactly one control. It now accepts exactly one `.ic-play` on a narrated card and nothing else. Every other existing test is unchanged.
+- **"Underlines p0 within 250 ms"** is timed in the page from `click()` to the first frame with p0 underlined.
+- **The rapid-switch test** presses Play and then changes card every 100 ms, 20 times. It checks that no more than one button is ever pressed, that there's never an underline on a card that isn't playing, and that afterwards there is one media element, it's paused, there's no underline, and Play still works.
+
+---
+
 # Insight Cards: decisions log
 
 Every judgement call made while building Insight Cards (PRD v2.1), with one line of reasoning each.
