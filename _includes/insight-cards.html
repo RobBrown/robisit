@@ -5,8 +5,7 @@
   assets/js/insight-cards.js shows them, so without the script the page is the
   plain article. The switch has two tabs, TL;DR (the deck) and Full article
   (#ic-article), and one view is on the page at a time. The terminal control
-  and the "Read The Full Article" button under the deck switch to the article
-  the same way. Insight cards render in the default order and the script
+  switches to the article the same way. Insight cards render in the default order and the script
   reorders them for a path.
   A card with generated narration (see insight-cards-narration.html) renders
   its phrase-wrapped fragment and one read-aloud button, shown by
@@ -69,6 +68,4 @@
     <button type="button" class="ic-chev ic-next" aria-label="Next card">›</button>
     <div class="ic-sr" id="ic-live" aria-live="polite"></div>
   </section>
-  <button type="button" class="ic-open" id="ic-open" hidden>Read The Full Article</button>
-  <p class="ic-published" id="ic-published">Published on {{ page.date | date: "%B %-d, %Y" }}</p>
   <script type="application/json" id="ic-data">{"default_anchor":{{ ic.default_anchor | jsonify }},"options":{{ ic.situation.options | default: "" | jsonify | replace: "</", "<\/" }}}</script>

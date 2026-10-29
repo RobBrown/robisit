@@ -29,7 +29,6 @@
   var sw = document.getElementById('ic-switch');
   var tabs = { tldr: document.getElementById('ic-tab-tldr'), article: document.getElementById('ic-tab-article') };
   var panels = { tldr: deck, article: article };
-  var openBtn = document.getElementById('ic-open');
   var situation = rail.querySelector('.ic-situation');
   var terminal = rail.querySelector('.ic-terminal');
   var radios = [].slice.call(rail.querySelectorAll('.ic-opt'));
@@ -126,7 +125,7 @@
     history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
   }
 
-  /* Views. The tabs, both article buttons, find in page, links and
+  /* Views. The tabs, the terminal control, find in page, links and
      back/forward all go through setView. The hidden article is
      hidden="until-found", so find in page reaches it. The hash names the
      view: #tldr, #article, or a section of the article. */
@@ -156,17 +155,20 @@
   }
   function show(v) {
     view = v;
+    // Keep the scroll position: with nothing between the deck and the article,
+    // the browser otherwise resets it when one replaces the other.
+    var y = window.scrollY;
     deck.hidden = v !== 'tldr';
-    openBtn.hidden = v !== 'tldr';
     // until-found hides the text; aria-hidden drops the empty panel from the tree too.
     if (v === 'article') { article.removeAttribute('hidden'); article.removeAttribute('aria-hidden'); }
     else { article.setAttribute('hidden', 'until-found'); article.setAttribute('aria-hidden', 'true'); }
+    if (window.scrollY !== y) window.scrollTo(0, y);
     if (v === 'tldr') go(idx, true); // the rail loses its scroll position while hidden
     changed();
   }
 
   // The page stays where it is. A section link scrolls to its section, and the
-  // article buttons bring the article's start back into view if it is above
+  // terminal control brings the article's start back into view if it is above
   // the screen. Focus moves to the view's start.
   function land(v, o) {
     var t = o.land || o.top && sw.getBoundingClientRect().top < 0 && sw;
@@ -281,11 +283,10 @@
     tabs[v].focus();
     setView(v, { route: 'switch', history: 'push', focus: tabs[v] });
   });
-  // Both "Read The Full Article" buttons open the article at its start.
+  // "Read The Full Article" on the last card opens the article at its start.
   terminal.querySelector('.ic-go').addEventListener('click', function () {
     setView('article', { route: 'terminal', history: 'push', top: true });
   });
-  openBtn.addEventListener('click', function () { setView('article', { route: 'button', history: 'push', top: true }); });
   // Find in page reveals the article itself and scrolls to the match.
   article.addEventListener('beforematch', function () { setView('article', { history: 'replace', instant: true, focus: false }); });
   window.addEventListener('popstate', sync);

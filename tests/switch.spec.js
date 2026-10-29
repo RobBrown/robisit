@@ -63,7 +63,6 @@ test('switching back to TL;DR keeps the page still and the deck in its place', a
 test('#article opens the full article directly', async ({ page }) => {
   await page.goto(`${CARDED_URL}#article`);
   await showing(page, 'article');
-  await expect(page.locator('#ic-open')).toBeHidden();
 });
 
 test('back and forward move between views, one entry per switch', async ({ page }) => {
@@ -118,7 +117,7 @@ test('switching to the article via the tabs is recorded as a handoff, once', asy
   await showing(page, 'article');
   await tldr(page).click();
   await showing(page, 'tldr');
-  await page.locator('#ic-open').click();
+  await page.locator('.ic-go').evaluate((b) => b.click());
   const h = (await page.evaluate(() => window.__events)).filter((e) => e.name === 'cards_handoff');
   expect(h.map((e) => e.props)).toEqual([{ route: 'switch', card: 2, path: 'default', anchor: '#ic-article' }]);
 });

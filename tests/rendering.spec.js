@@ -6,25 +6,23 @@ const { ROOT, CARDED_URL, CARDED_FILE, cards } = require('./helpers');
 
 const SITE = path.join(ROOT, '_site');
 
-test('carded post renders the site header, the TL;DR deck, the Read The Full Article button and the collapsed article', async ({ page }) => {
+test('carded post renders the site header, the TL;DR deck and the collapsed article', async ({ page }) => {
   await page.goto(CARDED_URL);
   const masthead = page.locator('article > header');
   await expect(masthead.locator('h1')).toHaveText(/Hello, World/);
   // Owner direction: carded pages leave out the date and view counts.
   await expect(masthead.locator('.date')).toHaveCount(0);
   await expect(masthead.locator('.byline')).toHaveCount(0);
-  await expect(page.locator('#ic-published')).toHaveText(/^Published on [A-Z][a-z]+ \d{1,2}, \d{4}$/);
+  await expect(page.locator('#ic-published')).toHaveCount(0);
   await expect(page.getByRole('tabpanel', { name: /^TL;DR/ })).toBeVisible();
   await expect(page.locator('.ic-card')).toHaveCount(1 + cards.insights.length + 1);
-  // Owner direction (2026-10-25): the article starts collapsed behind a
-  // button under the deck, styled like the terminal control.
-  await expect(page.locator('#ic-open')).toBeVisible();
-  await expect(page.locator('#ic-open')).toHaveText('Read The Full Article');
+  // Owner direction (2026-10-28): no button under the deck.
+  await expect(page.locator('#ic-open')).toHaveCount(0);
   await expect(page.locator('#ic-article')).toBeHidden();
   await expect(page.locator('#ic-article')).toHaveAttribute('hidden', 'until-found');
 
-  // Order on the page: masthead, view switch, deck, button, published line, article.
-  const order = await page.evaluate(() => ['article > header', '#ic-switch', '#ic-deck', '#ic-open', '#ic-published', '#ic-article']
+  // Order on the page: masthead, view switch, deck, article.
+  const order = await page.evaluate(() => ['article > header', '#ic-switch', '#ic-deck', '#ic-article']
     .map((s) => document.querySelector(s)).every((el, i, a) => i === 0 || (a[i - 1].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)));
   expect(order).toBe(true);
 });
@@ -42,7 +40,6 @@ test('article body is complete in the initial HTML, visible before script runs',
   expect(html).toContain('id="ic-article"');
   // Never collapsed in the HTML: only the script collapses it.
   expect(html).not.toMatch(/id="ic-article"[^>]*hidden/);
-  expect(html).toMatch(/<button[^>]*id="ic-open"[^>]*hidden/);
   // Every section heading of the source post is present.
   const src = fs.readFileSync(path.join(ROOT, CARDED_FILE), 'utf8');
   const headings = [...src.matchAll(/^#{2,3} (.+)$/gm)].length;
@@ -85,8 +82,6 @@ test.describe('JavaScript disabled', () => {
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('#ic-article')).toBeVisible();
     await expect(page.locator('#hello-world')).toBeVisible();
-    await expect(page.locator('#ic-open')).toBeHidden();
-    await expect(page.locator('#ic-published')).toBeVisible();
     const deckText = await page.evaluate(() => {
       const r = document.querySelector('#ic-deck').getBoundingClientRect();
       return r.width * r.height;

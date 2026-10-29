@@ -113,7 +113,7 @@ test('arrow keys move one card; navigation stops at both ends', async ({ page })
 
 test('arrow keys do nothing while the article is showing', async ({ page }) => {
   await page.goto(CARDED_URL);
-  await page.locator('#ic-open').click();
+  await page.locator('#ic-tab-article').click();
   await expect(page.locator('#ic-deck')).toBeHidden();
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
   await page.keyboard.press('ArrowRight');
@@ -185,21 +185,7 @@ test('terminal control switches to the article at its start', async ({ page }) =
   expect(new URL(page.url()).hash).toBe('#article');
 });
 
-test('the button under the deck switches to the article in place', async ({ page }) => {
-  await page.goto(`${CARDED_URL}?card=2`);
-  const open = page.locator('#ic-open');
-  await expect(page.locator('#ic-article')).toBeHidden();
-  await open.scrollIntoViewIfNeeded();
-  const y = await page.evaluate(() => window.scrollY);
-  await open.click();
-  await expect(page.locator('#ic-article')).toBeVisible();
-  await expect(page.locator('#ic-article')).toBeFocused();
-  await page.waitForTimeout(700);
-  expect(await page.evaluate(() => window.scrollY)).toBe(y); // the page does not move
-  await expect(open).toBeHidden(); // part of the TL;DR view
-});
-
-for (const [name, sel] of [['button under the deck', '#ic-open'], ['terminal control', '.ic-go']]) {
+for (const [name, sel] of [['terminal control', '.ic-go']]) {
   test(`on a phone, the ${name} brings the article's start back into view`, async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto(`${CARDED_URL}?path=pilot&card=${N}`);
@@ -212,14 +198,6 @@ for (const [name, sel] of [['button under the deck', '#ic-open'], ['terminal con
     await expect(page.locator('#ic-article .body > :first-child')).toBeInViewport();
   });
 }
-
-test('the button under the deck works from the keyboard', async ({ page }) => {
-  await page.goto(CARDED_URL);
-  await page.locator('#ic-open').focus();
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#ic-article')).toBeVisible();
-  await expect(page.locator('#ic-article')).toBeFocused();
-});
 
 test('a link to a section of the article opens it', async ({ page }) => {
   await page.goto(`${CARDED_URL}${cards.default_anchor}`);
