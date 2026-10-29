@@ -169,10 +169,10 @@ test('with motion allowed, only the current card flickers, at most one dip a sec
   expect(n / secs).toBeLessThanOrEqual(1);
 });
 
-// Owner request (2026-10-29): "What do you think?" is tucked just under the
-// cards: its box starts 4px above their foot, the same at every width.
+// Owner request (2026-10-29): "What do you think?" is as close to the cards as
+// the TL;DR tab is: the gap below them equals the switch's gap above them.
 for (const vp of [{ width: 375, height: 667 }, { width: 1280, height: 800 }]) {
-  test(`the discussion link is tucked under the cards at ${vp.width}`, async ({ page }) => {
+  test(`the discussion link sits at the switch's gap to the cards at ${vp.width}`, async ({ page }) => {
     await page.setViewportSize(vp);
     await page.goto(CARDED_URL);
     const g = await page.evaluate(() => {
@@ -180,7 +180,7 @@ for (const vp of [{ width: 375, height: 667 }, { width: 1280, height: 800 }]) {
       const tab = r('#ic-tab-tldr'), card = r('.ic-card'), link = r('.ic-discuss');
       return { above: Math.round(card.top - tab.bottom), below: Math.round(link.top - card.bottom), h: [tab.height, link.height] };
     });
-    expect(g.below).toBe(-4);
+    expect(Math.abs(g.below - g.above)).toBeLessThanOrEqual(0.5);
     expect(g.h[1]).toBe(g.h[0]);
   });
 }
