@@ -63,6 +63,7 @@ test('switching back to TL;DR keeps the page still and the deck in its place', a
 test('#article opens the full article directly', async ({ page }) => {
   await page.goto(`${CARDED_URL}#article`);
   await showing(page, 'article');
+  await expect(page.locator('.ic-discuss')).toBeHidden(); // part of the TL;DR view
 });
 
 test('back and forward move between views, one entry per switch', async ({ page }) => {

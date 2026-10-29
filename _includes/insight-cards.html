@@ -10,8 +10,9 @@
   A card with generated narration (see insight-cards-narration.html) renders
   its phrase-wrapped fragment and one read-aloud button, shown by
   assets/js/insight-cards-narration.js.
-  Each insight ends with "Discuss this on LinkedIn", linking to the post's
-  `linkedin_post` (# until it is set).
+  Under the deck, "Discuss this on LinkedIn" links to the post's
+  `linkedin_post` (# until it is set); it belongs to the TL;DR view and hides
+  with the deck.
   An insight with `art` (a 960x320 transparent image, see
   docs/insight-cards-design.md) shows it at the foot of its card, decorative, as a background.
 {%- endcomment -%}
@@ -19,13 +20,6 @@
 {%- assign ic_ids = ic.insights | map: "id" -%}
 {%- assign ic_order = ic.default_order | default: ic_ids -%}
 {%- assign ic_total = ic.insights | size | plus: 1 -%}
-{%- capture ic_discuss -%}
-  {%- if page.linkedin_post -%}
-  <a class="ic-discuss" href="{{ page.linkedin_post | escape }}" target="_blank" rel="noopener">Discuss this on LinkedIn</a>
-  {%- else -%}
-  <a class="ic-discuss" href="#">Discuss this on LinkedIn</a>
-  {%- endif -%}
-{%- endcapture -%}
   <div class="ic-switch" id="ic-switch" role="tablist" aria-label="View" hidden>
     <button type="button" class="ic-tab" id="ic-tab-tldr" role="tab" aria-controls="ic-deck" aria-selected="true">TL;DR</button>
     <button type="button" class="ic-tab" id="ic-tab-article" role="tab" aria-controls="ic-article" aria-selected="false" tabindex="-1">Full article</button>
@@ -54,7 +48,6 @@
         {%- if i.art %}
         <div class="ic-art" style="background-image:url('{{ i.art | relative_url }}')" aria-hidden="true"></div>
         {%- endif %}
-        {{ ic_discuss }}
       </div>
       {%- else %}
       <div class="ic-card ic-insight" role="group" aria-roledescription="card" aria-label="{{ forloop.index }} of {{ ic_total }}" data-id="{{ id | escape }}">
@@ -64,7 +57,6 @@
         {%- if i.art %}
         <div class="ic-art" style="background-image:url('{{ i.art | relative_url }}')" aria-hidden="true"></div>
         {%- endif %}
-        {{ ic_discuss }}
       </div>
       {%- endif %}
       {%- endfor %}
@@ -79,4 +71,9 @@
     <button type="button" class="ic-chev ic-next" aria-label="Next card">›</button>
     <div class="ic-sr" id="ic-live" aria-live="polite"></div>
   </section>
+  <a class="ic-discuss" href="{{ page.linkedin_post | default: '#' | escape }}"{% if page.linkedin_post %} target="_blank" rel="noopener"{% endif %}>
+    <svg class="ic-in" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+    <span>Discuss this on LinkedIn</span>
+    <span aria-hidden="true">→</span>
+  </a>
   <script type="application/json" id="ic-data">{"default_anchor":{{ ic.default_anchor | jsonify }},"options":{{ ic.situation.options | default: "" | jsonify | replace: "</", "<\/" }}}</script>

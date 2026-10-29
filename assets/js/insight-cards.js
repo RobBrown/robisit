@@ -248,7 +248,7 @@
 
   /* Depth (PRD 7): how far through the article the reader has scrolled, from
      its top, counted only while it is open. route is the control the reader
-     first opened it with ('button' or 'terminal'), and 'none' before that. */
+     first opened it with ('switch' or 'terminal'), and 'none' before that. */
   var depthFired = {}, depthQueued = false;
   function queueDepth() {
     if (depthQueued) return;

@@ -51,7 +51,7 @@ test('ACC-04: scroll rail is focusable with a visible focus ring', async ({ page
 test('ACC-01: keyboard only — Tab reaches rail, options, chevrons and terminal control; Enter activates each', async ({ page }) => {
   await page.goto(CARDED_URL);
   const focusNames = [];
-  for (let i = 0; i < 12 + cards.insights.length; i++) {
+  for (let i = 0; i < 12; i++) {
     await page.keyboard.press('Tab');
     focusNames.push(await page.evaluate(() => {
       const a = document.activeElement;

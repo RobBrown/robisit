@@ -21,8 +21,13 @@ test('carded post renders the site header, the TL;DR deck and the collapsed arti
   await expect(page.locator('#ic-article')).toBeHidden();
   await expect(page.locator('#ic-article')).toHaveAttribute('hidden', 'until-found');
 
-  // Order on the page: masthead, view switch, deck, article.
-  const order = await page.evaluate(() => ['article > header', '#ic-switch', '#ic-deck', '#ic-article']
+  // Owner request (2026-10-29): "Discuss this on LinkedIn" sits under the deck.
+  await expect(page.locator('.ic-discuss')).toBeVisible();
+  await expect(page.locator('.ic-discuss')).toHaveText('Discuss this on LinkedIn →');
+  await expect(page.locator('.ic-discuss')).toHaveAttribute('href', '#');
+
+  // Order on the page: masthead, view switch, deck, LinkedIn link, article.
+  const order = await page.evaluate(() => ['article > header', '#ic-switch', '#ic-deck', '.ic-discuss', '#ic-article']
     .map((s) => document.querySelector(s)).every((el, i, a) => i === 0 || (a[i - 1].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)));
   expect(order).toBe(true);
 });
