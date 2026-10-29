@@ -71,14 +71,14 @@
   .ic-switch{gap:22px;margin-bottom:8px;letter-spacing:.14em}
 }
 
-/* "What do you think?": the lit TL;DR tab, as far below the cards as the
+/* "What do you think?": the lit TL;DR tab, half as far below the cards as the
    switch is above them (the rail's 30px shadow room is taken back). */
 .ic-discuss{
-  display:flex;align-items:center;gap:9px;width:fit-content;margin-top:-14px;padding:6px 0;
+  display:flex;align-items:center;gap:9px;width:fit-content;margin-top:-22px;padding:6px 0;
   font-family:var(--ic-mono);font-size:13px;letter-spacing:.18em;line-height:1.4;text-transform:uppercase;text-decoration:none;
 }
 .ic-deck[hidden]+.ic-discuss{display:none}
-@media(max-width:600px){.ic-discuss{margin-top:-16px;letter-spacing:.14em}}
+@media(max-width:600px){.ic-discuss{margin-top:-23px;letter-spacing:.14em}}
 
 /* Deck: a native scroller spanning the column plus its gutters. The current
    card snaps to the text column and the next card shows to its right. */
