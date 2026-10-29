@@ -5,6 +5,7 @@
   "scripts": {
     "build": "bash scripts/build-site.sh",
     "narrate": "node scripts/narrate.js",
+    "carousel": "node scripts/carousel.js",
     "validate:cards": "node scripts/validate-cards.js --site _site",
     "test": "npm run test:unit && playwright test",
     "test:unit": "node --test \"tests/unit/*.test.js\"",
