@@ -44,16 +44,19 @@ test('swiping past the situation card uses the default order', async ({ page }) 
 });
 
 // Narration adds exactly one control to a narrated insight card: its
-// read-aloud button. Nothing else.
-test('insight cards show counter, title and body and nothing else', async ({ page }) => {
+// read-aloud button. Every insight ends with "Discuss this on LinkedIn"
+// (owner request, 2026-10-29). Nothing else.
+test('insight cards show counter, title, body and the LinkedIn link, and nothing else', async ({ page }) => {
   await page.goto(CARDED_URL);
   const ins = page.locator('.ic-insight');
   await expect(ins).toHaveCount(cards.insights.length);
   for (let i = 0; i < cards.insights.length; i++) {
     const narrated = await ins.nth(i).evaluate((el) => el.hasAttribute('data-narration'));
     const kids = await ins.nth(i).evaluate((el) => [...el.children].map((c) => c.className));
-    expect(kids).toEqual(narrated ? ['ic-n', 'ic-play', 'ic-title', 'ic-body'] : ['ic-n', 'ic-title', 'ic-body']);
-    await expect(ins.nth(i).locator('a, button, input')).toHaveCount(narrated ? 1 : 0);
+    const tail = kids.includes('ic-art') ? ['ic-art', 'ic-discuss'] : ['ic-discuss'];
+    expect(kids).toEqual([...(narrated ? ['ic-n', 'ic-play', 'ic-title', 'ic-body'] : ['ic-n', 'ic-title', 'ic-body']), ...tail]);
+    await expect(ins.nth(i).locator('button, input')).toHaveCount(narrated ? 1 : 0);
+    await expect(ins.nth(i).locator('a')).toHaveText('Discuss this on LinkedIn');
     if (narrated) await expect(ins.nth(i).locator('button')).toHaveClass('ic-play');
   }
 });

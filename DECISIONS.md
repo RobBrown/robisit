@@ -236,3 +236,4 @@ Supersedes "The article starts collapsed" and the TL;DR label in "Section labels
 - **No new dependency.** The generator uses the Playwright already in devDependencies; the tests read page count and size with a small built-in PDF parser.
 - **Later.** Linking to the PDF from the site is a separate task.
 
+- **"Discuss this on LinkedIn" at the foot of each insight (owner request, 2026-10-29).** A text link in the readout type (mono, 13px, tracked caps, amber with its glow), below the art when a card has some. It points to the post's `linkedin_post` front matter, Rob's LinkedIn post announcing the article, and opens it in a new tab; until that is set it is `#`. Readers are sent to engage with Rob's post rather than share the blog link, because comments and reposts on his post build his LinkedIn reach. Its tap padding overlaps the card's bottom padding, so cards grow by the text line only (27px at 375 wide).
