@@ -168,3 +168,19 @@ test('with motion allowed, only the current card flickers, at most one dip a sec
   for (const [, o] of dips) { if (o < 1 && !low) n++; low = o < 1; }
   expect(n / secs).toBeLessThanOrEqual(1);
 });
+
+// Owner request (2026-10-29): "What do you think?" is as far below the cards
+// as the view switch is above them.
+for (const vp of [{ width: 375, height: 667 }, { width: 1280, height: 800 }]) {
+  test(`the discussion link mirrors the switch's gap to the cards at ${vp.width}`, async ({ page }) => {
+    await page.setViewportSize(vp);
+    await page.goto(CARDED_URL);
+    const g = await page.evaluate(() => {
+      const r = (s) => document.querySelector(s).getBoundingClientRect();
+      const tab = r('#ic-tab-tldr'), card = r('.ic-card'), link = r('.ic-discuss');
+      return { above: Math.round(card.top - tab.bottom), below: Math.round(link.top - card.bottom), h: [tab.height, link.height] };
+    });
+    expect(g.below).toBe(g.above);
+    expect(g.h[1]).toBe(g.h[0]);
+  });
+}

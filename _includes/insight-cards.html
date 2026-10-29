@@ -10,7 +10,7 @@
   A card with generated narration (see insight-cards-narration.html) renders
   its phrase-wrapped fragment and one read-aloud button, shown by
   assets/js/insight-cards-narration.js.
-  Under the deck, "What do you think? Discuss here." links to the post's
+  Under the deck, "What do you think?" (styled as the lit TL;DR tab) links to the post's
   `linkedin_post` (# until it is set); it belongs to the TL;DR view and hides
   with the deck.
   An insight with `art` (a 960x320 transparent image, see
@@ -71,7 +71,5 @@
     <button type="button" class="ic-chev ic-next" aria-label="Next card">›</button>
     <div class="ic-sr" id="ic-live" aria-live="polite"></div>
   </section>
-  <a class="ic-discuss" href="{{ page.linkedin_post | default: '#' | escape }}"{% if page.linkedin_post %} target="_blank" rel="noopener"{% endif %}>
-    <span>What do you think?</span> <span>Discuss here.&nbsp;<span aria-hidden="true">→</span></span>
-  </a>
+  <a class="ic-discuss" href="{{ page.linkedin_post | default: '#' | escape }}"{% if page.linkedin_post %} target="_blank" rel="noopener"{% endif %}>What do you think?</a>
   <script type="application/json" id="ic-data">{"default_anchor":{{ ic.default_anchor | jsonify }},"options":{{ ic.situation.options | default: "" | jsonify | replace: "</", "<\/" }}}</script>

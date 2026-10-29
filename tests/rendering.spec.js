@@ -23,7 +23,7 @@ test('carded post renders the site header, the TL;DR deck and the collapsed arti
 
   // Owner request (2026-10-29): the LinkedIn discussion link sits under the deck.
   await expect(page.locator('.ic-discuss')).toBeVisible();
-  await expect(page.locator('.ic-discuss')).toHaveText('What do you think? Discuss here. →');
+  await expect(page.locator('.ic-discuss')).toHaveText('What do you think?');
   await expect(page.locator('.ic-discuss')).toHaveAttribute('href', '#');
 
   // Order on the page: masthead, view switch, deck, discussion link, article.
