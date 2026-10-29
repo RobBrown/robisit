@@ -1,0 +1,89 @@
+# Generates a LinkedIn carousel (PDF) for posts with Insight Cards after they
+# reach main, so publishing stays "push the markdown" (npm run carousel on a
+# laptop is not needed). Unchanged decks are skipped by hash. Generated PDFs
+# are committed back to main, then a Pages build is requested, because pushes
+# made with GITHUB_TOKEN don't start one.
+#
+# Rendering uses Playwright's Chromium with the site's own fonts inlined, so
+# there is no network or credential involved beyond the repo token.
+#
+# This runs on the same push as narrate.yml and both commit back. They write
+# disjoint paths (assets/narration and _includes/narration there, assets/carousel
+# here), so whichever pushes second is rejected, rebases cleanly onto the other's
+# commit and retries. The concurrency groups are separate on purpose, so neither
+# waits on the other's Google call. Bot pushes use GITHUB_TOKEN and never
+# retrigger either workflow. Each requests its own Pages build; a second
+# request is harmless.
+#
+# Actions are pinned to full commit SHAs (tag in the comment): this job can
+# push to main, so a moved tag must not run here.
+#
+# A failure never blocks publishing: the article is already live and the
+# carousel can be regenerated later.
+name: LinkedIn carousels
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '_articles/**'
+      - '_posts/**'
+      - '_config.yml'            # the site url feeds the closing slide
+      - 'assets/cards/**'        # card art
+      - 'assets/fonts/**'
+      - 'scripts/carousel.js'
+      - 'scripts/carousel/**'
+      - 'scripts/narration/segment.js'  # shared text escaping
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Regenerate every deck, even unchanged ones'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write  # commit generated carousels
+  pages: write     # request a Pages build
+
+concurrency:
+  group: carousel
+  cancel-in-progress: false
+
+jobs:
+  carousel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      # The Playwright version comes from the lockfile.
+      - run: npx playwright install --with-deps chromium
+
+      - name: Generate carousels
+        id: carousel
+        continue-on-error: true
+        run: node scripts/carousel.js --all ${{ inputs.force && '--force' || '' }}
+
+      - name: Report failures
+        if: steps.carousel.outcome == 'failure'
+        run: echo "::warning title=Carousel::Some carousels could not be generated. The article is unaffected; see the Generate carousels step."
+
+      - name: Commit and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Only generated carousels are ever committed.
+          git add assets/carousel
+          if git diff --cached --quiet; then echo "No new carousels."; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "content(carousel): generate LinkedIn carousels for carded posts"
+          for i in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && break
+            sleep 5
+          done
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" --silent
+          git log -1 --stat --format='Committed %h: %s'
