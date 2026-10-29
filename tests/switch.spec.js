@@ -66,6 +66,16 @@ test('#article opens the full article directly', async ({ page }) => {
   await expect(page.locator('.ic-discuss')).toBeHidden(); // part of the TL;DR view
 });
 
+// Owner request (2026-10-29): the subscribe block shows with the full article only.
+test('the subscribe block is hidden in the card view and shown with the article', async ({ page }) => {
+  await page.goto(CARDED_URL);
+  await showing(page, 'tldr');
+  await expect(page.locator('#subscribe')).toBeHidden();
+  await full(page).click();
+  await showing(page, 'article');
+  await expect(page.locator('#subscribe')).toBeVisible();
+});
+
 test('back and forward move between views, one entry per switch', async ({ page }) => {
   await page.goto(CARDED_URL);
   const start = await page.evaluate(() => history.length);

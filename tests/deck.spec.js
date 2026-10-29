@@ -189,6 +189,8 @@ for (const [name, sel] of [['terminal control', '.ic-go']]) {
   test(`on a phone, the ${name} brings the article's start back into view`, async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto(`${CARDED_URL}?path=pilot&card=${N}`);
+    // The card view has no subscribe block, so give the page room to scroll.
+    await page.addStyleTag({ content: 'footer{min-height:100vh}' });
     await page.locator(sel).scrollIntoViewIfNeeded();
     await page.evaluate(() => window.scrollBy(0, 200)); // the switch is above the screen
     expect(await page.locator('#ic-switch').evaluate((el) => el.getBoundingClientRect().bottom)).toBeLessThan(0);
