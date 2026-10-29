@@ -72,20 +72,18 @@
 }
 
 .ic-discuss{
-  position:relative;display:flex;align-items:center;gap:14px;width:fit-content;
-  margin-top:14px;padding:13px 20px 13px 16px;
+  display:block;width:fit-content;margin-top:14px;padding:6px 0;line-height:1.6;
   font-family:var(--ic-mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ic-accent);text-shadow:var(--ic-readout-glow);text-decoration:none;
-  background:var(--ic-row);border:1px solid var(--ic-row-edge);
+  color:var(--ic-accent);text-shadow:var(--ic-readout-glow);
+  text-decoration:underline transparent 1px;text-underline-offset:5px;
 }
-.ic-discuss::before{content:"";position:absolute;inset:-1px auto -1px -1px;width:2px;background:var(--ic-row-rule);transform:scaleY(0)}
 .ic-deck[hidden]+.ic-discuss{display:none}
-.ic-in{flex:none;width:18px;fill:currentColor}
-.ic-discuss>span+span{color:var(--ic-ink-soft);text-shadow:none}
-.ic-discuss:hover{background:var(--ic-row-on);border-color:var(--ic-row-edge-on)}
-.ic-discuss:hover::before{transform:none}
-.ic-discuss:hover span+span{color:inherit;transform:translateX(4px)}
-@media(max-width:600px){.ic-discuss{width:100%}.ic-discuss>span+span{margin-left:auto}}
+.ic-discuss span:first-child{color:var(--ic-ink-soft);text-shadow:none}
+.ic-discuss:hover{text-decoration-color:currentColor}
+.ic-discuss span+span{white-space:nowrap}
+.ic-discuss span span{display:inline-block}
+@media(max-width:600px){.ic-discuss{letter-spacing:.1em}}
+.ic-discuss:hover span span{transform:translateX(4px)}
 
 /* Deck: a native scroller spanning the column plus its gutters. The current
    card snaps to the text column and the next card shows to its right. */
@@ -258,8 +256,8 @@
   .ic-card.is-current::before{animation:ic-bezel-flicker 7s step-end infinite}
   .ic-opt{transition:background .2s,border-color .2s,color .2s,transform .2s}
   .ic-tab,.ic-tab::before{transition:color .2s,text-shadow .2s,background .2s,box-shadow .2s}
-  .ic-opt::before,.ic-discuss::before{transition:transform .2s}
-  .ic-discuss,.ic-discuss span{transition:.2s}
+  .ic-opt::before{transition:transform .2s}
+  .ic-discuss,.ic-discuss span{transition:text-decoration-color .2s,transform .2s}
   @media(hover:hover){.ic-opt:hover{transform:translateX(3px)}}
 }
 @keyframes ic-power-on{
