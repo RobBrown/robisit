@@ -57,9 +57,9 @@
   font:inherit;letter-spacing:inherit;text-transform:inherit;
   color:var(--ic-ink-soft);background:none;border:0;border-radius:2px;
 }
-.ic-tab::before,.ic-discuss::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--ic-row-edge-on)}
+.ic-tab::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--ic-row-edge-on)}
 .ic-tab[aria-selected="true"],.ic-discuss{color:var(--ic-accent);text-shadow:var(--ic-readout-glow)}
-.ic-tab[aria-selected="true"]::before,.ic-discuss::before{background:var(--ic-accent);box-shadow:var(--ic-readout-glow)}
+.ic-tab[aria-selected="true"]::before{background:var(--ic-accent);box-shadow:var(--ic-readout-glow)}
 .ic-tab[aria-selected="false"]:hover{color:var(--ic-ink)}
 .ic-tab[aria-selected="false"]:hover::before{box-shadow:inset 0 0 0 1px var(--ic-accent)}
 .ic-tab:focus-visible,.ic-discuss:focus-visible{outline:2px solid var(--ic-accent);outline-offset:4px}
@@ -76,6 +76,12 @@
 .ic-discuss{
   display:flex;align-items:center;gap:9px;width:fit-content;margin-top:-14px;padding:6px 0;
   font-family:var(--ic-mono);font-size:13px;letter-spacing:.18em;line-height:1.4;text-transform:uppercase;text-decoration:none;
+}
+/* Its mark is a speech bubble in amber, in place of the tab's lamp. */
+.ic-discuss::before{
+  content:"";flex:none;width:12px;height:12px;background:var(--ic-accent);
+  -webkit-mask:var(--ic-bubble) center/contain no-repeat;mask:var(--ic-bubble) center/contain no-repeat;
+  --ic-bubble:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2.5 1h9A1.5 1.5 0 0 1 13 2.5v6A1.5 1.5 0 0 1 11.5 10H6.5L3.5 13v-3h-1A1.5 1.5 0 0 1 1 8.5v-6A1.5 1.5 0 0 1 2.5 1z'/%3E%3C/svg%3E");
 }
 .ic-deck[hidden]+.ic-discuss{display:none}
 @media(max-width:600px){.ic-discuss{margin-top:-16px;letter-spacing:.14em}}
