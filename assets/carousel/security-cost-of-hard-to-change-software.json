@@ -1,0 +1,101 @@
+{
+  "slug": "security-cost-of-hard-to-change-software",
+  "hash": "4709e02e79875167793ab425d664b0da0bbf9d333261af955d2359949a410852",
+  "version": "v1",
+  "url": "https://robisit.com/thoughts/security-cost-of-hard-to-change-software/",
+  "pages": 9,
+  "slides": [
+    {
+      "kind": "cover",
+      "id": null
+    },
+    {
+      "kind": "insight",
+      "id": "risk"
+    },
+    {
+      "kind": "insight",
+      "id": "remediation"
+    },
+    {
+      "kind": "insight",
+      "id": "legacy"
+    },
+    {
+      "kind": "insight",
+      "id": "exposure"
+    },
+    {
+      "kind": "insight",
+      "id": "isolation"
+    },
+    {
+      "kind": "insight",
+      "id": "ai"
+    },
+    {
+      "kind": "insight",
+      "id": "investment"
+    },
+    {
+      "kind": "closing",
+      "id": null
+    }
+  ],
+  "fit": [
+    {
+      "slide": 1,
+      "kind": "cover",
+      "body": 32,
+      "title": 68
+    },
+    {
+      "slide": 2,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 3,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 4,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 5,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 6,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 7,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 8,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 9,
+      "kind": "closing",
+      "body": 36,
+      "title": 54
+    }
+  ]
+}

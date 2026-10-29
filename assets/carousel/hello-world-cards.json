@@ -1,0 +1,81 @@
+{
+  "slug": "hello-world-cards",
+  "hash": "bbeed8587d4a7423434cf11abaacb6e586f8b87c9188107fd91184ca0b9da671",
+  "version": "v1",
+  "url": "https://robisit.com/thoughts/hello-world-cards/",
+  "pages": 7,
+  "slides": [
+    {
+      "kind": "cover",
+      "id": null
+    },
+    {
+      "kind": "insight",
+      "id": "hello"
+    },
+    {
+      "kind": "insight",
+      "id": "counter"
+    },
+    {
+      "kind": "insight",
+      "id": "swipe"
+    },
+    {
+      "kind": "insight",
+      "id": "jump"
+    },
+    {
+      "kind": "insight",
+      "id": "links"
+    },
+    {
+      "kind": "closing",
+      "id": null
+    }
+  ],
+  "fit": [
+    {
+      "slide": 1,
+      "kind": "cover",
+      "body": 32,
+      "title": 68
+    },
+    {
+      "slide": 2,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 3,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 4,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 5,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 6,
+      "kind": "insight",
+      "body": 38,
+      "title": 60
+    },
+    {
+      "slide": 7,
+      "kind": "closing",
+      "body": 36,
+      "title": 54
+    }
+  ]
+}
