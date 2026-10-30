@@ -9,7 +9,7 @@
 <meta name="description" content="{{ page.description }}">
 <meta property="og:title" content="{{ page.title }}">
 <meta property="og:description" content="{{ page.description }}">
-<meta property="og:image" content="{{ page.og_image }}">
+<meta property="og:image" content="{% if page.og_image != "" and page.og_image %}{{ page.og_image | absolute_url }}{% endif %}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
 <meta name="twitter:card" content="summary_large_image">
