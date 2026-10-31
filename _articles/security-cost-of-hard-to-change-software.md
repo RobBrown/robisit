@@ -4,6 +4,7 @@ title: "Your Security Backlog is an Architecture Problem"
 date: 2026-10-29
 description: "AI is making vulnerabilities easier to exploit. The ability to update, isolate, and recover enterprise systems is becoming a critical security capability."
 og_image: "/images/security-backlog-v2.png"
+linkedin_post: "https://lnkd.in/p/g-vdfcf6"
 featured: false
 views: 0
 read_time: "7 min"
